@@ -62,8 +62,9 @@ public class MainConfigHandler {
 }
 
 public class MainConfigData : ObservableObject {
-    bool _isLifeModeActivated;
     public event Action? RestartPropertyChanged;
+    
+    bool _isLifeModeActivated;
     public bool IsLifeModeActivated {
         get => _isLifeModeActivated;
         set {
@@ -73,7 +74,18 @@ public class MainConfigData : ObservableObject {
             RestartPropertyChanged?.Invoke();
         }
     }
-
+    
+    bool _isExperimentalModeActivated;
+    public bool IsExperimentalModeActivated {
+        get => _isExperimentalModeActivated;
+        set {
+            if (value == _isExperimentalModeActivated) return;
+            _isExperimentalModeActivated = value;
+            OnPropertyChanged();
+            //RestartPropertyChanged?.Invoke();
+        }
+    }
+    
     public DockConfig Dock { get; set; } = new DockConfig(); 
     public class DockConfig : ObservableObject {
         bool _enabled;

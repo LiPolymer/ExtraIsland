@@ -55,13 +55,18 @@ namespace ExtraIsland
                 Console.ForegroundColor = defaultColor;
                 services.AddComponent<LifeMode.Components.Sleepy,LifeMode.Components.SleepySettings>();
             }
+            if (GlobalConstants.Handlers.MainConfig.Data.IsExperimentalModeActivated) {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("[ExIsLand][EarlyLoad][Experiment]实验模式已启用! 若出现Bug,请勿报告!");
+                Console.ForegroundColor = defaultColor;
+                services.AddComponent<Components.DebugLyricsHandler>();
+                services.AddComponent<Components.DebugSubLyricsHandler>();
+            }
             #if DEBUG
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("[ExIsLand][EarlyLoad][DEBUG]这是一个调试构建! 若出现Bug,请勿报告!");
                 Console.ForegroundColor = defaultColor;
                 services.AddSettingsPage<SettingsPages.DebugSettingsPage>();
-                services.AddComponent<Components.DebugLyricsHandler>();
-                services.AddComponent<Components.DebugSubLyricsHandler>();
             #endif
             Console.WriteLine("[ExIsLand][EarlyLoad]完成!");
             Console.WriteLine("[ExIsLand][EarlyLoad]注册事件...");

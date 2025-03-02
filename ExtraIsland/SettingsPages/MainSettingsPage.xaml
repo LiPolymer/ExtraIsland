@@ -126,7 +126,19 @@
                              IsOn="{Binding Settings.IsLifeModeActivated, Mode=TwoWay}"
                              Description="启用不适用于课堂环境的功能"
                              Header="生活模式"/>
-            <materialDesign:Card Margin="0 0 0 6">
+            <ci:SettingsCard x:Name="ExpModeCard"
+                             IconGlyph="Bug"
+                             Description="启用尚未开发完成,已经知道有Bug的功能(启用后请勿提交Bug)"
+                             Header="实验性功能">
+                <ci:SettingsCard.Switcher>
+                    <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+                    <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                  IsChecked="{Binding Settings.IsExperimentalModeActivated, Mode=TwoWay}"
+                                  Click="ExpSwitcher_Click">
+                    </ToggleButton>
+                </ci:SettingsCard.Switcher>
+            </ci:SettingsCard>
+            <materialDesign:Card x:Name="DockSettingsCard" Margin="0 0 0 6" Visibility="Collapsed">
                 <Expander Background="Transparent"
                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                     <Expander.Header>
