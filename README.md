@@ -23,7 +23,7 @@
 
 ![Repobeatsa](https://repobeats.axiom.co/api/embed/1f18128f350eea1c2612fe115498942e5c4fefff.svg "Repobeats Analytics Image")
 
-[ExtraIsland](https://docs.lipoly.ink/ExtraIsland) 是一款 [ClassIsland](https://classisland.tech/) 的实用插件，为 ClassIsland 增加了更好的倒计日、流畅时钟、名句一言、值日表等组件功能。诸多新功能，如换届导引、Sleepy 组件等亦处于绝赞开发中。
+[ExtraIsland](https://docs.lipoly.ink/ExtraIsland) 是一款 [ClassIsland](https://classisland.tech/) 的实用插件，为 ClassIsland 增加了更好的倒计日、流畅时钟、名句一言、值日表、换届导引、Sleepy 等组件和功能！
 
 ![GitHub Commit Activity](https://img.shields.io/github/commit-activity/t/LiPolymer/ExtraIsland)
 ![GitHub Last Commit](https://img.shields.io/github/last-commit/LiPolymer/ExtraIsland)
