@@ -7,6 +7,7 @@ using System.Windows.Input;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
+using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 
@@ -51,8 +52,11 @@ public partial class DutySettingsPage {
     }
 
     void UpdateOnDuty() {
-        PeopleOnDutyLabel.Content = Settings.PeoplesOnDutyString;
-        LastUpdateLabel.Content = Settings.LastUpdateString;
+        this.Invoke(() => {
+            IndexOnDutyLabel.Content = Settings.Data.CurrentPeopleIndex.ToString();
+            PeopleOnDutyLabel.Content = Settings.PeoplesOnDutyString;
+            LastUpdateLabel.Content = Settings.LastUpdateString;
+        });
     }
     
     [GeneratedRegex("[^0-9]+")]

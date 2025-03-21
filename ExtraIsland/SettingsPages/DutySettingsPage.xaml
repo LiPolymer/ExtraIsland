@@ -80,7 +80,7 @@
                             <materialDesign:Chip Background="{DynamicResource MaterialDesignDivider}">
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="当前索引" />
-                                    <Label Content="{Binding Settings.Data.CurrentPeopleIndex}" />
+                                    <Label x:Name="IndexOnDutyLabel" Content="{Binding Settings.Data.CurrentPeopleIndex}" />
                                     <Label Content="@" />
                                     <Label x:Name="PeopleOnDutyLabel" Content="{Binding PeopleOnDuty}" />
                                 </StackPanel>

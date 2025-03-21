@@ -30,7 +30,7 @@ public class OnDutyPersistedConfigHandler {
                 Data);
         }
         PeoplesOnDuty = Data.GetWhoOnDuty();
-        _updateThread = new Thread(TickerAction);
+        _updateThread = new Thread(Updater);
         Data.PropertyChanged += Save;
         _updateThread.Start();
     }
@@ -91,11 +91,15 @@ public class OnDutyPersistedConfigHandler {
     
     public event Action? OnDutyUpdated;
     
-    void TickerAction() {
-        if (EiUtils.GetDateTimeSpan(Data.LastUpdate,DateTime.Now) >= Data.DutyChangeDuration) {
-            SwapOnDuty();
+    void Updater() {
+        while (true) {
+            if (EiUtils.GetDateTimeSpan(Data.LastUpdate,DateTime.Now) >= Data.DutyChangeDuration) {
+                SwapOnDuty();
+                UpdateOnDuty();
+            }
+            Thread.Sleep(500);   
         }
-        Thread.Sleep(200);
+        // ReSharper disable once FunctionNeverReturns
     }
 
     public void SwapOnDuty() {
