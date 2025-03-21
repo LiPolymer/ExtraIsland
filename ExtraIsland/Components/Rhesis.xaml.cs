@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
@@ -12,7 +12,7 @@ namespace ExtraIsland.Components;
     "FBB380C2-5480-4FED-8349-BA5F4EAD2688",
     "名句一言",
     PackIconKind.MessageOutline,
-    "显示一句古今名言,可使用三个API"
+    "显示一句古今名言，可使用多种API和在线TXT文件"
 )]
 public partial class Rhesis {
     public Rhesis(ILessonsService lessonsService) {
@@ -44,15 +44,20 @@ public partial class Rhesis {
     
     void Update() {
         new Thread(() => {
-            Showing = _rhesisHandler.LegacyGet(Settings.DataSource,Settings.HitokotoProp switch {
+            Showing = _rhesisHandler.LegacyGet(
+                Settings.DataSource,
+                Settings.HitokotoProp switch {
                     "" => "https://v1.hitokoto.cn/",
                     _ => $"https://v1.hitokoto.cn/?{Settings.HitokotoLengthArgs}{Settings.HitokotoProp}"
                 },
                 Settings.SainticProp switch {
                     "" => "https://open.saintic.com/api/sentence/",
-                    _ => $"https://open.saintic.com/api/sentence/{Settings.HitokotoProp}.json"
+                    _ => $"https://open.saintic.com/api/sentence/{Settings.SainticProp}.json"
                 },
-                Settings.LengthLimitation).Content; 
+                Settings.OnlineTxtUrl,
+                Settings.LengthLimitation,
+                Settings.OnlineTxtWeight
+            ).Content; 
             this.BeginInvoke(() => {
                 if (Settings.IgnoreListString.Split("\r\n").Any(keyWord => Showing.Contains(keyWord) & keyWord != "")) return;
                 _labelAnimator.Update(Showing, Settings.IsAnimationEnabled, Settings.IsSwapAnimationEnabled);
