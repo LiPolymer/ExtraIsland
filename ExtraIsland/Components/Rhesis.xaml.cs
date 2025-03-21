@@ -2,6 +2,7 @@
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
+using Google.Protobuf;
 using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
 
@@ -53,6 +54,7 @@ public partial class Rhesis {
                 },
                 Settings.LengthLimitation).Content; 
             this.BeginInvoke(() => {
+                if (Settings.IgnoreListString.Split("\r\n").Any(keyWord => Showing.Contains(keyWord) & keyWord != "")) return;
                 _labelAnimator.Update(Showing, Settings.IsAnimationEnabled, Settings.IsSwapAnimationEnabled);
             });
         }).Start();

@@ -82,6 +82,38 @@
                           IsExpanded="False"
                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                     <Expander.Header>
+                        <ci:SettingsControl IconGlyph="FormTextboxLock"
+                                            Margin="-10,-2,0,-2"
+                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                            Header="排除列表"
+                                            Description="包含位于此列表中的字符串的内容更新将被忽略,一行一个"
+                                            HasSwitcher="True">
+                            <ci:SettingsControl.Switcher>
+                                <materialDesign:PackIcon
+                                    Kind="ScriptTextKey"
+                                    Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                    VerticalAlignment="Center"/>
+                            </ci:SettingsControl.Switcher>
+                        </ci:SettingsControl>
+                    </Expander.Header>
+                    <!-- ReSharper disable once Xaml.DynamicResourceError -->
+                    <Border Background="{DynamicResource MaterialDesignDivider}"
+                            Margin="35,3,20,9"
+                            CornerRadius="5">
+                        <TextBox Text="{Binding Settings.IgnoreListString}"
+                                 Background="Transparent"
+                                 AcceptsReturn="True"
+                                 VerticalContentAlignment="Top"
+                                 TextWrapping="Wrap"
+                                 Margin="6,6,6,6"/>
+                    </Border>
+                </Expander>
+            </materialDesign:Card>
+            <materialDesign:Card Margin="0 0 0 6">
+                <Expander Background="Transparent"
+                          IsExpanded="False"
+                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    <Expander.Header>
                         <ci:SettingsControl IconGlyph="Api"
                                             Foreground="{DynamicResource MaterialDesignBody}"
                                             Header="高级 · 接口参数"

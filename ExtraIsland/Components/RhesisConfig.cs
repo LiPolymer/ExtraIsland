@@ -7,6 +7,8 @@ namespace ExtraIsland.Components;
 public class RhesisConfig {
     public RhesisDataSource DataSource { get; set; } = RhesisDataSource.All;
     
+    public string IgnoreListString { get; set; } = string.Empty;
+    
     public string HitokotoProp  { get; set; } = string.Empty;
     
     public DateTime LastUpdate { get; set; } = DateTime.Today;

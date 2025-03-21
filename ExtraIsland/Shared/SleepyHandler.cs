@@ -49,6 +49,7 @@ public static class SleepyHandler {
             public string Color { get; set; } = string.Empty;
         }
 
+        // ReSharper disable once ClassNeverInstantiated.Global
         public class SleepyDevice {
             [JsonPropertyName("show_name")]
             public string ShowName { get; set; } = string.Empty;
