@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Windows.Input;
 using ExtraIsland.Shared;
@@ -22,7 +22,8 @@ public partial class RhesisSettings {
         RhesisDataSource.Hitokoto,
         RhesisDataSource.Jinrishici,
         RhesisDataSource.Saint,
-        RhesisDataSource.SaintJinrishici
+        RhesisDataSource.SaintJinrishici,
+        RhesisDataSource.OnlineTxt
     ];
 }
 
@@ -40,4 +41,3 @@ public class LimitIntToArgConverter : IValueConverter {
         return 0;
     }
 }
-
