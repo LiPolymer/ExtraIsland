@@ -1,4 +1,4 @@
-﻿<ci:ComponentBase x:Class="ExtraIsland.Components.RhesisSettings"
+<ci:ComponentBase x:Class="ExtraIsland.Components.RhesisSettings"
                   x:TypeArguments="local:RhesisConfig"
                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -21,7 +21,7 @@
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
         <StackPanel Style="{StaticResource SettingsPageStackPanelStyle}">
             <ci:SettingsCard IconGlyph="GitRepository" Header="数据来源"
-                             Description="选择使用的API">
+                             Description="选择使用的API或在线TXT文件">
                 <ci:SettingsCard.Switcher>
                     <Grid>
                         <ComboBox
@@ -40,6 +40,61 @@
                     </Grid>
                 </ci:SettingsCard.Switcher>
             </ci:SettingsCard>
+            
+            <!-- TXT文件设置 -->
+            <materialDesign:Card Margin="0 0 0 6" Background="{DynamicResource MaterialDesignBackground}">
+                <Expander Background="Transparent"
+                          IsExpanded="False"
+                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    <Expander.Header>
+                        <ci:SettingsControl IconGlyph="FileDocument"
+                                            Margin="-10,-2,0,-2"
+                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                            Header="在线TXT文件设置"
+                                            Description="配置在线TXT文件的URL和权重"
+                                            HasSwitcher="True">
+                            <ci:SettingsControl.Switcher>
+                                <materialDesign:PackIcon
+                                    Kind="FileDocumentMultiple"
+                                    Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                    VerticalAlignment="Center"/>
+                            </ci:SettingsControl.Switcher>
+                        </ci:SettingsControl>
+                    </Expander.Header>
+                    <StackPanel Margin="36,10,20,10">
+                        <TextBlock Margin="0,0,0,5" Text="TXT文件URL（每行一个句子）" 
+                                   FontWeight="Medium" />
+                        <TextBox Text="{Binding Settings.OnlineTxtUrl, Mode=TwoWay}"
+                                 Margin="0,0,0,10"
+                                 ToolTip="输入包含句子的TXT文件URL，每行一个句子"
+                                 materialDesign:HintAssist.Hint="https://example.com/quotes.txt" />
+                        
+                        <TextBlock Margin="0,5,0,5" Text="TXT文件权重（0-100%）" 
+                                   FontWeight="Medium" />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <Slider Minimum="0" Maximum="100" 
+                                    Value="{Binding Settings.OnlineTxtWeight}"
+                                    Width="200"
+                                    TickFrequency="10"
+                                    IsSnapToTickEnabled="True"
+                                    TickPlacement="BottomRight"
+                                    ToolTip="设置TXT文件作为来源的权重百分比" />
+                            <TextBox Text="{Binding Settings.OnlineTxtWeight, Converter={StaticResource IntToStringConverter}, Mode=TwoWay}"
+                                     Width="40"
+                                     Margin="10,0,0,0"
+                                     VerticalAlignment="Center"
+                                     InputMethod.IsInputMethodEnabled="False"
+                                     PreviewTextInput="TextBoxNumberCheck" />
+                            <TextBlock Text="%" VerticalAlignment="Center" Margin="2,0,0,0" />
+                        </StackPanel>
+                        
+                        <TextBlock Margin="0,10,0,5" FontStyle="Italic" TextWrapping="Wrap" Foreground="{DynamicResource MaterialDesignBodyLight}">
+                            注意：权重为在线TXT文件与其他API来源的出现概率比例。设为0表示不使用TXT文件，设为100表示仅使用TXT文件。
+                        </TextBlock>
+                    </StackPanel>
+                </Expander>
+            </materialDesign:Card>
+            
             <ci:SettingsCard IconGlyph="FormTextboxLock" Header="字数限制"
                              Description="当字数大于该设置时,不显示并重新获取(一言为API级限制),设为0即禁用">
                 <ci:SettingsCard.Switcher>
