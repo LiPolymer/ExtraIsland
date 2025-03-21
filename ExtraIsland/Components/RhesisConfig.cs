@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using ExtraIsland.Shared;
 
 namespace ExtraIsland.Components;
@@ -38,4 +38,15 @@ public class RhesisConfig {
     public bool IsAnimationEnabled { get; set; } = true;
     
     public bool IsSwapAnimationEnabled { get; set; }
+
+    // 新增的在线TXT文件相关属性
+    public string OnlineTxtUrl { get; set; } = string.Empty;
+    
+    [JsonIgnore]
+    private int _onlineTxtWeight = 20; // 默认20%权重
+    
+    public int OnlineTxtWeight {
+        get => _onlineTxtWeight;
+        set => _onlineTxtWeight = Math.Max(0, Math.Min(100, value)); // 确保权重在0-100范围内
+    }
 }
