@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -11,19 +11,12 @@ public static class RhesisHandler {
     public class Instance {
         readonly Random _random = new Random();
         public RhesisData LegacyGet(RhesisDataSource rhesisDataSource = RhesisDataSource.All
-            ,string? hitokotoRequestUrl = null,string? sainticRequestUrl = null, int lengthLimitation = 0) {
+            ,string? hitokotoRequestUrl = null, string? sainticRequestUrl = null, 
+            string? onlineTxtUrl = null, int lengthLimitation = 0, int onlineTxtWeight = 20) {
+            
             for (int i = 0; i <= 5; i++) {
-                RhesisData dataFetched =  rhesisDataSource switch {
-                    //TODO: 使用基于权重的随机方法(在EiUtil内实现)
-                    RhesisDataSource.All => _random.Next(4) switch {
-                        0 => RhesisDataSource.Jinrishici,
-                        //今日诗词接口内容较少,故概率较低
-                        1 => RhesisDataSource.Saint,
-                        2 => RhesisDataSource.Saint,
-                        3 => RhesisDataSource.Hitokoto,
-                        4 => RhesisDataSource.Hitokoto,
-                        _ => rhesisDataSource
-                    },
+                RhesisData dataFetched = rhesisDataSource switch {
+                    RhesisDataSource.All => GetRandomSourceWithWeight(onlineTxtWeight),
                     RhesisDataSource.SaintJinrishici => _random.Next(2) switch {
                         0 => RhesisDataSource.Jinrishici,
                         //今日诗词接口内容较少,故概率较低
@@ -36,16 +29,53 @@ public static class RhesisHandler {
                     RhesisDataSource.Jinrishici => JinrishiciData.Fetch().ToRhesisData(),
                     RhesisDataSource.Saint => SainticData.Fetch(sainticRequestUrl).ToRhesisData(),
                     RhesisDataSource.Hitokoto => HitokotoData.Fetch(hitokotoRequestUrl).ToRhesisData(),
+                    RhesisDataSource.OnlineTxt => OnlineTxtData.Fetch(onlineTxtUrl).ToRhesisData(),
                     RhesisDataSource.SaintJinrishici => new RhesisData { Content = "处理时出现错误" },
                     RhesisDataSource.All => new RhesisData { Content = "处理时出现错误" },
                     _ => new RhesisData { Content = "处理时出现错误" }
                 };
-                if (lengthLimitation == 0 | dataFetched.Content.Length <= lengthLimitation) {
+                
+                if (lengthLimitation == 0 || dataFetched.Content.Length <= lengthLimitation) {
                     return dataFetched;
                 }
             }
+            
             return rhesisDataSource == RhesisDataSource.All ? HitokotoData.Fetch(hitokotoRequestUrl).ToRhesisData() 
                 : new RhesisData { Content = "满足限制时遇到困难" };
+        }
+
+        private RhesisDataSource GetRandomSourceWithWeight(int onlineTxtWeight) {
+            // 确保权重在0-100之间
+            onlineTxtWeight = Math.Max(0, Math.Min(100, onlineTxtWeight));
+            
+            // 如果TXT权重为0或URL为空，则不考虑TXT源
+            if (onlineTxtWeight == 0) {
+                return GetTraditionalSource();
+            }
+            
+            // 计算传统源的剩余权重
+            int traditionalWeight = 100 - onlineTxtWeight;
+            
+            // 生成0-99之间的随机数
+            int randomValue = _random.Next(100);
+            
+            // 如果随机数小于在线TXT权重，使用在线TXT
+            if (randomValue < onlineTxtWeight) {
+                return RhesisDataSource.OnlineTxt;
+            }
+            
+            // 否则，使用传统源
+            return GetTraditionalSource();
+        }
+        
+        private RhesisDataSource GetTraditionalSource() {
+            int randomValue = _random.Next(4);
+            return randomValue switch {
+                0 => RhesisDataSource.Jinrishici,  // 今日诗词接口概率较低
+                1 => RhesisDataSource.Saint,
+                2 => RhesisDataSource.Saint,
+                _ => RhesisDataSource.Hitokoto
+            };
         }
     }
 }
@@ -55,12 +85,56 @@ public class RhesisData {
     public string Content { get; set; } = string.Empty;
     public string Author { get; set; } = string.Empty;
     public string Source { get; set; } = string.Empty;
-
     public string Catalog { get; set; } = string.Empty;
 }
 
-public class SainticData {
+public class OnlineTxtData {
+    public string Sentence { get; set; } = string.Empty;
 
+    public RhesisData ToRhesisData() {
+        return new RhesisData {
+            Author = string.Empty,
+            Title = string.Empty,
+            Content = Sentence,
+            Source = "在线TXT文件",
+            Catalog = "自定义",
+        };
+    }
+
+    public static OnlineTxtData Fetch(string? requestUrl = null) {
+        if (string.IsNullOrEmpty(requestUrl)) {
+            return new OnlineTxtData {
+                Sentence = "请在设置中配置TXT文件URL"
+            };
+        }
+
+        try {
+            var client = new HttpClient();
+            var content = client.GetStringAsync(requestUrl).Result;
+            var lines = content.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            
+            if (lines.Length == 0) {
+                return new OnlineTxtData {
+                    Sentence = "TXT文件内容为空，请检查URL"
+                };
+            }
+
+            var random = new Random();
+            var randomLine = lines[random.Next(lines.Length)];
+            
+            return new OnlineTxtData {
+                Sentence = randomLine.Trim()
+            };
+        }
+        catch (Exception ex) {
+            return new OnlineTxtData {
+                Sentence = $"获取TXT文件时发生错误：请检查网络连接和URL有效性"
+            };
+        }
+    }
+}
+
+public class SainticData {
     [JsonPropertyName("code")] 
     public int StatusCode { get; set; } = -1;
 
@@ -74,7 +148,6 @@ public class SainticData {
     public QueueInfoData QueueInfo { get; set; } = new QueueInfoData();
 
     public class SainticRhesisData {
-
         [JsonPropertyName("author")]
         public string Author { get; set; } = string.Empty;
 
@@ -110,7 +183,6 @@ public class SainticData {
     }
 
     public class QueueInfoData {
-
         [JsonPropertyName("author")] 
         public string Author { get; set; } = string.Empty;
 
@@ -152,7 +224,6 @@ public class SainticData {
 }
 
 public class JinrishiciData {
-
     [JsonPropertyName("content")]
     public string Content { get; set; } = string.Empty;
 
@@ -290,5 +361,7 @@ public enum RhesisDataSource {
     [Description("今日诗词")]
     Jinrishici = 2,
     [Description("一言")]
-    Hitokoto = 3
+    Hitokoto = 3,
+    [Description("在线TXT文件")]
+    OnlineTxt = 4
 }
