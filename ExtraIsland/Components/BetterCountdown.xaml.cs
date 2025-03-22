@@ -98,7 +98,7 @@ public partial class BetterCountdown {
     void DetectEvent() {
         if (_updateLock) return;
         _updateLock = true;
-        TimeSpan span = EiUtils.GetDateTimeSpan(Now,Convert.ToDateTime(Settings.TargetDate));
+        TimeSpan span = EiUtils.GetDateTimeSpan(Now,DateTime.Parse(Settings.TargetDate));
         if (_days != span.Days.ToString() | _isAccurateChanged) {
             int dayI = span.Days;
             int dayCi = (int)Settings.Accuracy == 0 & Settings.IsCorrectorEnabled ? dayI + 1 : dayI;
@@ -135,7 +135,7 @@ public partial class BetterCountdown {
     }
 
     void SilentUpdater() {
-        TimeSpan span = EiUtils.GetDateTimeSpan(Now,Convert.ToDateTime(Settings.TargetDate));
+        TimeSpan span = EiUtils.GetDateTimeSpan(Now,DateTime.Parse(Settings.TargetDate));
         if (_days != span.Days.ToString() | _isAccurateChanged) {
             int dayI = span.Days;
             _days = (int)Settings.Accuracy == 0 ? (dayI + 1).ToString() : dayI.ToString();
