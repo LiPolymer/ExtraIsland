@@ -3,14 +3,15 @@
 > [!IMPORTANT]
 >
 > 由于备考压力，[维护暂停](https://lipoly.ink/2024/announcement/)，届时开发将几乎停止，还请见谅 😭🙏
-> 
+>
 > 本项目暂停开发,将在高考结束后恢复
 >
 > 当然,如果你觉得这个项目不错，欢迎Star，也可以为本项目创建 PullRequest 来帮助我们变得更好！
-> 
+>
 > 再次感谢大家的喜爱和使用！😋🙏 祝大家学业有成！
 
 <div align="center">
+
 
 <img src="./ExtraIsland/Assets/fullLogo.svg" alt="ExtraIsland Logo" style="height: 100px;">
 
@@ -24,6 +25,22 @@
 ![Repobeatsa](https://repobeats.axiom.co/api/embed/1f18128f350eea1c2612fe115498942e5c4fefff.svg "Repobeats Analytics Image")
 
 [ExtraIsland](https://docs.lipoly.ink/ExtraIsland) 是一款 [ClassIsland](https://classisland.tech/) 的实用插件，为 ClassIsland 增加了更好的倒计日、流畅时钟、名句一言、值日表、换届导引、Sleepy 等组件和功能！
+
+
+
+✨这是[ExtraIsland](https://docs.lipoly.ink/ExtraIsland) 插件的Fork，由HL中学高一22班电教维护。
+
+主要增加每日一句的【预缓存，更精确的权重调节，在线TXT文本支持】。
+
+虽然也许无人在意，但我会在课余时间（能力范围内）维护它，给同学们精神上的鼓舞。
+
+> 我无坚不摧，也无所不能。—《某某》木苏里
+
+<img src="https://iamyx.co/d/%E3%80%90YX%E4%BA%91%E7%9B%98-%E5%85%B1%E4%BA%AB-1TB%E3%80%91/%E5%85%B6%E4%BB%96%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/%E7%94%B5%E6%95%99%E7%9A%84/ec23286ffafb56bdb7fd933d69015c45.png" style="zoom: 33%;" />
+
+
+
+
 
 ![GitHub Commit Activity](https://img.shields.io/github/commit-activity/t/LiPolymer/ExtraIsland)
 ![GitHub Last Commit](https://img.shields.io/github/last-commit/LiPolymer/ExtraIsland)
@@ -79,9 +96,9 @@ _也算是以前写的班级小工具的精神续作(?_
 > 本插件的部分组件应用了动画效果。动画效果在部分较旧的设备上可能引发性能问题，请用户酌情启用插件的动画效果!
 >
 > **强制使用动画效果的组件**：`流畅时钟`.
->
 
 <div align="center">
+
 
 **感谢同学们对本项目的支持与贡献！**
 
@@ -94,6 +111,7 @@ _也算是以前写的班级小工具的精神续作(?_
 ### 流畅时钟
 
 <div align="center">
+
 
 ![流畅时钟组件截图](./assets/README_screenshots/fluent_clock.png)
 
@@ -110,6 +128,7 @@ _也算是以前写的班级小工具的精神续作(?_
 ### 更好的倒计日
 
 <div align="center">
+
 
 ![更好的倒计日组件截图](./assets/README_screenshots/better_countdown.png)
 
@@ -128,6 +147,7 @@ _也算是以前写的班级小工具的精神续作(?_
 ### 值日表
 
 <div align="center">
+
 
 ![值日表设置页面截图](./assets/README_screenshots/duty_student.png)
 
@@ -148,6 +168,7 @@ _也算是以前写的班级小工具的精神续作(?_
 ### 名句一言
 
 <div align="center">
+
 
 ![名句一言组件截图](./assets/README_screenshots/hitokoto.png)
 
@@ -180,7 +201,7 @@ _也算是以前写的班级小工具的精神续作(?_
   - Sleepy 组件 ~~`随地视奸`~~ `连接到现有的Sleepy实例,并在岛上显示!`
 
     - 支持轮播设备状态
-    
+
     - 带有切换动画(可配置)
 
 ## 高可用的实验性功能（需获取 [自动构建](https://gitlab.com/LiPolymer/ExtraIsland/-/pipelines)）
