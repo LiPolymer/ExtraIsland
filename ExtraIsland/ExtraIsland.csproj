@@ -9,19 +9,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Assets\fullLogo.png" />
-	  <None Remove="Assets\fullLogo.svg" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="ClassIsland.PluginSdk" Version="1.6.0.1">
 			<ExcludeAssets>runtime; native</ExcludeAssets>
 		</PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Resource Include="Assets\fullLogo.png" />
-	  <Resource Include="Assets\fullLogo.svg" />
 	</ItemGroup>
 
 	<ItemGroup>

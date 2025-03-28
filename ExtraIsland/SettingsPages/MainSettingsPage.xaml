@@ -7,6 +7,7 @@
                      xmlns:ci="http://classisland.tech/schemas/xaml/core"
                      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                      xmlns:sc="clr-namespace:ExtraIsland.Shared.Converters"
+                     xmlns:controls="clr-namespace:ExtraIsland.Controls"
                      mc:Ignorable="d"
                      Title="MainSettingsPage">
     <ci:SettingsPageBase.Resources>
@@ -43,7 +44,13 @@
                                           Height="55"
                                           Width="55"
                                           Margin="0,-2,4,0"
+                                          Visibility="Collapsed"
                                           VerticalAlignment="Center"/>
+                        <controls:FullLogo
+                            Height="55"
+                            Width="55"
+                            Margin="0,-2,4,0"
+                            VerticalAlignment="Center" />
                         <TextBlock Margin="4 0 0 0">
                                     <Run Text="ExtraIsland" FontSize="24" />
                                     <Run Text="R0.38" />

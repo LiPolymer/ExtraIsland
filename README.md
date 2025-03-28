@@ -12,7 +12,7 @@
 
 <div align="center">
 
-<img src="https://docs.lipoly.ink/ExtraIsland/images/extraIslandFull.svg" alt="ExtraIsland Logo" style="height: 100px;">
+<img src="./ExtraIsland/Assets/fullLogo.svg" alt="ExtraIsland Logo" style="height: 100px;">
 
 # ExtraIsland
 
