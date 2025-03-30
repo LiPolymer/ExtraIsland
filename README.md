@@ -51,9 +51,6 @@
 ![GitHub Forks](https://img.shields.io/github/forks/iamyx123/ExtraIsland)
 ![GitHub Repo Stars](https://img.shields.io/github/stars/iamyx123/ExtraIsland)
 ![GitHub Watchers](https://img.shields.io/github/watchers/iamyx123/ExtraIsland)
-
-![WakaTime](https://wakatime.com/badge/user/0c9f5a71-56d1-4ba3-b95c-da9e563fa119/project/c6f9dda0-5282-4b6b-b0e1-4461c06a5b41.svg?style=flat)
-
 </div>
 
 为 [ClassIsland](https://classisland.tech/) 扩充一些小小的功能
