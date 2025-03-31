@@ -5,7 +5,6 @@ using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
 using MaterialDesignThemes.Wpf;
 using System.Windows.Media;
-using ClassIsland.Core;
 using ClassIsland.Core.Controls;
 using ClassIsland.Core.Controls.CommonDialog;
 using ExtraIsland.StandaloneViews;

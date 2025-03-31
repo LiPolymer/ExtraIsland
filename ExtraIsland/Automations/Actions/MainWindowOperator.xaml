@@ -10,8 +10,8 @@
                               mc:Ignorable="d">
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=actions1:MainWindowOperator}}"
                 Orientation="Horizontal">
-        <Label Grid.Column="0" Content="进行" />
-        <ComboBox Grid.Column="1"
+        <Label Content="进行" />
+        <ComboBox
             MinWidth="20"
             SelectedItem="{Binding Settings.OperationType}"
             ItemsSource="{Binding OperationTypes}">

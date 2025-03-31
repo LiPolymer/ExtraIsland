@@ -5,17 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Shell;
 using System.Windows.Threading;
 using ClassIsland.Core;
-using ClassIsland.Core.Controls;
 using ExtraIsland.ConfigHandlers;
-using ExtraIsland.StandaloneViews;
-using Google.Protobuf;
-using MahApps.Metro.Controls;
-using MaterialDesignThemes.Wpf;
-using Octokit;
-using Label = System.Windows.Controls.Label;
 
 namespace ExtraIsland.Shared;
 
