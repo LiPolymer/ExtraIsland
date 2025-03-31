@@ -62,5 +62,8 @@
 	    <XamlRuntime>Wpf</XamlRuntime>
 	    <SubType>Designer</SubType>
 	  </Page>
+	  <Page Update="Automations\Actions\MainWindowOperator.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 </Project>
