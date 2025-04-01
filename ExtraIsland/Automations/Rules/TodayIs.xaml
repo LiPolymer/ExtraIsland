@@ -13,7 +13,6 @@
                             d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:TodayIs}}" 
                 Orientation="Horizontal">
-        <Label Content="今天是"/>
         <ComboBox MinWidth="20"
                   SelectedItem="{Binding Settings.Target}"
                   ItemsSource="{Binding TargetTypes}">
