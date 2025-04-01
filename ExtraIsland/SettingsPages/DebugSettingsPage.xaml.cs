@@ -81,8 +81,7 @@ public partial class DebugSettingsPage {
         });
     }
     void ClassIsDock(object sender,RoutedEventArgs eventArgs) {
-        GlobalConstants.Handlers.MainWindow ??= new MainWindowHandler();
-        MainWindowHandler bar = GlobalConstants.Handlers.MainWindow;
+        MainWindowHandler bar = GlobalConstants.Handlers.MainWindow!;
         bar.SetBar();
     }
 }

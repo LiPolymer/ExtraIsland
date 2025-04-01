@@ -74,9 +74,9 @@ namespace ExtraIsland
             Console.WriteLine("[ExIsLand][EarlyLoad]注册事件...");
             GlobalConstants.Triggers.OnLoaded += TinyFeatures.JuniorGuide.Trigger;
             AppBase.Current.AppStarted += (_,_) => {
+                GlobalConstants.Handlers.MainWindow = new MainWindowHandler();
                 if (!GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) return;
-                GlobalConstants.Handlers.MainWindow ??= new MainWindowHandler();
-                GlobalConstants.Handlers.MainWindow.InitBar(accentState: GlobalConstants.Handlers.MainConfig.Data.Dock.AccentState);
+                GlobalConstants.Handlers.MainWindow!.InitBar(accentState: GlobalConstants.Handlers.MainConfig.Data.Dock.AccentState);
             };
             AppBase.Current.AppStopping += (_,_) => {
                 if (GlobalConstants.Handlers.LyricsIsland == null) return;
