@@ -52,10 +52,10 @@
                             Margin="0,-2,4,0"
                             VerticalAlignment="Center" />
                         <TextBlock Margin="4 0 0 0">
-                                    <Run Text="ExtraIsland" FontSize="24" />
+                                    <Run Text="ExtraIsland iamyx123 Fork" FontSize="24" />
                                     <Run Text="R0.38" />
                                     <LineBreak />
-                                    <Run Text="Copyright © 2024-2025 LiPolymer"/>
+                                    <Run Text="Copyright © 2025 LiPolymer,iamyx123"/>
                                     <LineBreak />
                                     <Run Foreground="Gray"
                                          FontSize="10"
@@ -71,7 +71,7 @@
                                 BorderBrush="Transparent"
                                 Background="Transparent"
                                 Command="{x:Static ci:UriNavigationCommands.UriNavigationCommand}"
-                                CommandParameter="https://github.com/LiPolymer/ExtraIsland">
+                                CommandParameter="https://github.com/iamyx123/ExtraIsland">
                             <materialDesign:PackIcon Kind="Github"
                                                      Foreground="{DynamicResource MaterialDesignBody}"
                                                      Height="20"

@@ -1,11 +1,11 @@
 id: ink.lipoly.ext.extraisland
-name: ExtraIsland
+name: ExtraIsland-iamyx123Fork
 description: 为ClassIsland提供多种扩展功能!
 entranceAssembly: "ExtraIsland.dll"
-url: https://github.com/LiPolymer/ExtraIsland
+url: https://github.com/iamyx123/ExtraIsland
 version: 0.3.8.0
 apiVersion: 1.5.0
-author: LiPolymer
-repoOwner: LiPolymer
+author: iamyx123,LiPolymer
+repoOwner: iamyx123
 repoName: ExtraIsland
 assetsRoot: master/ExtraIsland

@@ -1,28 +1,15 @@
 <!--markdownlint-disable MD033 MD036-->
 
-> [!IMPORTANT]
->
-> 由于备考压力，[维护暂停](https://lipoly.ink/2024/announcement/)，届时开发将几乎停止，还请见谅 😭🙏
->
-> 本项目暂停开发,将在高考结束后恢复
->
-> 当然,如果你觉得这个项目不错，欢迎Star，也可以为本项目创建 PullRequest 来帮助我们变得更好！
->
-> 再次感谢大家的喜爱和使用！😋🙏 祝大家学业有成！
-
 <div align="center">
 
 
 <img src="./ExtraIsland/Assets/fullLogo.svg" alt="ExtraIsland Logo" style="height: 100px;">
 
-# ExtraIsland
+# ExtraIsland(Fork)
 
 **✨「课岛进化」** ✨
 
-[![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/LiPolymer/ExtraIsland)
-[![GitLab](https://img.shields.io/badge/GitLab-FC6D26?logo=gitlab&logoColor=fff)](https://gitlab.com/LiPolymer/ExtraIsland)
-
-![Repobeatsa](https://repobeats.axiom.co/api/embed/1f18128f350eea1c2612fe115498942e5c4fefff.svg "Repobeats Analytics Image")
+[![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/iamyx123/ExtraIsland)
 
 [ExtraIsland](https://docs.lipoly.ink/ExtraIsland) 是一款 [ClassIsland](https://classisland.tech/) 的实用插件，为 ClassIsland 增加了更好的倒计日、流畅时钟、名句一言、值日表、换届导引、Sleepy 等组件和功能！
 
@@ -42,37 +29,31 @@
 
 
 
-![GitHub Commit Activity](https://img.shields.io/github/commit-activity/t/LiPolymer/ExtraIsland)
-![GitHub Last Commit](https://img.shields.io/github/last-commit/LiPolymer/ExtraIsland)
-![GitHub Commits Since Latest Release](https://img.shields.io/github/commits-since/LiPolymer/ExtraIsland/latest)
-![GitHub Created At](https://img.shields.io/github/created-at/LiPolymer/ExtraIsland)
-![GitHub Release Date](https://img.shields.io/github/release-date-pre/LiPolymer/ExtraIsland)
-![GitHub Release](https://img.shields.io/github/v/release/LiPolymer/ExtraIsland?include_prereleases)
-![GitHub Language Count](https://img.shields.io/github/languages/count/LiPolymer/ExtraIsland)
-![GitHub Top Language](https://img.shields.io/github/languages/top/LiPolymer/ExtraIsland)
-![GitHub Repo Size](https://img.shields.io/github/repo-size/LiPolymer/ExtraIsland)
-![GitHub License](https://img.shields.io/github/license/LiPolymer/ExtraIsland)
-![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/LiPolymer/ExtraIsland/total)
-[![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FLiPolymer%2FExtraIsland&label=visits&countColor=%2337d67a&style=flat)](https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2FLiPolymer%2FExtraIsland)
-![Website](https://img.shields.io/website?url=https%3A%2F%2Fdocs.lipoly.ink%2FExtraIsland)
+![GitHub Commit Activity](https://img.shields.io/github/commit-activity/t/iamyx123/ExtraIsland)
+![GitHub Last Commit](https://img.shields.io/github/last-commit/iamyx123/ExtraIsland)
+![GitHub Commits Since Latest Release](https://img.shields.io/github/commits-since/iamyx123/ExtraIsland/latest)
+![GitHub Created At](https://img.shields.io/github/created-at/iamyx123/ExtraIsland)
+![GitHub Release Date](https://img.shields.io/github/release-date-pre/iamyx123/ExtraIsland)
+![GitHub Release](https://img.shields.io/github/v/release/iamyx123/ExtraIsland?include_prereleases)
+![GitHub Language Count](https://img.shields.io/github/languages/count/iamyx123/ExtraIsland)
+![GitHub Top Language](https://img.shields.io/github/languages/top/iamyx123/ExtraIsland)
+![GitHub Repo Size](https://img.shields.io/github/repo-size/iamyx123/ExtraIsland)
+![GitHub License](https://img.shields.io/github/license/iamyx123/ExtraIsland)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/iamyx123/ExtraIsland/total)
+[![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2Fiamyx123%2FExtraIsland&label=visits&countColor=%2337d67a&style=flat)](https://visitorbadge.io/status?path=https%3A%2F%2Fgithub.com%2Fiamyx123%2FExtraIsland)
 
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/LiPolymer/ExtraIsland)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed/LiPolymer/ExtraIsland)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr/LiPolymer/ExtraIsland)
-![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed/LiPolymer/ExtraIsland)
-![GitHub Discussions](https://img.shields.io/github/discussions/LiPolymer/ExtraIsland)
-![GitHub Number of Milestones](https://img.shields.io/github/milestones/all/LiPolymer/ExtraIsland)
-![GitHub Forks](https://img.shields.io/github/forks/LiPolymer/ExtraIsland)
-![GitHub Repo Stars](https://img.shields.io/github/stars/LiPolymer/ExtraIsland)
-![GitHub Watchers](https://img.shields.io/github/watchers/LiPolymer/ExtraIsland)
-
-![WakaTime](https://wakatime.com/badge/user/0c9f5a71-56d1-4ba3-b95c-da9e563fa119/project/c6f9dda0-5282-4b6b-b0e1-4461c06a5b41.svg?style=flat)
-
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/iamyx123/ExtraIsland)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-closed/iamyx123/ExtraIsland)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr/iamyx123/ExtraIsland)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues-pr-closed/iamyx123/ExtraIsland)
+![GitHub Discussions](https://img.shields.io/github/discussions/iamyx123/ExtraIsland)
+![GitHub Number of Milestones](https://img.shields.io/github/milestones/all/iamyx123/ExtraIsland)
+![GitHub Forks](https://img.shields.io/github/forks/iamyx123/ExtraIsland)
+![GitHub Repo Stars](https://img.shields.io/github/stars/iamyx123/ExtraIsland)
+![GitHub Watchers](https://img.shields.io/github/watchers/iamyx123/ExtraIsland)
 </div>
 
 为 [ClassIsland](https://classisland.tech/) 扩充一些小小的功能
-
-🧐 最新 commit 尝鲜可以前往 [GitLab Pipeline](https://gitlab.com/LiPolymer/ExtraIsland/-/pipelines) 获取 [未打包](https://docs.classisland.tech/dev/plugins/publishing.html#%E6%89%93%E5%8C%85%E6%8F%92%E4%BB%B6) 的构建
 
 _持续开发中_
 
@@ -102,7 +83,7 @@ _也算是以前写的班级小工具的精神续作(?_
 
 **感谢同学们对本项目的支持与贡献！**
 
-[![Contributors](https://contrib.nn.ci/api?repo=LiPolymer/ExtraIsland&repo=LiPolymer/SentenceSplicer)](https://github.com/LiPolymer/ExtraIsland/graphs/contributors)
+[![Contributors](https://contrib.nn.ci/api?repo=iamyx123/ExtraIsland)](https://github.com/iamyx123/ExtraIsland/graphs/contributors)
 
 </div>
 
@@ -203,17 +184,3 @@ _也算是以前写的班级小工具的精神续作(?_
     - 支持轮播设备状态
 
     - 带有切换动画(可配置)
-
-## 高可用的实验性功能（需获取 [自动构建](https://gitlab.com/LiPolymer/ExtraIsland/-/pipelines)）
-
-*暂无*
-
-
-
-## 正在开发的功能
-
-- 弹出式提醒
-
-- 名句一言
-
-  - 本地语句源
