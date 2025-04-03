@@ -1,15 +1,12 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using ClassIsland.Core;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
 using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
-using Octokit;
 using CommonDialog = ClassIsland.Core.Controls.CommonDialog.CommonDialog;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using Label = System.Windows.Controls.Label;
@@ -84,8 +81,7 @@ public partial class DebugSettingsPage {
         });
     }
     void ClassIsDock(object sender,RoutedEventArgs eventArgs) {
-        GlobalConstants.Handlers.MainWindow ??= new MainWindowHandler();
-        MainWindowHandler bar = GlobalConstants.Handlers.MainWindow;
+        MainWindowHandler bar = GlobalConstants.Handlers.MainWindow!;
         bar.SetBar();
     }
 }

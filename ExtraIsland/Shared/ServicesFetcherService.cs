@@ -1,7 +1,6 @@
 ﻿using ClassIsland.Core.Abstractions.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Octokit;
 using static ExtraIsland.Shared.GlobalConstants;
 
 namespace ExtraIsland.Shared;

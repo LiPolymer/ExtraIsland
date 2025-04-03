@@ -1,13 +1,9 @@
-using System.Reflection;
-using System.Windows;
-using Windows.Win32;
 using ClassIsland.Core;
 using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Extensions.Registry;
+using ExtraIsland.Automations;
 using ExtraIsland.Shared;
-using ICSharpCode.AvalonEdit.Document;
-using MahApps.Metro.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -39,16 +35,22 @@ namespace ExtraIsland
             GlobalConstants.Handlers.OnDuty = new ConfigHandlers.OnDutyPersistedConfigHandler();
             GlobalConstants.Handlers.MainConfig = new ConfigHandlers.MainConfigHandler();
             Console.WriteLine("[ExIsLand][EarlyLoad]正在注册ClassIsland要素...");
-            //Registering Services
+            //Services
             services.AddHostedService<ServicesFetcherService>();
+            services.AddHostedService<Register>();
+            //Components
             services.AddComponent<Components.BetterCountdown,Components.BetterCountdownSettings>();
             services.AddComponent<Components.FluentClock,Components.FluentClockSettings>();
             services.AddComponent<Components.Rhesis,Components.RhesisSettings>();
             services.AddComponent<Components.OnDuty,Components.OnDutySettings>();
             services.AddComponent<Components.LiveActivity,Components.LiveActivitySettings>();
+            //SettingsPages
             services.AddSettingsPage<SettingsPages.MainSettingsPage>();
             services.AddSettingsPage<SettingsPages.DutySettingsPage>();
             services.AddSettingsPage<SettingsPages.TinyFeaturesSettingsPage>();
+            //Actions
+            Register.Claim(services);
+            //LifeMode
             if (GlobalConstants.Handlers.MainConfig.Data.IsLifeModeActivated) {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("[ExIsLand][EarlyLoad]生活模式已启用!");
@@ -72,9 +74,9 @@ namespace ExtraIsland
             Console.WriteLine("[ExIsLand][EarlyLoad]注册事件...");
             GlobalConstants.Triggers.OnLoaded += TinyFeatures.JuniorGuide.Trigger;
             AppBase.Current.AppStarted += (_,_) => {
+                GlobalConstants.Handlers.MainWindow = new MainWindowHandler();
                 if (!GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) return;
-                GlobalConstants.Handlers.MainWindow ??= new MainWindowHandler();
-                GlobalConstants.Handlers.MainWindow.InitBar(accentState: GlobalConstants.Handlers.MainConfig.Data.Dock.AccentState);
+                GlobalConstants.Handlers.MainWindow!.InitBar(accentState: GlobalConstants.Handlers.MainConfig.Data.Dock.AccentState);
             };
             AppBase.Current.AppStopping += (_,_) => {
                 if (GlobalConstants.Handlers.LyricsIsland == null) return;

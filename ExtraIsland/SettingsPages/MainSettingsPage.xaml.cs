@@ -5,6 +5,7 @@ using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
 using MaterialDesignThemes.Wpf;
 using System.Windows.Media;
+// ReSharper disable once RedundantUsingDirective
 using ClassIsland.Core;
 using ClassIsland.Core.Controls;
 using ClassIsland.Core.Controls.CommonDialog;
@@ -174,8 +175,7 @@ public partial class MainSettingsPage {
             };
             approveButton.Click += (_,_) => {
                 Settings.Dock.Enabled = true;
-                GlobalConstants.Handlers.MainWindow ??= new MainWindowHandler();
-                GlobalConstants.Handlers.MainWindow.InitBar(accentState: Settings.Dock.AccentState);
+                GlobalConstants.Handlers.MainWindow!.InitBar(accentState: Settings.Dock.AccentState);
                 popup.FadeOut();
             };
             popup.Show();
