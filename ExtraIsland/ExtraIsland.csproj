@@ -12,6 +12,7 @@
 		<PackageReference Include="ClassIsland.PluginSdk" Version="1.6.0.1">
 			<ExcludeAssets>runtime; native</ExcludeAssets>
 		</PackageReference>
+		<PackageReference Include="Sentry" Version="5.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>

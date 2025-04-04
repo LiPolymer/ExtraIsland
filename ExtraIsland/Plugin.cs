@@ -3,7 +3,12 @@ using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Extensions.Registry;
 using ExtraIsland.Automations;
+using ExtraIsland.Components;
+using ExtraIsland.ConfigHandlers;
+using ExtraIsland.LifeMode.Components;
+using ExtraIsland.SettingsPages;
 using ExtraIsland.Shared;
+using ExtraIsland.TinyFeatures;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -30,24 +35,34 @@ namespace ExtraIsland
                              + "\r\n Copyright (C) 2024-2025 LiPolymer \r\n Licensed under GNU AGPLv3. \r\n" 
                              + "[ExIsLand][EarlyLoad]正在初始化...-------------------------------------------------");
             Console.ForegroundColor = defaultColor;
+            Console.WriteLine("[ExIsLand][EarlyLoad]正在初始化Sentry...");
+
+            SentrySdk.Init(o => {
+                o.Dsn = "https://0957ca91c84095acea32a5888148bb68@o4508585356165120.ingest.de.sentry.io/4508585358065744";
+            });
+            
+            AppBase.Current.DispatcherUnhandledException += (sender,e) => {
+                SentrySdk.CaptureException(e.Exception);
+            };
+            
             //Initialize GlobalConstants/ConfigHandlers
             GlobalConstants.PluginConfigFolder = PluginConfigFolder;
-            GlobalConstants.Handlers.OnDuty = new ConfigHandlers.OnDutyPersistedConfigHandler();
-            GlobalConstants.Handlers.MainConfig = new ConfigHandlers.MainConfigHandler();
+            GlobalConstants.Handlers.OnDuty = new OnDutyPersistedConfigHandler();
+            GlobalConstants.Handlers.MainConfig = new MainConfigHandler();
             Console.WriteLine("[ExIsLand][EarlyLoad]正在注册ClassIsland要素...");
             //Services
             services.AddHostedService<ServicesFetcherService>();
             services.AddHostedService<Register>();
             //Components
-            services.AddComponent<Components.BetterCountdown,Components.BetterCountdownSettings>();
-            services.AddComponent<Components.FluentClock,Components.FluentClockSettings>();
-            services.AddComponent<Components.Rhesis,Components.RhesisSettings>();
-            services.AddComponent<Components.OnDuty,Components.OnDutySettings>();
-            services.AddComponent<Components.LiveActivity,Components.LiveActivitySettings>();
+            services.AddComponent<BetterCountdown,BetterCountdownSettings>();
+            services.AddComponent<FluentClock,FluentClockSettings>();
+            services.AddComponent<Rhesis,RhesisSettings>();
+            services.AddComponent<OnDuty,OnDutySettings>();
+            services.AddComponent<LiveActivity,LiveActivitySettings>();
             //SettingsPages
-            services.AddSettingsPage<SettingsPages.MainSettingsPage>();
-            services.AddSettingsPage<SettingsPages.DutySettingsPage>();
-            services.AddSettingsPage<SettingsPages.TinyFeaturesSettingsPage>();
+            services.AddSettingsPage<MainSettingsPage>();
+            services.AddSettingsPage<DutySettingsPage>();
+            services.AddSettingsPage<TinyFeaturesSettingsPage>();
             //Actions
             Register.Claim(services);
             //LifeMode
@@ -55,24 +70,24 @@ namespace ExtraIsland
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("[ExIsLand][EarlyLoad]生活模式已启用!");
                 Console.ForegroundColor = defaultColor;
-                services.AddComponent<LifeMode.Components.Sleepy,LifeMode.Components.SleepySettings>();
+                services.AddComponent<Sleepy,SleepySettings>();
             }
             if (GlobalConstants.Handlers.MainConfig.Data.IsExperimentalModeActivated) {
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("[ExIsLand][EarlyLoad][Experiment]实验模式已启用! 若出现Bug,请勿报告!");
                 Console.ForegroundColor = defaultColor;
-                services.AddComponent<Components.DebugLyricsHandler>();
-                services.AddComponent<Components.DebugSubLyricsHandler>();
+                services.AddComponent<DebugLyricsHandler>();
+                services.AddComponent<DebugSubLyricsHandler>();
             }
             #if DEBUG
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("[ExIsLand][EarlyLoad][DEBUG]这是一个调试构建! 若出现Bug,请勿报告!");
                 Console.ForegroundColor = defaultColor;
-                services.AddSettingsPage<SettingsPages.DebugSettingsPage>();
+                services.AddSettingsPage<DebugSettingsPage>();
             #endif
             Console.WriteLine("[ExIsLand][EarlyLoad]完成!");
             Console.WriteLine("[ExIsLand][EarlyLoad]注册事件...");
-            GlobalConstants.Triggers.OnLoaded += TinyFeatures.JuniorGuide.Trigger;
+            GlobalConstants.Triggers.OnLoaded += JuniorGuide.Trigger;
             AppBase.Current.AppStarted += (_,_) => {
                 GlobalConstants.Handlers.MainWindow = new MainWindowHandler();
                 if (!GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) return;
