@@ -85,6 +85,17 @@ public class MainConfigData : ObservableObject {
         }
     }
     
+    bool _isTelemetryActivated = true;
+    public bool IsTelemetryActivated {
+        get => _isTelemetryActivated;
+        set {
+            if (value == _isTelemetryActivated) return;
+            _isTelemetryActivated = value;
+            OnPropertyChanged();
+            RestartPropertyChanged?.Invoke();
+        }
+    }
+    
     public DockConfig Dock { get; set; } = new DockConfig(); 
     public class DockConfig : ObservableObject {
         bool _enabled;

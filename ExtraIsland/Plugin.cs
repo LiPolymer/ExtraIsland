@@ -2,6 +2,7 @@ using ClassIsland.Core;
 using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Extensions.Registry;
+using ClassIsland.Core.Models.Plugin;
 using ExtraIsland.Automations;
 using ExtraIsland.Components;
 using ExtraIsland.ConfigHandlers;
@@ -35,20 +36,27 @@ namespace ExtraIsland
                              + "\r\n Copyright (C) 2024-2025 LiPolymer \r\n Licensed under GNU AGPLv3. \r\n" 
                              + "[ExIsLand][EarlyLoad]正在初始化...-------------------------------------------------");
             Console.ForegroundColor = defaultColor;
-            Console.WriteLine("[ExIsLand][EarlyLoad]正在初始化Sentry...");
-
-            SentrySdk.Init(o => {
-                o.Dsn = "https://0957ca91c84095acea32a5888148bb68@o4508585356165120.ingest.de.sentry.io/4508585358065744";
-            });
-            
-            AppBase.Current.DispatcherUnhandledException += (sender,e) => {
-                SentrySdk.CaptureException(e.Exception);
-            };
-            
+            Console.WriteLine("[ExIsLand][EarlyLoad]正在载入主设置...");
             //Initialize GlobalConstants/ConfigHandlers
             GlobalConstants.PluginConfigFolder = PluginConfigFolder;
-            GlobalConstants.Handlers.OnDuty = new OnDutyPersistedConfigHandler();
             GlobalConstants.Handlers.MainConfig = new MainConfigHandler();
+            if (GlobalConstants.Handlers.MainConfig.Data.IsTelemetryActivated) {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("[ExIsLand][EarlyLoad]遥测已启用! 感谢您的帮助(～￣▽￣)～");
+                Console.ForegroundColor = defaultColor;
+                Console.WriteLine("[ExIsLand][EarlyLoad]正在初始化Sentry...");
+            
+                SentrySdk.Init(o => {
+                    o.Dsn = "https://0957ca91c84095acea32a5888148bb68@o4508585356165120.ingest.de.sentry.io/4508585358065744";
+                    o.Release = Info.Manifest.Version;
+                });
+            
+                AppBase.Current.DispatcherUnhandledException += (sender,e) => {
+                    SentrySdk.CaptureException(e.Exception);
+                };   
+            }
+            Console.WriteLine("[ExIsLand][EarlyLoad]正在载入其余配置...");
+            GlobalConstants.Handlers.OnDuty = new OnDutyPersistedConfigHandler();
             Console.WriteLine("[ExIsLand][EarlyLoad]正在注册ClassIsland要素...");
             //Services
             services.AddHostedService<ServicesFetcherService>();

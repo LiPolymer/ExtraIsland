@@ -133,6 +133,10 @@
                              IsOn="{Binding Settings.IsLifeModeActivated, Mode=TwoWay}"
                              Description="启用不适用于课堂环境的功能"
                              Header="生活模式"/>
+            <ci:SettingsCard IconGlyph="Antenna"
+                             IsOn="{Binding Settings.IsTelemetryActivated, Mode=TwoWay}"
+                             Description="允许我们通过Sentry采集崩溃报告,以便更好地改进本插件"
+                             Header="允许遥测"/>
             <ci:SettingsCard x:Name="ExpModeCard"
                              IconGlyph="Bug"
                              Description="启用尚未开发完成,已经知道有Bug的功能(启用后请勿提交Bug)"
