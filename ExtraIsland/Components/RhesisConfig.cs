@@ -38,4 +38,8 @@ public class RhesisConfig {
     public bool IsAnimationEnabled { get; set; } = true;
     
     public bool IsSwapAnimationEnabled { get; set; }
+
+    public bool IsAutherShowEnabled { get; set; } = true;
+
+    public bool IsTitleShowEnabled { get; set; } = true;
 }

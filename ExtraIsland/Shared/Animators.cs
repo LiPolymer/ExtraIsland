@@ -104,29 +104,35 @@ public static class Animators {
             get => _targetContent;
             set => Update(value);
         }
-        
-        public void Update(string targetContent, bool isAnimated = true, bool isSwapAnimEnabled = true, bool isForced = false) {
+
+        public void Update(string targetContent, bool isAnimated = true, bool isSwapAnimEnabled = true, bool isForced = false)
+        {
             if (!(targetContent != _targetContent | isForced)) return;
             if (_renderLock) return;
             _targetContent = targetContent;
-            if (!isAnimated) {
+            if (!isAnimated)
+            {
                 _targetLabel.Content = _targetContent;
                 return;
             }
+
             _renderLock = true;
-            if (isSwapAnimEnabled) {
+            if (isSwapAnimEnabled)
+            {
                 _swapStoryboard.Begin();
-            } else {
+            }
+            else
+            {
                 _fadeStoryboard.Begin();
             }
-            new Thread(() => {
+
+            Task.Run(() =>
+            {
                 Thread.Sleep(110);
-                _targetLabel.Dispatcher.InvokeAsync(() => {
-                    _targetLabel.Content = _targetContent;
-                });
-            }).Start();
+                _targetLabel.Dispatcher.InvokeAsync(() => { _targetLabel.Content = _targetContent; });
+            });
         }
-        
+
         public void SilentUpdate(string targetContent) {
             _targetContent = targetContent;
             _targetLabel.Content = _targetContent;
