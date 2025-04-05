@@ -61,7 +61,7 @@ public partial class Rhesis {
                 Settings.LengthLimitation);
             Showing = data.Content;
             if (Settings.IgnoreListString.Split("\r\n").Any(keyWord => Showing.Contains(keyWord) && keyWord != "")) return;
-            if (Settings.IsAutherShowEnabled && data.Author != null && data.Author != string.Empty) {
+            if (Settings.IsAuthorShowEnabled && data.Author != null && data.Author != string.Empty) {
                 Author = $"{data.Author}";
                 this.BeginInvoke(() => Label2.Visibility = Visibility.Visible);
             } else {

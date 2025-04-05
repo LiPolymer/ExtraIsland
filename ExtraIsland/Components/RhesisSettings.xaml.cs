@@ -1,15 +1,19 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Windows.Input;
+using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
 
 namespace ExtraIsland.Components;
 
 public partial class RhesisSettings {
     public RhesisSettings() {
+        MainConfig = GlobalConstants.Handlers.MainConfig!.Data;
         InitializeComponent();
     }
 
+    public MainConfigData MainConfig { get; set; } 
+        
     [GeneratedRegex("[^0-9]+")]
     private static partial Regex NumberRegex();
     void TextBoxNumberCheck(object sender,TextCompositionEventArgs e) {

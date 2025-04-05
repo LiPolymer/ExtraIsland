@@ -15,6 +15,7 @@
         <converters:DoubleToStringConverter x:Key="DoubleToStringConverter" />
         <converters:IntToStringConverter x:Key="IntToStringConverter" />
         <local:LimitIntToArgConverter x:Key="LimitIntToArgConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </ci:ComponentBase.Resources>
     <ScrollViewer
         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:RhesisSettings}}">
@@ -68,13 +69,15 @@
                     </StackPanel>
                 </ci:SettingsCard.Switcher>
             </ci:SettingsCard>
-            <ci:SettingsCard IconGlyph="Pen"
+            <ci:SettingsCard IconGlyph="PeopleCheck"
                              Header="显示作者"
-                             Description="将会在末尾添加作者，未获取到则不显示"
-                             IsOn="{Binding Settings.IsAutherShowEnabled, Mode=TwoWay}"/>
-            <ci:SettingsCard IconGlyph="Pen"
+                             Visibility="{Binding MainConfig.IsExperimentalModeActivated, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
+                             Description="(待优化)将会在末尾添加作者，未获取到则不显示"
+                             IsOn="{Binding Settings.IsAuthorShowEnabled, Mode=TwoWay}"/>
+            <ci:SettingsCard IconGlyph="BookCheck"
                              Header="显示出处"
-                             Description="将会在末尾添加出处，未获取到则不显示"
+                             Visibility="{Binding MainConfig.IsExperimentalModeActivated, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
+                             Description="(待优化)将会在末尾添加出处，未获取到则不显示"
                              IsOn="{Binding Settings.IsTitleShowEnabled, Mode=TwoWay}"/>
             <ci:SettingsCard IconGlyph="AnimationPlay"
                              Header="启用动画"
