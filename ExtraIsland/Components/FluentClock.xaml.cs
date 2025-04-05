@@ -75,7 +75,7 @@ public partial class FluentClock {
         OnTimeChanged += () => {
             if (updLock) return;
             updLock = true;
-            new Thread(MainUpdater).Start();
+            Task.Run(MainUpdater);
         };
         return;
         void MainUpdater() {
