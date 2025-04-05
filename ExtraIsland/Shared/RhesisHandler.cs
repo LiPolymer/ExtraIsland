@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace ExtraIsland.Shared;
 
@@ -67,12 +69,12 @@ public class SainticData {
     [JsonPropertyName("data")] 
     public SainticRhesisData Data { get; set; } = new SainticRhesisData();
 
-    [JsonPropertyName("msg")] 
+    [JsonPropertyName("message")] 
     public string? Message { get; set; }
-    
-    [JsonPropertyName("q")] 
-    public QueueInfoData QueueInfo { get; set; } = new QueueInfoData();
 
+    [JsonPropertyName("remark")]
+    public RemarkData Remark { get; set; } = new RemarkData();
+    
     public class SainticRhesisData {
 
         [JsonPropertyName("author")]
@@ -109,19 +111,27 @@ public class SainticData {
         public string ThemePinyin { get; set; } = string.Empty;
     }
 
-    public class QueueInfoData {
+    public class RemarkData {
+        [JsonPropertyName("q")] 
+        public QueueInfoData QueueInfo { get; set; } = new QueueInfoData();
+        
+        [JsonPropertyName("success")] 
+        public bool IsSuccess { get; set; }
+        
+        public class QueueInfoData {
 
-        [JsonPropertyName("author")] 
-        public string Author { get; set; } = string.Empty;
+            [JsonPropertyName("author")] 
+            public string Author { get; set; } = string.Empty;
 
-        [JsonPropertyName("catalog")]
-        public string Catalog { get; set; } = string.Empty;
+            [JsonPropertyName("catalog")]
+            public string Catalog { get; set; } = string.Empty;
 
-        [JsonPropertyName("suffix")] 
-        public string Suffix { get; set; } = string.Empty;
+            [JsonPropertyName("suffix")] 
+            public string Suffix { get; set; } = string.Empty;
 
-        [JsonPropertyName("theme")] 
-        public string Theme { get; set; } = string.Empty;
+            [JsonPropertyName("theme")] 
+            public string Theme { get; set; } = string.Empty;
+        }
     }
 
     public RhesisData ToRhesisData() {
@@ -136,12 +146,19 @@ public class SainticData {
 
     public static SainticData Fetch(string? requestUrl = null) {
         try {
-            requestUrl ??= "https://open.saintic.com/api/sentence/all.json";
-            return new HttpClient()
+            requestUrl ??= "https://hub.saintic.com/openservice/sentence/all.json";
+            return new HttpClient {
+                    DefaultRequestHeaders = {
+                        UserAgent = {
+                            ProductInfoHeaderValue.Parse("ExtraIsland/1.0")
+                        }
+                    }
+                }
                 .GetFromJsonAsync<SainticData>(requestUrl)
                 .Result!;
         }
         catch (Exception ex) {
+            GlobalConstants.HostInterfaces.PluginLogger?.LogError(ex, "Failed to download data from Saintic API");
             return new SainticData {
                 Data = new SainticRhesisData {
                     Sentence = $"获取时发生错误"
