@@ -11,13 +11,44 @@
                   Unloaded="Rhesis_OnUnloaded">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:Rhesis}}" 
           ClipToBounds="True">
-        <Label x:Name="Label"
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label x:Name="Label1"
                VerticalAlignment="Center"
                FontSize="{DynamicResource MainWindowLargeFontSize}"
-               Content="{Binding Showing, Mode=OneWay}">
-            <Label.RenderTransform>
-                <TranslateTransform/>
-            </Label.RenderTransform>
-        </Label>
+               Content="{Binding Showing, Mode=OneWay}"
+               Grid.Column="0">
+                <Label.RenderTransform>
+                    <TranslateTransform/>
+                </Label.RenderTransform>
+            </Label>
+            <Grid  VerticalAlignment="Center" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label x:Name="Label2"
+                   Content="{Binding Author, Mode=OneWay}"
+                   Margin="0,4,0,0"
+                   Grid.Row="0"
+                   Padding="0"
+                   VerticalContentAlignment="Center"
+                   HorizontalAlignment="Left"
+                   FontSize="{DynamicResource MainWindowSecondaryFontSize}"
+                   Visibility="Visible"/>
+
+                <Label Grid.Row="1" x:Name="Label3"
+                   Content="{Binding Title}"
+                   Margin="0,0,0,4"
+                   Padding="0"
+                   VerticalContentAlignment="Center"
+                   HorizontalAlignment="Left"
+                   FontSize="{DynamicResource MainWindowSecondaryFontSize}"
+                   Visibility="Visible"/>
+            </Grid>
+        </Grid>
     </Grid>
 </ci:ComponentBase>

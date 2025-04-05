@@ -68,6 +68,14 @@
                     </StackPanel>
                 </ci:SettingsCard.Switcher>
             </ci:SettingsCard>
+            <ci:SettingsCard IconGlyph="Pen"
+                             Header="显示作者"
+                             Description="将会在末尾添加作者，未获取到则不显示"
+                             IsOn="{Binding Settings.IsAutherShowEnabled, Mode=TwoWay}"/>
+            <ci:SettingsCard IconGlyph="Pen"
+                             Header="显示出处"
+                             Description="将会在末尾添加出处，未获取到则不显示"
+                             IsOn="{Binding Settings.IsTitleShowEnabled, Mode=TwoWay}"/>
             <ci:SettingsCard IconGlyph="AnimationPlay"
                              Header="启用动画"
                              Description="禁用后,将不再播放动画,对低性能设备友好!"
