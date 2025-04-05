@@ -158,7 +158,7 @@ public class SainticData {
                 .Result!;
         }
         catch (Exception ex) {
-            GlobalConstants.HostInterfaces.PluginLogger!.LogWarning(ex,"获取时发生错误，URL: {requestUrl}", requestUrl);
+            GlobalConstants.HostInterfaces.PluginLogger!.LogWarning(ex,$"获取时发生错误，URL: {requestUrl}");
             return new SainticData {
                 Data = new SainticRhesisData {
                     Sentence = $"获取时发生错误"
@@ -192,13 +192,16 @@ public class JinrishiciData {
         };
     }
 
-    public static JinrishiciData Fetch(int lengthLimitation = 0) {
+    public static JinrishiciData Fetch(int lengthLimitation = 0)
+    {
+        var requestUrl = "https://v1.jinrishici.com/all.json";
         try {
             return new HttpClient()
-                .GetFromJsonAsync<JinrishiciData>("https://v1.jinrishici.com/all.json")
+                .GetFromJsonAsync<JinrishiciData>(requestUrl)
                 .Result!;
         }
         catch (Exception ex) {
+            GlobalConstants.HostInterfaces.PluginLogger!.LogWarning(ex,$"获取时发生错误，URL: {requestUrl}");
             return new JinrishiciData {
                 Content = "获取时发生错误"
             };
@@ -290,6 +293,7 @@ public class HitokotoData {
                 .Result!;
         }
         catch (Exception ex) {
+            GlobalConstants.HostInterfaces.PluginLogger!.LogWarning(ex,$"获取时发生错误，URL: {requestUrl}");
             return new HitokotoData {
                 Hitokoto = $"获取时发生错误"
             };
