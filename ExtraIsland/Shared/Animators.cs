@@ -7,7 +7,7 @@ namespace ExtraIsland.Shared;
 
 public static class Animators {
     public class ClockTransformControlAnimator {
-        public ClockTransformControlAnimator(ContentControl targetLabel, double motionMultiple = 0.8) {
+        public ClockTransformControlAnimator(ContentControl targetLabel,double motionMultiple = 0.8) {
             _targetLabel = targetLabel;
             DoubleAnimationUsingKeyFrames swapFadeAnimation = new DoubleAnimationUsingKeyFrames {
                 KeyFrames = [
@@ -28,9 +28,9 @@ public static class Animators {
                 ],
                 Duration = new Duration(TimeSpan.FromMilliseconds(250))
             };
-            Storyboard.SetTarget(swapFadeAnimation, targetLabel);
-            Storyboard.SetTargetProperty(swapFadeAnimation, new PropertyPath(UIElement.OpacityProperty));
-            
+            Storyboard.SetTarget(swapFadeAnimation,targetLabel);
+            Storyboard.SetTargetProperty(swapFadeAnimation,new PropertyPath(UIElement.OpacityProperty));
+
             DoubleAnimationUsingKeyFrames fadeAnimation = new DoubleAnimationUsingKeyFrames {
                 KeyFrames = [
                     new EasingDoubleKeyFrame {
@@ -44,9 +44,9 @@ public static class Animators {
                 ],
                 Duration = new Duration(TimeSpan.FromMilliseconds(250))
             };
-            Storyboard.SetTarget(fadeAnimation, targetLabel);
-            Storyboard.SetTargetProperty(fadeAnimation, new PropertyPath(UIElement.OpacityProperty));
-            
+            Storyboard.SetTarget(fadeAnimation,targetLabel);
+            Storyboard.SetTargetProperty(fadeAnimation,new PropertyPath(UIElement.OpacityProperty));
+
             DoubleAnimationUsingKeyFrames swapAnimation = new DoubleAnimationUsingKeyFrames {
                 KeyFrames = [
                     new EasingDoubleKeyFrame {
@@ -72,8 +72,8 @@ public static class Animators {
                 FillBehavior = FillBehavior.Stop
             };
             Storyboard.SetTarget(swapAnimation,targetLabel);
-            Storyboard.SetTargetProperty(swapAnimation, new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
-            
+            Storyboard.SetTargetProperty(swapAnimation,new PropertyPath("(UIElement.RenderTransform).(TranslateTransform.Y)"));
+
             _swapStoryboard = new Storyboard {
                 Children = [swapAnimation,swapFadeAnimation]
             };
@@ -81,7 +81,7 @@ public static class Animators {
                 _renderLock = false;
             };
             //Timeline.SetDesiredFrameRate(_swapStoryboard, 60);
-            
+
             _fadeStoryboard = new Storyboard {
                 Children = [fadeAnimation]
             };
@@ -98,38 +98,34 @@ public static class Animators {
         bool _renderLock;
 
         readonly ContentControl _targetLabel;
-        
+
         string _targetContent = string.Empty;
         public string TargetContent {
             get => _targetContent;
             set => Update(value);
         }
 
-        public void Update(string targetContent, bool isAnimated = true, bool isSwapAnimEnabled = true, bool isForced = false)
-        {
+        public void Update(string targetContent,bool isAnimated = true,bool isSwapAnimEnabled = true,bool isForced = false) {
             if (!(targetContent != _targetContent | isForced)) return;
             if (_renderLock) return;
             _targetContent = targetContent;
-            if (!isAnimated)
-            {
+            if (!isAnimated) {
                 _targetLabel.Content = _targetContent;
                 return;
             }
 
             _renderLock = true;
-            if (isSwapAnimEnabled)
-            {
+            if (isSwapAnimEnabled) {
                 _swapStoryboard.Begin();
-            }
-            else
-            {
+            } else {
                 _fadeStoryboard.Begin();
             }
 
-            Task.Run(() =>
-            {
+            Task.Run(() => {
                 Thread.Sleep(110);
-                _targetLabel.Dispatcher.InvokeAsync(() => { _targetLabel.Content = _targetContent; });
+                _targetLabel.Dispatcher.InvokeAsync(() => {
+                    _targetLabel.Content = _targetContent;
+                });
             });
         }
 
@@ -138,33 +134,31 @@ public static class Animators {
             _targetLabel.Content = _targetContent;
         }
     }
-    
+
     public class SeparatorControlAnimator {
         public SeparatorControlAnimator(Control targetControl) {
             // ReSharper disable once SuggestVarOrType_SimpleTypes
             var easeFunc = new SineEase();
-            DoubleAnimation fadeOutAnimation = new DoubleAnimation
-            {
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation {
                 From = 1,
                 To = 0,
                 Duration = new Duration(TimeSpan.FromMilliseconds(60)),
                 EasingFunction = easeFunc
             };
-            Storyboard.SetTarget(fadeOutAnimation, targetControl);
-            Storyboard.SetTargetProperty(fadeOutAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard.SetTarget(fadeOutAnimation,targetControl);
+            Storyboard.SetTargetProperty(fadeOutAnimation,new PropertyPath(UIElement.OpacityProperty));
             _fadeOutStoryboard = new Storyboard {
                 Children = [fadeOutAnimation]
             };
 
-            DoubleAnimation fadeInAnimation = new DoubleAnimation
-            {
+            DoubleAnimation fadeInAnimation = new DoubleAnimation {
                 From = 0,
                 To = 1,
                 Duration = new Duration(TimeSpan.FromMilliseconds(60)),
                 EasingFunction = easeFunc
             };
-            Storyboard.SetTarget(fadeInAnimation, targetControl);
-            Storyboard.SetTargetProperty(fadeInAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard.SetTarget(fadeInAnimation,targetControl);
+            Storyboard.SetTargetProperty(fadeInAnimation,new PropertyPath(UIElement.OpacityProperty));
             _fadeInStoryboard = new Storyboard {
                 Children = [fadeInAnimation]
             };
@@ -172,7 +166,7 @@ public static class Animators {
 
         readonly Storyboard _fadeOutStoryboard;
         readonly Storyboard _fadeInStoryboard;
-        
+
         public void Update(bool isInverse = false) {
             if (isInverse) {
                 _fadeOutStoryboard.Begin();
@@ -181,50 +175,47 @@ public static class Animators {
             }
         }
     }
-    
+
     public class EmphasizeUiElementAnimator {
-        public EmphasizeUiElementAnimator(UIElement targetControl, double timeMultiple = 1) {
+        public EmphasizeUiElementAnimator(UIElement targetControl,double timeMultiple = 1) {
             // ReSharper disable once SuggestVarOrType_SimpleTypes
             var easeFunc = new SineEase();
-            DoubleAnimation fadeOutAnimation = new DoubleAnimation
-            {
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation {
                 From = 0,
                 To = 1,
                 Duration = new Duration(TimeSpan.FromMilliseconds(60 * timeMultiple)),
                 EasingFunction = easeFunc
             };
-            Storyboard.SetTarget(fadeOutAnimation, targetControl);
-            Storyboard.SetTargetProperty(fadeOutAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard.SetTarget(fadeOutAnimation,targetControl);
+            Storyboard.SetTargetProperty(fadeOutAnimation,new PropertyPath(UIElement.OpacityProperty));
 
-            DoubleAnimation fadeOutInAnimation = new DoubleAnimation
-            {
+            DoubleAnimation fadeOutInAnimation = new DoubleAnimation {
                 From = 1,
                 To = 0,
                 Duration = new Duration(TimeSpan.FromMilliseconds(60 * timeMultiple)),
                 BeginTime = TimeSpan.FromSeconds(3),
                 EasingFunction = easeFunc
             };
-            Storyboard.SetTarget(fadeOutInAnimation, targetControl);
-            Storyboard.SetTargetProperty(fadeOutInAnimation, new PropertyPath(UIElement.OpacityProperty));
-            
-            DoubleAnimation fadeInAnimation = new DoubleAnimation
-            {
+            Storyboard.SetTarget(fadeOutInAnimation,targetControl);
+            Storyboard.SetTargetProperty(fadeOutInAnimation,new PropertyPath(UIElement.OpacityProperty));
+
+            DoubleAnimation fadeInAnimation = new DoubleAnimation {
                 From = 1,
                 To = 0,
                 Duration = new Duration(TimeSpan.FromMilliseconds(60 * timeMultiple)),
                 EasingFunction = easeFunc
             };
-            Storyboard.SetTarget(fadeInAnimation, targetControl);
-            Storyboard.SetTargetProperty(fadeInAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard.SetTarget(fadeInAnimation,targetControl);
+            Storyboard.SetTargetProperty(fadeInAnimation,new PropertyPath(UIElement.OpacityProperty));
 
             _fadeOutInStoryboard = new Storyboard {
                 Children = [fadeOutAnimation,fadeOutInAnimation]
             };
-            
+
             _fadeOutStoryboard = new Storyboard {
                 Children = [fadeOutAnimation]
             };
-            
+
             _fadeInStoryboard = new Storyboard {
                 Children = [fadeInAnimation]
             };
@@ -250,7 +241,7 @@ public static class Animators {
     }
 
     public class IslandDriftAnimator {
-        public IslandDriftAnimator(Window targetWindow, Color dockBackground, double moveAmount, double timeAmount = 700) {
+        public IslandDriftAnimator(Window targetWindow,Color dockBackground,double moveAmount,double timeAmount = 700) {
             targetWindow.Background = new SolidColorBrush {
                 Color = Color.FromArgb(0x00,0x00,0x00,0x00)
             };
@@ -266,9 +257,9 @@ public static class Animators {
                 ],
                 Duration = new Duration(TimeSpan.FromMilliseconds(timeAmount))
             };
-            Storyboard.SetTarget(expandAnimation, targetWindow);
-            Storyboard.SetTargetProperty(expandAnimation, new PropertyPath("Content.RenderTransform.Children[0].Y"));
-            
+            Storyboard.SetTarget(expandAnimation,targetWindow);
+            Storyboard.SetTargetProperty(expandAnimation,new PropertyPath("Content.RenderTransform.Children[0].Y"));
+
             DoubleAnimationUsingKeyFrames collapseAnimation = new DoubleAnimationUsingKeyFrames {
                 KeyFrames = [
                     new EasingDoubleKeyFrame {
@@ -281,24 +272,24 @@ public static class Animators {
                 ],
                 Duration = new Duration(TimeSpan.FromMilliseconds(timeAmount))
             };
-            Storyboard.SetTarget(collapseAnimation, targetWindow);
-            Storyboard.SetTargetProperty(collapseAnimation, new PropertyPath("Content.RenderTransform.Children[0].Y"));
+            Storyboard.SetTarget(collapseAnimation,targetWindow);
+            Storyboard.SetTargetProperty(collapseAnimation,new PropertyPath("Content.RenderTransform.Children[0].Y"));
 
             ColorAnimation colorOutAnimation = new ColorAnimation {
                 From = dockBackground,
                 To = Colors.Transparent,
                 Duration = new Duration(TimeSpan.FromMilliseconds(timeAmount))
             };
-            Storyboard.SetTarget(colorOutAnimation, targetWindow);
-            Storyboard.SetTargetProperty(colorOutAnimation, new PropertyPath("Background.Color"));
-            
+            Storyboard.SetTarget(colorOutAnimation,targetWindow);
+            Storyboard.SetTargetProperty(colorOutAnimation,new PropertyPath("Background.Color"));
+
             ColorAnimation colorInAnimation = new ColorAnimation {
                 From = Colors.Transparent,
                 To = dockBackground,
                 Duration = new Duration(TimeSpan.FromMilliseconds(timeAmount))
             };
-            Storyboard.SetTarget(colorInAnimation, targetWindow);
-            Storyboard.SetTargetProperty(colorInAnimation, new PropertyPath("Background.Color"));
+            Storyboard.SetTarget(colorInAnimation,targetWindow);
+            Storyboard.SetTargetProperty(colorInAnimation,new PropertyPath("Background.Color"));
 
             _expandStoryboard = new Storyboard {
                 Children = [expandAnimation]

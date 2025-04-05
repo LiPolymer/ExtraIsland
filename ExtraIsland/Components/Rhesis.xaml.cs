@@ -42,48 +42,49 @@ public partial class Rhesis {
     }
 
     void UpdateEvent(object? sender,EventArgs eventArgs) {
-        if (EiUtils.GetDateTimeSpan(Settings.LastUpdate,DateTime.Now) < Settings.UpdateTimeGap|Settings.UpdateTimeGapSeconds == 0) return;
+        if (EiUtils.GetDateTimeSpan(Settings.LastUpdate,DateTime.Now) < Settings.UpdateTimeGap
+            | Settings.UpdateTimeGapSeconds == 0) return;
         Settings.LastUpdate = DateTime.Now;
         Update();
     }
 
     void Update() {
-        Task.Run(() =>
-        {
-            var data = _rhesisHandler.LegacyGet(Settings.DataSource, Settings.HitokotoProp switch
-                {
+        Task.Run(() => {
+            var data = _rhesisHandler.LegacyGet(Settings.DataSource,Settings.HitokotoProp switch {
                     "" => "https://v1.hitokoto.cn/",
                     _ => $"https://v1.hitokoto.cn/?{Settings.HitokotoLengthArgs}{Settings.HitokotoProp}"
                 },
-                Settings.SainticProp switch
-                {
+                Settings.SainticProp switch {
                     "" => "https://open.saintic.com/api/sentence/",
                     _ => $"https://open.saintic.com/api/sentence/{Settings.HitokotoProp}.json"
                 },
                 Settings.LengthLimitation);
             Showing = data.Content;
             if (Settings.IgnoreListString.Split("\r\n").Any(keyWord => Showing.Contains(keyWord) && keyWord != "")) return;
-            if (Settings.IsAutherShowEnabled && data.Author != null && data.Author != string.Empty)
-            {
+            if (Settings.IsAutherShowEnabled && data.Author != null && data.Author != string.Empty) {
                 Author = $"{data.Author}";
                 this.BeginInvoke(() => Label2.Visibility = Visibility.Visible);
-            }else
-            {
+            } else {
                 Author = string.Empty;
                 this.BeginInvoke(() => Label2.Visibility = Visibility.Hidden);
             }
-            if (Settings.IsTitleShowEnabled && data.Title != null && data.Title != string.Empty){
+            if (Settings.IsTitleShowEnabled && data.Title != null && data.Title != string.Empty) {
                 Title = $"{data.Title}";
                 this.BeginInvoke(() => Label3.Visibility = Visibility.Visible);
-            }else
-            {
+            } else {
                 Title = string.Empty;
                 this.BeginInvoke(() => Label3.Visibility = Visibility.Hidden);
             }
-            this.BeginInvoke(() => { _labelAnimator1.Update(Showing, Settings.IsAnimationEnabled, Settings.IsSwapAnimationEnabled); });
-            this.BeginInvoke(() => { _labelAnimator2.Update(Author, Settings.IsAnimationEnabled, Settings.IsSwapAnimationEnabled); });
-            this.BeginInvoke(() => { _labelAnimator3.Update(Title, Settings.IsAnimationEnabled, Settings.IsSwapAnimationEnabled); });
-            
+            this.BeginInvoke(() => {
+                _labelAnimator1.Update(Showing,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
+            });
+            this.BeginInvoke(() => {
+                _labelAnimator2.Update(Author,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
+            });
+            this.BeginInvoke(() => {
+                _labelAnimator3.Update(Title,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
+            });
+
         });
     }
 }
