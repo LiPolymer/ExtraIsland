@@ -41,6 +41,15 @@ namespace ExtraIsland
             GlobalConstants.PluginConfigFolder = PluginConfigFolder;
             GlobalConstants.Handlers.MainConfig = new MainConfigHandler();
             if (GlobalConstants.Handlers.MainConfig.Data.IsTelemetryActivated) {
+                #if DEBUG
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("[ExIsLand][EarlyLoad]这是调试构建,遥测已自动禁用!");
+                Console.ForegroundColor = defaultColor;        
+                GlobalConstants.Handlers.MainConfig.Data.IsTelemetryActivated = false;
+                return;
+                #endif
+                #pragma warning disable CS0162 // Unreachable code detected
+                // ReSharper disable once HeuristicUnreachableCode
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("[ExIsLand][EarlyLoad]遥测已启用! 感谢您的帮助(～￣▽￣)～");
                 Console.ForegroundColor = defaultColor;
@@ -51,9 +60,10 @@ namespace ExtraIsland
                     o.Release = Info.Manifest.Version;
                 });
             
-                AppBase.Current.DispatcherUnhandledException += (sender,e) => {
+                AppBase.Current.DispatcherUnhandledException += (_,e) => {
                     SentrySdk.CaptureException(e.Exception);
                 };   
+                #pragma warning restore CS0162 // Unreachable code detected
             }
             Console.WriteLine("[ExIsLand][EarlyLoad]正在载入其余配置...");
             GlobalConstants.Handlers.OnDuty = new OnDutyPersistedConfigHandler();
