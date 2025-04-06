@@ -1,5 +1,5 @@
 # ExtraIsland
-⌈R0.38⌋ ⌈[维护暂停](https://lipoly.ink/2024/announcement/)⌋
+⌈R0.40⌋ ⌈[维护暂停](https://lipoly.ink/2024/announcement/)⌋
 
 为[ClassIsland](https://classisland.tech/)扩充一些小小的功能
 
@@ -66,6 +66,6 @@
 
 感谢所有同学的帮助与支持!
 
-感谢 `HelloWRC 零音 流焰xwx 星澜曦光` 对本项目的 文档/代码 贡献!
+感谢 `HelloWRC` `零音` `流焰xwx` `星澜曦光` 对本项目的 文档/代码 贡献!
 
 感谢 `Aris` 提供 `当前活动` 组件的UI设计原稿!

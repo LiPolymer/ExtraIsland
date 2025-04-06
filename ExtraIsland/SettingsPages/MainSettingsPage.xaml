@@ -53,7 +53,7 @@
                             VerticalAlignment="Center" />
                         <TextBlock Margin="4 0 0 0">
                                     <Run Text="ExtraIsland" FontSize="24" />
-                                    <Run Text="R0.38" />
+                                    <Run Text="R0.40" />
                                     <LineBreak />
                                     <Run Text="Copyright © 2024-2025 LiPolymer"/>
                                     <LineBreak />
