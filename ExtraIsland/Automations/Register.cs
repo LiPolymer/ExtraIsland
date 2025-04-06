@@ -3,6 +3,7 @@ using ClassIsland.Core.Extensions.Registry;
 using ExtraIsland.Automations.Actions;
 using ExtraIsland.Automations.Rules;
 using ExtraIsland.Automations.Triggers;
+using ExtraIsland.Shared;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,7 +29,9 @@ public class Register : IHostedService {
         services.AddRule<TodayIsConfig, TodayIs>
             ("extraIsland.rule.todayIs", "今天是", PackIconKind.Calendar);
         // 触发器
-        services.AddTrigger<PostMainTimerTicked>();
+        if (GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) {
+            services.AddTrigger<PostMainTimerTicked>();
+        }
     }
     
     /// <summary>

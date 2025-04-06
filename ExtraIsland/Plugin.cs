@@ -43,9 +43,8 @@ namespace ExtraIsland
             if (GlobalConstants.Handlers.MainConfig.Data.IsTelemetryActivated) {
                 #if DEBUG
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("[ExIsLand][EarlyLoad]这是调试构建,遥测已自动禁用!");
-                Console.ForegroundColor = defaultColor;        
-                GlobalConstants.Handlers.MainConfig.Data.IsTelemetryActivated = false;
+                Console.WriteLine("[ExIsLand][EarlyLoad][DEBUG]这是调试构建,遥测将被禁用!");
+                Console.ForegroundColor = defaultColor;
                 return;
                 #endif
                 #pragma warning disable CS0162 // Unreachable code detected
