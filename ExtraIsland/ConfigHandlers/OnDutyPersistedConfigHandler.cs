@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.Json.Serialization;
 using ClassIsland.Shared.Helpers;
 using ExtraIsland.Shared;
+using Octokit;
 
 namespace ExtraIsland.ConfigHandlers;
 
@@ -30,13 +31,11 @@ public class OnDutyPersistedConfigHandler {
                 Data);
         }
         PeoplesOnDuty = Data.GetWhoOnDuty();
-        _updateThread = new Thread(Updater);
+        GlobalConstants.Triggers.OnLoaded += () => {
+            GlobalConstants.HostInterfaces.LessonsService!.PostMainTimerTicked += Updater;
+        };
         Data.PropertyChanged += Save;
-        _updateThread.Start();
     }
-    
-    // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
-    readonly Thread _updateThread;
     
     public void Save() {
         ConfigureFileHelper.SaveConfig<OnDutyPersistedConfigData>(
@@ -91,15 +90,10 @@ public class OnDutyPersistedConfigHandler {
     
     public event Action? OnDutyUpdated;
     
-    void Updater() {
-        while (true) {
-            if (EiUtils.GetDateTimeSpan(Data.LastUpdate,DateTime.Now) >= Data.DutyChangeDuration) {
-                SwapOnDuty();
-                UpdateOnDuty();
-            }
-            Thread.Sleep(500);   
-        }
-        // ReSharper disable once FunctionNeverReturns
+    void Updater(object? sender,EventArgs eventArgs) {
+        if (EiUtils.GetDateTimeSpan(Data.LastUpdate,DateTime.Now) < Data.DutyChangeDuration) return;
+        SwapOnDuty();
+        UpdateOnDuty();
     }
 
     public void SwapOnDuty() {
