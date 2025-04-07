@@ -46,9 +46,8 @@ namespace ExtraIsland
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("[ExIsLand][EarlyLoad][DEBUG]这是调试构建,遥测将被禁用!");
                 Console.ForegroundColor = defaultColor;
-                return;
                 #endif
-                #pragma warning disable CS0162 // Unreachable code detected
+                #if !DEBUG
                 // ReSharper disable once HeuristicUnreachableCode
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("[ExIsLand][EarlyLoad]遥测已启用! 感谢您的帮助(～￣▽￣)～");
@@ -63,8 +62,8 @@ namespace ExtraIsland
                 AppBase.Current.DispatcherUnhandledException += (_,e) => {
                     if (e.Exception.StackTrace == null) SentrySdk.CaptureException(e.Exception);
                     else if (e.Exception.StackTrace.Contains("ExtraIsland")) SentrySdk.CaptureException(e.Exception);
-                };   
-                #pragma warning restore CS0162 // Unreachable code detected
+                };
+                #endif
             }
             Console.WriteLine("[ExIsLand][EarlyLoad]正在载入其余配置...");
             GlobalConstants.Handlers.OnDuty = new OnDutyPersistedConfigHandler();

@@ -77,7 +77,8 @@
                                    Margin="3">
                                 值日列表
                             </Label>
-                            <materialDesign:Chip Background="{DynamicResource MaterialDesignDivider}">
+                            <materialDesign:Chip Background="{DynamicResource MaterialDesignDivider}"
+                                                 MaxWidth="300">
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="当前索引" />
                                     <Label x:Name="IndexOnDutyLabel" Content="{Binding Settings.Data.CurrentPeopleIndex}" />
