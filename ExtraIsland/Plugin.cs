@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 using ClassIsland.Core;
 using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
@@ -60,7 +61,8 @@ namespace ExtraIsland
                 });
             
                 AppBase.Current.DispatcherUnhandledException += (_,e) => {
-                    SentrySdk.CaptureException(e.Exception);
+                    if (e.Exception.StackTrace == null) SentrySdk.CaptureException(e.Exception);
+                    else if (e.Exception.StackTrace.Contains("ExtraIsland")) SentrySdk.CaptureException(e.Exception);
                 };   
                 #pragma warning restore CS0162 // Unreachable code detected
             }
