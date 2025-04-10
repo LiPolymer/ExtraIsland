@@ -51,4 +51,11 @@ public class LiveActivityConfig {
             OnLyricsChanged?.Invoke();
         }
     }
+    
+    public bool IsSleepyUploaderEnabled { get; set; }
+    public string SleepyUrl { get; set; } = string.Empty;
+    public string SleepySecret { get; set; } = string.Empty;
+    public string SleepyPattern { get; set; } = "{0}";
+    public string SleepyDeviceId { get; set; } = "0";
+    public string SleepyDevice { get; set; } = "ExtraIsland Sleepy Interface";
 }

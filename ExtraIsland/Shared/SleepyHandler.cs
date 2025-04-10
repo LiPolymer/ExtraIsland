@@ -1,6 +1,9 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Logging;
 
 namespace ExtraIsland.Shared;
 
@@ -57,6 +60,30 @@ public static class SleepyHandler {
             public bool Using { get; set; }
             [JsonPropertyName("app_name")]
             public string AppName { get; set; } = string.Empty;
+        }
+        
+        public class PostData : SleepyDevice {
+            [JsonPropertyName("secret")]
+            public string Secret { get; set; } = string.Empty;
+            [JsonPropertyName("id")]
+            public string Id { get; set; } = string.Empty;
+            public string Post(string url) {
+                try {
+                    string jsonPayload = JsonSerializer.Serialize(this);
+                    StringContent content = new StringContent(
+                        jsonPayload,
+                        Encoding.UTF8,
+                        "application/json"
+                    );
+                    using HttpClient httpClient = new HttpClient();
+                    HttpResponseMessage response = httpClient.PostAsync(url, content).Result;
+                    return response.Content.ReadAsStringAsync().Result;
+                }
+                catch (Exception e) {
+                    GlobalConstants.HostInterfaces.PluginLogger!.LogWarning(e.Message);
+                    return string.Empty;
+                }
+            }
         }
     }
 }

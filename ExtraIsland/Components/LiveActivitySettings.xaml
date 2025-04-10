@@ -95,6 +95,84 @@
                              Header="启用歌词"
                              Description="启用后,将在组件显示歌词,使用LyricsIsland协议"
                              IsOn="{Binding Settings.IsLyricsEnabled, Mode=TwoWay}"/>
+            <materialDesign:Card Margin="0 0 0 6">
+                <Expander Background="Transparent"
+                          IsExpanded="{Binding Settings.IsSleepyUploaderEnabled, Mode=OneWay}"
+                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    <Expander.Header>
+                        <ci:SettingsControl IconGlyph="BedTime"
+                                            Header="Sleepy上报"
+                                            Description="向一个Sleepy实例上报当前活动数据"
+                                            HasSwitcher="True"
+                                            IsOn="{Binding Settings.IsSleepyUploaderEnabled, Mode=TwoWay}"
+                                            Margin="-12 0" />
+                    </Expander.Header>
+                    <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+                    <StackPanel Orientation="Vertical" Style="{StaticResource SettingsPageStackPanelStyle}">
+                        <ci:SettingsControl IconGlyph="Link"
+                                            Header="目标URL"
+                                            Description="填写目标Sleepy页面的API链接"
+                                            HasSwitcher="True"
+                                            Margin="12,0,6,6">
+                            <ci:SettingsControl.Switcher>
+                                <TextBox MinWidth="50"
+                                         Foreground="{DynamicResource MaterialDesignBody}"
+                                         Text="{Binding Settings.SleepyUrl}"
+                                         Margin="3,0,3,0"/>
+                            </ci:SettingsControl.Switcher>
+                        </ci:SettingsControl>
+                        
+                        <ci:SettingsControl IconGlyph="Key"
+                                            Header="密钥"
+                                            Description="目标Sleepy服务的secret字段"
+                                            HasSwitcher="True"
+                                            Margin="12,0,6,6">
+                            <ci:SettingsControl.Switcher>
+                                <TextBox MinWidth="50"
+                                         Foreground="{DynamicResource MaterialDesignBody}"
+                                         Text="{Binding Settings.SleepySecret}"
+                                         Margin="3,0,3,0"/>
+                            </ci:SettingsControl.Switcher>
+                        </ci:SettingsControl>
+                        <ci:SettingsControl IconGlyph="Devices"
+                                            Header="设备"
+                                            Description="设备名"
+                                            HasSwitcher="True"
+                                            Margin="12,0,6,6">
+                            <ci:SettingsControl.Switcher>
+                                <TextBox MinWidth="50"
+                                         Foreground="{DynamicResource MaterialDesignBody}"
+                                         Text="{Binding Settings.SleepyDevice}"
+                                         Margin="3,0,3,0"/>
+                            </ci:SettingsControl.Switcher>
+                        </ci:SettingsControl>
+                        <ci:SettingsControl IconGlyph="ImportantDevices"
+                                            Header="设备ID"
+                                            Description="填写设备ID"
+                                            HasSwitcher="True"
+                                            Margin="12,0,6,6">
+                            <ci:SettingsControl.Switcher>
+                                <TextBox MinWidth="20"
+                                         Foreground="{DynamicResource MaterialDesignBody}"
+                                         Text="{Binding Settings.SleepyDeviceId}"
+                                         Margin="3,0,3,0"/>
+                            </ci:SettingsControl.Switcher>
+                        </ci:SettingsControl>
+                        <ci:SettingsControl IconGlyph="Paperclip"
+                                            Header="上传格式"
+                                            Description="填写上报字符串的格式 {0}代指当前应用"
+                                            HasSwitcher="True"
+                                            Margin="12,0,6,6">
+                            <ci:SettingsControl.Switcher>
+                                <TextBox MinWidth="20"
+                                         Foreground="{DynamicResource MaterialDesignBody}"
+                                         Text="{Binding Settings.SleepyPattern}"
+                                         Margin="3,0,3,0"/>
+                            </ci:SettingsControl.Switcher>
+                        </ci:SettingsControl>
+                    </StackPanel>
+                </Expander>
+            </materialDesign:Card>
             <Label HorizontalAlignment="Center" 
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland

@@ -5,6 +5,8 @@ using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
 using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Extensions.Logging;
+using Sentry.Protocol;
 
 namespace ExtraIsland.Components;
 
@@ -31,7 +33,8 @@ public partial class LiveActivity {
     readonly Animators.EmphasizeUiElementAnimator _lyricsAnimator;
     readonly Animators.ClockTransformControlAnimator _lyricsLabelAnimator;
     LyricsIslandHandler? _lyricsHandler;
-
+    string _postName = string.Empty;
+    
     bool IsLyricsIslandLoaded { get; }
     
     void Check(object? sender,EventArgs eventArgs) {
@@ -51,6 +54,22 @@ public partial class LiveActivity {
                 CardChip.Visibility = Visibility.Visible;
                 if (title != null) {
                     _labelAnimator.Update(title, Settings.IsAnimationEnabled, false);
+                    if (Settings.IsSleepyUploaderEnabled) {
+                        string appName = string.Format(Settings.SleepyPattern,title);
+                        if (_postName != appName) {
+                            _postName = appName;
+                            new Thread(() => {
+                                new SleepyHandler.SleepyApiData.PostData {
+                                    AppName = appName,
+                                    Id = Settings.SleepyDeviceId,
+                                    Secret = Settings.SleepySecret,
+                                    ShowName = Settings.SleepyDevice,
+                                    Using = true
+                                }.Post(Settings.SleepyUrl);
+                                GlobalConstants.HostInterfaces.PluginLogger!.LogTrace("[LiveActivity]已上传Sleepy数据");
+                            }).Start();   
+                        }
+                    }
                 }
             }
         });
@@ -136,5 +155,9 @@ public partial class LiveActivity {
     void LiveActivity_OnUnloaded(object sender,RoutedEventArgs e) {
         LessonsService.PostMainTimerTicked -= Check;
         Settings.OnMarginChanged -= UpdateMargin;
+        Settings.OnLyricsChanged -= InitializeLyrics;
+        if (_lyricsHandler != null) {
+            _lyricsHandler.OnLyricsChanged -= UpdateLyrics;
+        }
     }
 }
