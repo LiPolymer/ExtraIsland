@@ -9,6 +9,9 @@
                   xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                   mc:Ignorable="d"
                   d:DesignHeight="300" d:DesignWidth="300">
+    <ci:ComponentBase.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </ci:ComponentBase.Resources>
     <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LiveActivitySettings}}">
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
         <StackPanel Style="{StaticResource SettingsPageStackPanelStyle}">
@@ -95,8 +98,10 @@
                              Header="启用歌词"
                              Description="启用后,将在组件显示歌词,使用LyricsIsland协议"
                              IsOn="{Binding Settings.IsLyricsEnabled, Mode=TwoWay}"/>
-            <materialDesign:Card Margin="0 0 0 6">
+            <materialDesign:Card Margin="0 0 0 6"
+                                 Visibility="{Binding IsLifeModeEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
                 <Expander Background="Transparent"
+
                           IsExpanded="{Binding Settings.IsSleepyUploaderEnabled, Mode=OneWay}"
                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                     <Expander.Header>

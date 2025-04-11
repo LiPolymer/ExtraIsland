@@ -146,6 +146,9 @@ public partial class LiveActivity {
     }
     
     void LiveActivity_OnLoaded(object sender,RoutedEventArgs e) {
+        if (!GlobalConstants.Handlers.MainConfig!.Data.IsLifeModeActivated) {
+            Settings.IsSleepyUploaderEnabled = false;
+        }
         UpdateMargin();
         InitializeLyrics();
         LessonsService.PostMainTimerTicked += Check;
