@@ -10,9 +10,10 @@
                   mc:Ignorable="d"
                   d:DesignHeight="300" d:DesignWidth="300">
     <ci:ComponentBase.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </ci:ComponentBase.Resources>
-    <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LiveActivitySettings}}">
+    <ScrollViewer
+        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LiveActivitySettings}}">
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
         <StackPanel Style="{StaticResource SettingsPageStackPanelStyle}">
             <ci:SettingsCard IconGlyph="BorderHorizontal"
@@ -20,28 +21,28 @@
                              Description="启用后,对应侧的元素边界将收缩至适合圆角">
                 <ci:SettingsCard.Switcher>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="(左" 
-                               Foreground="Gray"/>
+                        <Label Content="(左"
+                               Foreground="Gray" />
                         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
                         <ToggleButton Margin="0,0,5,0"
                                       Style="{StaticResource MaterialDesignSwitchToggleButton}"
                                       IsChecked="{Binding Settings.IsLeftNegativeMargin, Mode=TwoWay}">
                         </ToggleButton>
-                        <Label Content="(O --)" 
-                               Foreground="Gray"/>
+                        <Label Content="(O --)"
+                               Foreground="Gray" />
                         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
                         <ToggleButton Margin="5,0,0,0"
                                       Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                      IsChecked="{Binding Settings.IsRightNegativeMargin, Mode=TwoWay}"/>
-                        <Label Content="右)" 
-                               Foreground="Gray"/>
+                                      IsChecked="{Binding Settings.IsRightNegativeMargin, Mode=TwoWay}" />
+                        <Label Content="右)"
+                               Foreground="Gray" />
                     </StackPanel>
                 </ci:SettingsCard.Switcher>
             </ci:SettingsCard>
             <ci:SettingsCard IconGlyph="AnimationPlay"
                              Header="启用动画"
                              Description="禁用后,将不再播放动画,对低性能设备友好!"
-                             IsOn="{Binding Settings.IsAnimationEnabled, Mode=TwoWay}"/>
+                             IsOn="{Binding Settings.IsAnimationEnabled, Mode=TwoWay}" />
             <materialDesign:Card Margin="0 0 0 6">
                 <Expander Background="Transparent"
                           IsExpanded="False"
@@ -57,47 +58,47 @@
                                 <materialDesign:PackIcon
                                     Kind="ScriptTextKey"
                                     Foreground="{DynamicResource MaterialDesignBodyLight}"
-                                    VerticalAlignment="Center"/>
+                                    VerticalAlignment="Center" />
                             </ci:SettingsControl.Switcher>
                         </ci:SettingsControl>
                     </Expander.Header>
                     <!-- ReSharper disable once Xaml.DynamicResourceError -->
                     <Border Background="{DynamicResource MaterialDesignDivider}"
-                                Margin="35,3,20,9"
-                                CornerRadius="5">
+                            Margin="35,3,20,9"
+                            CornerRadius="5">
                         <TextBox Text="{Binding Settings.IgnoreListString}"
-                                     Background="Transparent"
-                                     AcceptsReturn="True"
-                                     VerticalContentAlignment="Top"
-                                     TextWrapping="Wrap"
-                                     Margin="6,6,6,6"/>
+                                 Background="Transparent"
+                                 AcceptsReturn="True"
+                                 VerticalContentAlignment="Top"
+                                 TextWrapping="Wrap"
+                                 Margin="6,6,6,6" />
                     </Border>
                 </Expander>
             </materialDesign:Card>
             <Border x:Name="ConflictHintContainer"
-                    Background="#1500F0F0" 
-                    Margin="0,0,0,-7" 
-                    Padding="6" 
+                    Background="#1500F0F0"
+                    Margin="0,0,0,-7"
+                    Padding="6"
                     CornerRadius="4">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="InfoCircle"
                                                  VerticalAlignment="Center"
-                                                 Margin="0,0,3,0"/>
+                                                 Margin="0,0,3,0" />
                         <TextBlock VerticalAlignment="Center">
-                        <Run>检测到LyricsIsland已安装,</Run>
-                        <Bold>歌词获取端口无法多开</Bold>
-                        <Run>,为确保兼容性,故禁用本功能</Run>
+                            <Run>检测到LyricsIsland已安装,</Run>
+                            <Bold>歌词获取端口无法多开</Bold>
+                            <Run>,为确保兼容性,故禁用本功能</Run>
                         </TextBlock>
                     </StackPanel>
-                    <Label/>
+                    <Label />
                 </StackPanel>
             </Border>
             <ci:SettingsCard IconGlyph="MusicNoteAdd"
                              IsEnabled="{Binding IsLyricsIslandNotLoaded}"
                              Header="启用歌词"
                              Description="启用后,将在组件显示歌词,使用LyricsIsland协议"
-                             IsOn="{Binding Settings.IsLyricsEnabled, Mode=TwoWay}"/>
+                             IsOn="{Binding Settings.IsLyricsEnabled, Mode=TwoWay}" />
             <materialDesign:Card Margin="0 0 0 6"
                                  Visibility="{Binding IsLifeModeEnabled, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
                 <Expander Background="Transparent"
@@ -110,7 +111,7 @@
                                             Description="向一个Sleepy实例上报当前活动数据"
                                             HasSwitcher="True"
                                             IsOn="{Binding Settings.IsSleepyUploaderEnabled, Mode=TwoWay}"
-                                            Margin="-12 0" />
+                                            Margin= "-12 0"/>
                     </Expander.Header>
                     <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
                     <StackPanel Orientation="Vertical" Style="{StaticResource SettingsPageStackPanelStyle}">
@@ -123,22 +124,31 @@
                                 <TextBox MinWidth="50"
                                          Foreground="{DynamicResource MaterialDesignBody}"
                                          Text="{Binding Settings.SleepyUrl}"
-                                         Margin="3,0,3,0"/>
+                                         Margin="3,0,3,0" />
                             </ci:SettingsControl.Switcher>
                         </ci:SettingsControl>
-                        
-                        <ci:SettingsControl IconGlyph="Key"
-                                            Header="密钥"
-                                            Description="目标Sleepy服务的secret字段"
-                                            HasSwitcher="True"
-                                            Margin="12,0,6,6">
-                            <ci:SettingsControl.Switcher>
+                            <Expander Background="Transparent"
+                                      IsExpanded="False"
+                                      TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                                <Expander.Header>
+                                    <ci:SettingsControl IconGlyph="Key"
+                                                        Header="密钥"
+                                                        Description="目标Sleepy服务的secret字段"
+                                                        HasSwitcher="True"
+                                                        Margin= "-12 0">
+                                        <ci:SettingsControl.Switcher>
+                                            <materialDesign:PackIcon
+                                                Kind="EyeLock"
+                                                Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                                VerticalAlignment="Center" />
+                                        </ci:SettingsControl.Switcher>
+                                    </ci:SettingsControl>   
+                                </Expander.Header>
                                 <TextBox MinWidth="50"
                                          Foreground="{DynamicResource MaterialDesignBody}"
                                          Text="{Binding Settings.SleepySecret}"
-                                         Margin="3,0,3,0"/>
-                            </ci:SettingsControl.Switcher>
-                        </ci:SettingsControl>
+                                         Margin="6,0,6,3" />
+                            </Expander>
                         <ci:SettingsControl IconGlyph="Devices"
                                             Header="设备"
                                             Description="设备名"
@@ -148,7 +158,7 @@
                                 <TextBox MinWidth="50"
                                          Foreground="{DynamicResource MaterialDesignBody}"
                                          Text="{Binding Settings.SleepyDevice}"
-                                         Margin="3,0,3,0"/>
+                                         Margin="3,0,3,0" />
                             </ci:SettingsControl.Switcher>
                         </ci:SettingsControl>
                         <ci:SettingsControl IconGlyph="ImportantDevices"
@@ -160,7 +170,7 @@
                                 <TextBox MinWidth="20"
                                          Foreground="{DynamicResource MaterialDesignBody}"
                                          Text="{Binding Settings.SleepyDeviceId}"
-                                         Margin="3,0,3,0"/>
+                                         Margin="3,0,3,0" />
                             </ci:SettingsControl.Switcher>
                         </ci:SettingsControl>
                         <ci:SettingsControl IconGlyph="Paperclip"
@@ -172,17 +182,17 @@
                                 <TextBox MinWidth="20"
                                          Foreground="{DynamicResource MaterialDesignBody}"
                                          Text="{Binding Settings.SleepyPattern}"
-                                         Margin="3,0,3,0"/>
+                                         Margin="3,0,3,0" />
                             </ci:SettingsControl.Switcher>
                         </ci:SettingsControl>
                     </StackPanel>
                 </Expander>
             </materialDesign:Card>
-            <Label HorizontalAlignment="Center" 
+            <Label HorizontalAlignment="Center"
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland
             </Label>
-            <Label HorizontalAlignment="Center" 
+            <Label HorizontalAlignment="Center"
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Lyrics Powered by LyricsIsland
             </Label>

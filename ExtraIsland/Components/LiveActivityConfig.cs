@@ -53,7 +53,7 @@ public class LiveActivityConfig {
     }
     
     public bool IsSleepyUploaderEnabled { get; set; }
-    public string SleepyUrl { get; set; } = string.Empty;
+    public string SleepyUrl { get; set; } = "https://sleepy.developers.classisland.tech/set/device";
     public string SleepySecret { get; set; } = string.Empty;
     public string SleepyPattern { get; set; } = "{0}";
     public string SleepyDeviceId { get; set; } = "0";
