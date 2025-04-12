@@ -83,11 +83,11 @@
                              Description="倒计时设定的日期和时间">
                 <ci:SettingsCard.Switcher>
                     <StackPanel Orientation="Horizontal">
-                        <DatePicker SelectedDate="{Binding Settings.TargetDate, Mode=TwoWay}"
+                        <DatePicker SelectedDate="{Binding Settings.TargetDateTime, Mode=TwoWay}"
                                     Margin="10 8 0 0" Width="95" />
                         <materialDesign:TimePicker Is24Hours="True"
                                                    WithSeconds="True"
-                                                   SelectedTime="{Binding Settings.TargetDate, Mode=TwoWay}"
+                                                   SelectedTime="{Binding Settings.TargetDateTime, Mode=TwoWay}"
                                                    Margin="4 8 0 0" Width="76" />
                     </StackPanel>
                 </ci:SettingsCard.Switcher>

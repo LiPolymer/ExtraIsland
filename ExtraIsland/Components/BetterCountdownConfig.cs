@@ -4,7 +4,9 @@ namespace ExtraIsland.Components;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public class BetterCountdownConfig {
-    public string TargetDate { get; set; } = DateTime.Now.ToString("s");
+    [Obsolete("已弃用,预计于R1.xx移除")]
+    public string TargetDate { get; set; } = string.Empty;
+    public DateTime TargetDateTime { get; set; } = DateTime.Now;
     public string Prefix { get; set; } = "现在";
     public string Suffix { get; set; } = "过去了";
     public bool IsSystemTime { get; set; }
