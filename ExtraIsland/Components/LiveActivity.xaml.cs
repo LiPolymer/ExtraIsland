@@ -17,34 +17,36 @@ namespace ExtraIsland.Components;
     "展示前台窗口标题"
 )]
 public partial class LiveActivity {
-    public LiveActivity(ILessonsService lessonsService) {
+    public LiveActivity(ILessonsService lessonsService, ILogger<LiveActivity> logger) {
         LessonsService = lessonsService;
+        Logger = logger;
         IsLyricsIslandLoaded = EiUtils.IsLyricsIslandInstalled();
         InitializeComponent();
         _labelAnimator = new Animators.ClockTransformControlAnimator(CurrentLabel);
-        _activityAnimator = new Animators.EmphasizeUiElementAnimator(ActivityStack, 5);
-        _lyricsAnimator = new Animators.EmphasizeUiElementAnimator(LyricsStack, 5);
-        _lyricsLabelAnimator = new Animators.ClockTransformControlAnimator(LyricsLabel, -0.2);
+        _activityAnimator = new Animators.EmphasizeUiElementAnimator(ActivityStack,5);
+        _lyricsAnimator = new Animators.EmphasizeUiElementAnimator(LyricsStack,5);
+        _lyricsLabelAnimator = new Animators.ClockTransformControlAnimator(LyricsLabel,-0.2);
     }
-    
+
     ILessonsService LessonsService { get; }
+    ILogger<LiveActivity> Logger { get; }
     readonly Animators.ClockTransformControlAnimator _labelAnimator;
     readonly Animators.EmphasizeUiElementAnimator _activityAnimator;
     readonly Animators.EmphasizeUiElementAnimator _lyricsAnimator;
     readonly Animators.ClockTransformControlAnimator _lyricsLabelAnimator;
     LyricsIslandHandler? _lyricsHandler;
     string _postName = string.Empty;
-    
+
     bool IsLyricsIslandLoaded { get; }
-    
+
     void Check(object? sender,EventArgs eventArgs) {
         Check();
     }
-    
+
     void Check() {
         this.BeginInvoke(() => {
-            Icon.Foreground = WindowsUtils.IsOurWindowInForeground() 
-                ? Brushes.DeepSkyBlue 
+            Icon.Foreground = WindowsUtils.IsOurWindowInForeground()
+                ? Brushes.DeepSkyBlue
                 : Brushes.LightGreen;
             string? title = WindowsUtils.GetActiveWindowTitle();
             if (Settings.IgnoreList.Contains(title)) title = null;
@@ -53,7 +55,7 @@ public partial class LiveActivity {
             } else {
                 CardChip.Visibility = Visibility.Visible;
                 if (title != null) {
-                    _labelAnimator.Update(title, Settings.IsAnimationEnabled, false);
+                    _labelAnimator.Update(title.Replace("_","__"),Settings.IsAnimationEnabled,false);
                     if (Settings.IsSleepyUploaderEnabled) {
                         string appName = string.Format(Settings.SleepyPattern,title);
                         if (_postName != appName) {
@@ -66,15 +68,15 @@ public partial class LiveActivity {
                                     ShowName = Settings.SleepyDevice,
                                     Using = true
                                 }.Post(Settings.SleepyUrl);
-                                GlobalConstants.HostInterfaces.PluginLogger!.LogTrace("[LiveActivity]已上传Sleepy数据");
-                            }).Start();   
+                                Logger.LogTrace("[LiveActivity]已上传Sleepy数据");
+                            }).Start();
                         }
                     }
                 }
             }
         });
     }
-    
+
     void UpdateMargin() {
         this.BeginInvoke(() => {
             CardChip.Margin = new Thickness {
@@ -85,7 +87,7 @@ public partial class LiveActivity {
             };
         });
     }
-    
+
     void InitializeLyrics() {
         if (IsLyricsIslandLoaded) {
             Settings.IsLyricsEnabled = false;
@@ -100,7 +102,7 @@ public partial class LiveActivity {
                     if (!Settings.IsLyricsEnabled) {
                         break;
                     }
-                    this.BeginInvoke(()=> {
+                    this.BeginInvoke(() => {
                         ActivityStack.Visibility = ActivityStack.Opacity == 0 ? Visibility.Collapsed : Visibility.Visible;
                         LyricsStack.Visibility = LyricsStack.Opacity == 0 ? Visibility.Collapsed : Visibility.Visible;
                     });
@@ -117,24 +119,24 @@ public partial class LiveActivity {
             _lyricsHandler.OnLyricsChanged -= UpdateLyrics;
             _lyricsHandler = null;
             ShowLyrics(false);
-            this.BeginInvoke(()=> {
+            this.BeginInvoke(() => {
                 ActivityStack.Visibility = Visibility.Visible;
                 LyricsStack.Visibility = Visibility.Collapsed;
             });
         }
     }
-    
+
     double _timeCounter;
-    
+
     void UpdateLyrics() {
         this.BeginInvoke(() => {
             if (_lyricsHandler == null) return;
             ShowLyrics(true);
             _timeCounter = 10;
-            _lyricsLabelAnimator.Update(_lyricsHandler.Lyrics, isForced:true);
+            _lyricsLabelAnimator.Update(_lyricsHandler.Lyrics,isForced:true);
         });
     }
-    
+
     bool _isLyricsShowed;
     void ShowLyrics(bool isShow) {
         if (_isLyricsShowed == isShow) return;
@@ -144,7 +146,7 @@ public partial class LiveActivity {
             _activityAnimator.Update(isShow);
         });
     }
-    
+
     void LiveActivity_OnLoaded(object sender,RoutedEventArgs e) {
         if (!GlobalConstants.Handlers.MainConfig!.Data.IsLifeModeActivated) {
             Settings.IsSleepyUploaderEnabled = false;
