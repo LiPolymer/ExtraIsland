@@ -205,9 +205,9 @@ public static class WindowsUtils {
                 }
                 finally {
                     drive.Dispose();
-                    completionEvent.Set();
                 }
             }
+            completionEvent.Set();
             // ReSharper restore PossibleInvalidCastExceptionInForeachLoop
         });
 
