@@ -4,6 +4,7 @@ using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Extensions.Registry;
 using ClassIsland.Core.Models.Plugin;
+using ExtraIsland.AuthorizeProvider;
 using ExtraIsland.Automations;
 using ExtraIsland.Components;
 using ExtraIsland.ConfigHandlers;
@@ -83,6 +84,8 @@ namespace ExtraIsland
             services.AddSettingsPage<TinyFeaturesSettingsPage>();
             //Actions
             Register.Claim(services);
+            //Authorizer
+            services.AddAuthorizeProvider<UsbDriveAuthorizer>();
             //LifeMode
             if (GlobalConstants.Handlers.MainConfig.Data.IsLifeModeActivated) {
                 Console.ForegroundColor = ConsoleColor.Green;

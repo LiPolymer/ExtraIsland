@@ -4,6 +4,7 @@ using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Interop;
 using Microsoft.Extensions.Logging;
@@ -101,7 +102,7 @@ public static class WindowsUtils {
         static string GetDriveLetter(uint unitMask) {
             for (int i = 0; i < 26; i++) {
                 if ((unitMask & (1 << i)) != 0) {
-                    return $"{Convert.ToChar('A' + i)}:\\";
+                    return $"{Convert.ToChar('A' + i)}:";
                 }
             }
             return string.Empty;
@@ -164,46 +165,72 @@ public static class WindowsUtils {
         public string? SerialNumber;
         public List<string>? DriveLetter;
     }
-    public static List<UsbDriveInfo> ScanUsbDrive() {
-        ManagementClass driveClass = new ManagementClass("Win32_DiskDrive");
-        List<UsbDriveInfo> driveInfos = [];
-        // ReSharper disable PossibleInvalidCastExceptionInForeachLoop
-        foreach (ManagementObject drive in driveClass.GetInstances()) {
-            if (drive!["InterfaceType"]?.ToString() != "USB") continue;
-            try {
-                // 获取关联的分区
-                List<string> driveLetters = [];
-                foreach (ManagementObject partition in drive.GetRelated("Win32_DiskPartition")) {
-                    // 获取关联的逻辑磁盘
-                    foreach (ManagementObject disk in partition.GetRelated("Win32_LogicalDisk")) {
-                        driveLetters.Add(disk["DeviceID"].ToString()!);
-                    }
-                }
-                
-                // 获取设备序列号
-                string pnpID = drive["PNPDeviceID"]?.ToString() ?? "";
-                string[] info = pnpID.Split('&');
-                string serial = (info.Length > 3
-                    ? info[3].Split('\\').LastOrDefault()
-                    : null)!;
 
-                // 显示结果
-                driveInfos.Add(new UsbDriveInfo {
-                    SerialNumber = serial,
-                    DriveLetter = driveLetters
-                });
+    public static List<UsbDriveInfo> ScanUsbDrive() {
+        List<UsbDriveInfo> driveInfos = [];
+        ManualResetEventSlim completionEvent = new ManualResetEventSlim();
+        Exception? threadException = null;
+
+        // 创建专用 STA 线程执行 WMI 操作
+        Thread staThread = new Thread(() => {
+            ManagementClass driveClass = new ManagementClass("Win32_DiskDrive");
+            // ReSharper disable PossibleInvalidCastExceptionInForeachLoop
+            foreach (ManagementObject drive in driveClass.GetInstances()) {
+                if (drive!["InterfaceType"]?.ToString() != "USB") continue;
+                try {
+                    // 获取关联的分区
+                    List<string> driveLetters = [];
+                    foreach (ManagementObject partition in drive.GetRelated("Win32_DiskPartition")) {
+                        // 获取关联的逻辑磁盘
+                        foreach (ManagementObject disk in partition.GetRelated("Win32_LogicalDisk")) {
+                            driveLetters.Add(disk["DeviceID"].ToString()!);
+                        }
+                    }
+
+                    // 获取设备序列号
+                    string pnpID = drive["PNPDeviceID"]?.ToString() ?? "";
+                    string[] info = pnpID.Split('&');
+                    string serial = (info.Length > 3
+                        ? info[3].Split('\\').LastOrDefault()
+                        : null)!;
+
+                    // 显示结果
+                    driveInfos.Add(new UsbDriveInfo {
+                        SerialNumber = serial,
+                        DriveLetter = driveLetters
+                    });
+                }
+                catch (Exception ex) {
+                    GlobalConstants.HostInterfaces.PluginLogger?.LogError(ex,"扫描USB设备时遇到问题");
+                }
+                finally {
+                    drive.Dispose();
+                    completionEvent.Set();
+                }
             }
-            catch (Exception ex) {
-                GlobalConstants.HostInterfaces.PluginLogger?.LogError(ex, "扫描USB设备时遇到问题");
-            }
-            finally {
-                drive.Dispose();
-            }
-        }
-        // ReSharper restore PossibleInvalidCastExceptionInForeachLoop
-        return driveInfos;
+            // ReSharper restore PossibleInvalidCastExceptionInForeachLoop
+        });
+
+        // 配置 STA 线程
+        staThread.SetApartmentState(ApartmentState.STA);
+        staThread.IsBackground = true;
+        staThread.Start();
+        completionEvent.Wait();
+
+        // 处理线程异常
+        if (threadException == null) return driveInfos;
+        GlobalConstants.HostInterfaces.PluginLogger?.LogError(threadException,"扫描USB设备时遇到问题");
+        return [];
     }
-    
+
+    public static UsbDriveInfo FindUsbDriveByLetter(string driveLetter) {
+        foreach (UsbDriveInfo info in ScanUsbDrive()) {
+            if (info.DriveLetter == null) continue;
+            if (info.DriveLetter.Contains(driveLetter)) return info;
+        }
+        return new UsbDriveInfo();
+    }
+
     public static void DetectUsb() {
         List<UsbDriveInfo> driveInfos = ScanUsbDrive();
         foreach (UsbDriveInfo driveInfo in driveInfos) {
