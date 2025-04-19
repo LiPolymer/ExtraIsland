@@ -1,4 +1,5 @@
-﻿<ci:AuthorizeProviderControlBase x:TypeArguments="local:UsbDriveAuthorizerSettings" x:Class="ExtraIsland.AuthorizeProvider.UsbDriveAuthorizer"
+﻿<ci:AuthorizeProviderControlBase x:TypeArguments="local:UsbDriveAuthorizerSettings"
+                                 x:Class="ExtraIsland.AuthorizeProvider.UsbDriveAuthorizer"
                                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -10,33 +11,36 @@
                                  Loaded="UsbDriveAuthorizer_OnLoaded"
                                  Unloaded="UsbDriveAuthorizer_OnUnloaded">
     <ci:AuthorizeProviderControlBase.Resources>
-        <ci:BooleanToVisibilityReConverter x:Key="InverseBooleanToVisibilityConverter"/>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <ci:BooleanToVisibilityReConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </ci:AuthorizeProviderControlBase.Resources>
-    <StackPanel Orientation="Horizontal" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:UsbDriveAuthorizer}}">
-        <StackPanel Visibility="{Binding IsEditingMode, Converter={StaticResource BooleanToVisibilityConverter}}" 
+    <StackPanel Orientation="Horizontal"
+                DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:UsbDriveAuthorizer}}">
+        <StackPanel Visibility="{Binding IsEditingMode, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Orientation="Vertical">
-            <Border Background="#3f00eff1" 
+            <Border Background="#3f00eff1"
                     CornerRadius="4"
                     Margin="3,4,0,0">
                 <StackPanel Orientation="Horizontal" Margin="4">
-                    <materialDesign:PackIcon Kind="Info" 
+                    <materialDesign:PackIcon Kind="Info"
                                              VerticalAlignment="Center"
-                                             Margin="0,0,2,0"/>
+                                             Margin="0,0,2,0" />
                     <TextBlock>
                         请尽量使用正规U盘进行验证
+                        <LineBreak />
+                        推荐同时设置密码,防止认证设备损坏
                     </TextBlock>
                 </StackPanel>
             </Border>
             <StackPanel Orientation="Horizontal">
                 <Label Visibility="{Binding Operating, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                    <Button Click="ButtonBase_OnClick" x:Name="SetterButton"
+                    <Button Click="ButtonBase_OnClick"
                             Visibility="{Binding OperationFinished, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="UsbFlashDrive" 
+                                <materialDesign:PackIcon Kind="UsbFlashDrive"
                                                          VerticalAlignment="Center"
-                                                         Margin="0,0,2,0"/>
+                                                         Margin="0,0,2,0" />
                                 <TextBlock>
                                     设置验证存储器
                                 </TextBlock>
@@ -44,38 +48,42 @@
                         </Button.Content>
                     </Button>
                 </Label>
-                <Label x:Name="SetterLabel"
-                       Foreground="SkyBlue"
+                <Label Foreground="SkyBlue"
                        Visibility="{Binding Operating, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       Content="现在插入U盘"/>
-                <Label x:Name="FinishedLabel"
-                       Foreground="LightGreen"
+                       Content="现在插入U盘" />
+                <Label Foreground="LightGreen"
                        Visibility="{Binding OperationFinished, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       Content="完成!"/>
+                       Content="完成!" />
             </StackPanel>
+            <Label Foreground="{DynamicResource MaterialDesignBodyLight}">
+                Added by ExtraIsland
+            </Label>
         </StackPanel>
-    <StackPanel Visibility="{Binding IsEditingMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
-                Orientation="Vertical">
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
+        <StackPanel
+            Visibility="{Binding IsEditingMode, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+            Orientation="Vertical">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="UsbFlashDriveOutline"
                                              VerticalAlignment="Center"
                                              Height="20"
                                              Width="20"
-                                             Margin="0,0,2,0"/>
+                                             Margin="0,0,2,0" />
                     <TextBlock VerticalAlignment="Center" FontSize="20">
                         请插入U盘开始验证
                     </TextBlock>
+                </StackPanel>
+                <Button Click="VerifyButton_OnClick"
+                        Content="已经插入?点此扫描"
+                        HorizontalContentAlignment="Left"
+                        BorderBrush="Transparent"
+                        Background="Transparent"
+                        Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                <Label
+                    Visibility="{Binding OperationFinished, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Foreground="OrangeRed"
+                    Content="验证失败，请使用正确的设备重试!" />
             </StackPanel>
-            <Button Click="VerifyButton_OnClick" 
-                    Content="已经插入?点此扫描" 
-                    BorderBrush="Transparent"
-                    Background="Transparent"
-                    Foreground="{DynamicResource PrimaryHueMidBrush}"/>
-            <Label Visibility="{Binding OperationFinished, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                   Foreground="OrangeRed"
-                   Content="验证失败，请使用正确的设备重试!"/>
         </StackPanel>
     </StackPanel>
-</StackPanel>
 </ci:AuthorizeProviderControlBase>

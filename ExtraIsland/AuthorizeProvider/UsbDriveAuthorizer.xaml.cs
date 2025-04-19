@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using ClassIsland.Core;
 using ClassIsland.Core.Attributes;
+using ClassIsland.Core.Controls.CommonDialog;
 using ExtraIsland.Shared;
 using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
@@ -38,6 +39,18 @@ public partial class UsbDriveAuthorizer {
         if (IsEditingMode & EditLock) return;
         EditLock = true;
         WindowsUtils.UsbDriveInfo info = WindowsUtils.FindUsbDriveByLetter(driveLetter);
+        if (info.SerialNumber == null) {
+            if (IsEditingMode)
+            {
+                CommonDialog.ShowError("此设备S/N异常,不能使用该设备!");
+                EditLock = false;
+            } 
+            else
+            {
+                OperationFinished = true;
+            }
+            return;
+        }
         if (IsEditingMode) {
             Settings.PassHash = EiUtils.Sha256EncryptString(info.SerialNumber!);
             Operating = false;
