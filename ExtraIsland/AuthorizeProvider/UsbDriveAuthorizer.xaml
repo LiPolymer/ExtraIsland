@@ -32,9 +32,22 @@
                     </TextBlock>
                 </StackPanel>
             </Border>
+            <ci:SettingsControl x:Name="ModeSettingsControl"
+                                Margin="4"
+                                IconGlyph="FileKey"
+                                Header="使用文件模式"
+                                Description="以自动放置的密钥文件而不是S/N作为验证依据"
+                                IsOn="{Binding Settings.IsFileModeEnabled, Mode=TwoWay}">
+                <ci:SettingsControl.Switcher>
+                    <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+                    <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                  IsChecked="{Binding Settings.IsFileModeEnabled, Mode=OneTime}"
+                                  Click="SetCredential"/>
+                </ci:SettingsControl.Switcher>
+            </ci:SettingsControl>
             <StackPanel Orientation="Horizontal">
                 <Label Visibility="{Binding Operating, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                    <Button Click="ButtonBase_OnClick"
+                    <Button Click="SetCredential"
                             Visibility="{Binding OperationFinished, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
