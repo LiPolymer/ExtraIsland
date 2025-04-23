@@ -1,6 +1,4 @@
-﻿using System.DirectoryServices.ActiveDirectory;
-using Windows.Win32;
-using ClassIsland.Core.Abstractions.Automation;
+﻿using ClassIsland.Core.Abstractions.Automation;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
 using MaterialDesignThemes.Wpf;

@@ -1,11 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Interop;
 using Microsoft.Extensions.Logging;
 

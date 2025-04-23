@@ -5,7 +5,6 @@ using System.IO;
 using System.Text.Json.Serialization;
 using ClassIsland.Shared.Helpers;
 using ExtraIsland.Shared;
-using Octokit;
 
 namespace ExtraIsland.ConfigHandlers;
 

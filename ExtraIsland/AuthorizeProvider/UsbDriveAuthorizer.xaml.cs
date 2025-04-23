@@ -1,13 +1,9 @@
 ﻿using System.IO;
-using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using ClassIsland.Core;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Controls.CommonDialog;
 using ExtraIsland.Shared;
-using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
 
 namespace ExtraIsland.AuthorizeProvider;

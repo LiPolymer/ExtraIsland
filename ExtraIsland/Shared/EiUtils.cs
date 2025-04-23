@@ -1,9 +1,6 @@
-﻿using System.IO;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Windows.Forms;
 using ClassIsland.Core.Abstractions.Services;
-using ClassIsland.Core.Models.Plugin;
 
 namespace ExtraIsland.Shared;
 

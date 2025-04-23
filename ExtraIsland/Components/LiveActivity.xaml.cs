@@ -6,7 +6,6 @@ using ExtraIsland.Shared;
 using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Extensions.Logging;
-using Sentry.Protocol;
 
 namespace ExtraIsland.Components;
 
