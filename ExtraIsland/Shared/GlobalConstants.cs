@@ -16,11 +16,14 @@ public static class GlobalConstants {
     }
 
     public static class Triggers {
+        public static bool IsLoaded { get; private set; }
+        
         /// <summary>
         /// ExtraIsland完全载入完毕后
         /// </summary>
         public static event Action? OnLoaded;
         public static void Loaded() {
+            IsLoaded = true;
             OnLoaded?.Invoke();
         }
         

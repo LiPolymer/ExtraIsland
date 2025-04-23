@@ -1,6 +1,9 @@
 ﻿using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows.Forms;
+using ClassIsland.Core.Abstractions.Services;
+using ClassIsland.Core.Models.Plugin;
 
 namespace ExtraIsland.Shared;
 
@@ -35,9 +38,12 @@ public static class EiUtils {
         }
         return builder.ToString();
     }
+
+    public static bool IsPluginInstalled(string pkgName) {
+        return IPluginService.LoadedPlugins.Any(info => info.Manifest.Id == pkgName);
+    }
     
     public static bool IsLyricsIslandInstalled() {
-        //TODO: 使用ClassIsland接口判断是否加载
-        return File.Exists("./Plugins/jiangyin14.lyrics/manifest.yml");
+        return IsPluginInstalled("jiangyin14.lyrics");
     }
 }
