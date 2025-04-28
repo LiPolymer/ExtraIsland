@@ -92,6 +92,9 @@ public class Plugin : PluginBase {
             Console.ForegroundColor = defaultColor;
             services.AddComponent<Sleepy,SleepySettings>();
         }
+        if (GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled | true) {
+            services.AddComponent<ActionButton,ActionButtonSettings>();
+        }
         if (GlobalConstants.Handlers.MainConfig.Data.IsExperimentalModeActivated) {
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("[ExIsLand][EarlyLoad][Experiment]实验模式已启用! 若出现Bug,请勿报告!");
@@ -99,12 +102,12 @@ public class Plugin : PluginBase {
             services.AddComponent<DebugLyricsHandler>();
             services.AddComponent<DebugSubLyricsHandler>();
         }
-            #if DEBUG
+        #if DEBUG
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.WriteLine("[ExIsLand][EarlyLoad][DEBUG]这是一个调试构建! 若出现Bug,请勿报告!");
         Console.ForegroundColor = defaultColor;
         services.AddSettingsPage<DebugSettingsPage>();
-            #endif
+        #endif
         Console.WriteLine("[ExIsLand][EarlyLoad]完成!");
         Console.WriteLine("[ExIsLand][EarlyLoad]注册事件...");
         GlobalConstants.Triggers.OnLoaded += JuniorGuide.Trigger;

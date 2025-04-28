@@ -1,0 +1,19 @@
+﻿<ci:ComponentBase x:Class="ExtraIsland.Components.ActionButton"
+                  x:TypeArguments="local:ActionButtonConfig"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:ExtraIsland.Components"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                  mc:Ignorable="d">
+    <ci:ComponentBase.Resources>
+        <ci:BooleanToVisibilityReConverter x:Key="BooleanToVisibilityReConverter"/>
+        <materialDesign:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </ci:ComponentBase.Resources>
+    <StackPanel DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ActionButton}}"
+                Orientation="Horizontal" VerticalAlignment="Center">
+        <Button Content="QwQ" Click="ButtonBase_OnClick"/>
+    </StackPanel>
+</ci:ComponentBase>
