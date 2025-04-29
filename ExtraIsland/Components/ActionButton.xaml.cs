@@ -21,7 +21,7 @@ public partial class ActionButton {
         InitializeComponent();
     }
     readonly IActionService _service;
-    void ButtonBase_OnClick(object sender,RoutedEventArgs e) {
+    void RunActionSet(object sender,RoutedEventArgs e) {
         _service.Invoke(Settings.ActionSet);
     }
 }

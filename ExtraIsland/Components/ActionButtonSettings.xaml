@@ -57,6 +57,34 @@
                                           ActionSet="{Binding Settings.ActionSet}"/>
                 </StackPanel>
             </materialDesign:Card>
+            <ci:SettingsCard IconGlyph="Tag" Header="按钮内容"
+                             Description="设定按钮控件显示的内容">
+                <ci:SettingsCard.Switcher>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox HorizontalContentAlignment="Center"
+                                Text="{Binding Settings.ContentString, Mode=TwoWay}"
+                                VerticalAlignment="Center"
+                                MinWidth="30" />
+                    </StackPanel>
+                </ci:SettingsCard.Switcher>
+            </ci:SettingsCard>
+            <ci:SettingsCard IconGlyph="PaintBucket"
+                             Header="颜色"
+                             Description="选择按钮控件的颜色">
+                <ci:SettingsCard.Switcher>
+                    <StackPanel Orientation="Horizontal">
+                        <Label VerticalAlignment="Center">内容</Label>
+                        <ci:ColorPicker Width="auto"
+                                        Color="{Binding Settings.FontColor, Mode=TwoWay}"/>
+                        <Label VerticalAlignment="Center">背景</Label>
+                        <ci:ColorPicker Width="auto"
+                                        Color="{Binding Settings.BackgroundColor, Mode=TwoWay}"/>
+                        <Label VerticalAlignment="Center">边框</Label>
+                        <ci:ColorPicker Width="auto"
+                                        Color="{Binding Settings.BorderColor, Mode=TwoWay}"/>
+                    </StackPanel>
+                </ci:SettingsCard.Switcher>
+            </ci:SettingsCard>
             <Label HorizontalAlignment="Center" 
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland

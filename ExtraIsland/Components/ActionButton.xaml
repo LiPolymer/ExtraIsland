@@ -9,11 +9,15 @@
                   xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                   mc:Ignorable="d">
     <ci:ComponentBase.Resources>
-        <ci:BooleanToVisibilityReConverter x:Key="BooleanToVisibilityReConverter"/>
-        <materialDesign:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <ci:ColorToColorPickerBrushConverter x:Key="ColorToColorPickerBrushConverter"/>
     </ci:ComponentBase.Resources>
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ActionButton}}"
                 Orientation="Horizontal" VerticalAlignment="Center">
-        <Button Content="QwQ" Click="ButtonBase_OnClick"/>
+        <Button Content="{Binding Settings.ContentString}"
+                Padding="11,0"
+                Foreground="{Binding Settings.FontColor, Converter={StaticResource ColorToColorPickerBrushConverter}}"
+                Background="{Binding Settings.BackgroundColor, Converter={StaticResource ColorToColorPickerBrushConverter}}"
+                BorderBrush="{Binding Settings.BorderColor, Converter={StaticResource ColorToColorPickerBrushConverter}}"
+                Click="RunActionSet"/>
     </StackPanel>
 </ci:ComponentBase>

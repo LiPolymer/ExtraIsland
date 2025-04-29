@@ -9,7 +9,7 @@ public partial class ActionButtonSettings {
         InitializeComponent();
     }
 
-    IActionService _actionService;
+    readonly IActionService _actionService;
 
     private void RunActionSet(object sender,System.Windows.RoutedEventArgs e) {
         _actionService.Invoke(Settings.ActionSet);
