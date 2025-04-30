@@ -13,7 +13,7 @@
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
         <StackPanel Style="{StaticResource SettingsPageStackPanelStyle}">
             <materialDesign:Card
-                HorizontalContentAlignment="Center"
+                HorizontalContentAlignment="Stretch"
                 VerticalContentAlignment="Center"
                 Margin="0,6,0,6">
                 <Grid Margin="6,6,6,12">
@@ -23,21 +23,23 @@
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0"
                           HorizontalAlignment="Left"
-                          Margin="5">
+                          Margin="6,6,0,6">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <materialDesign:PackIcon Grid.Column="0"
                             VerticalAlignment="Center"
-                            Kind="PencilAdd"/>
+                            Kind="PencilAdd"
+                            Width="20"
+                            Height="20"/>
                         <Label Grid.Column="1"
                                VerticalContentAlignment="Center"
                                VerticalAlignment="Center">
                             文案编辑...
                         </Label>
                     </Grid>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1" HorizontalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
