@@ -28,6 +28,12 @@ public class Register : IHostedService {
             "extraIsland.action.mainWindowOperator", 
             "主窗口操作器", 
             PackIconKind.DesktopWindows);
+        if (EiUtils.IsPluginInstalled("Plugin.IslandCaller")) {
+            services.AddAction<object, EmptySettings>(
+                "extraIsland.action.islandCaller", 
+                "拉起IslandCaller", 
+                PackIconKind.UserCheck);   
+        }
         // 规则
         services.AddRule<TodayIsConfig, TodayIs>
             ("extraIsland.rule.todayIs", "今天是", PackIconKind.Calendar);
@@ -46,6 +52,15 @@ public class Register : IHostedService {
         //行动
         actionService.RegisterActionHandler("extraIsland.action.mainWindowOperator",MainWindowOperator.Action);
         actionService.RegisterRevertHandler("extraIsland.action.mainWindowOperator",MainWindowOperator.Revert);
+        
+        if (EiUtils.IsPluginInstalled("Plugin.IslandCaller")) {
+            actionService.RegisterActionHandler("extraIsland.action.islandCaller",(_,_) => {
+                AppBase.Current.Dispatcher.BeginInvoke(() => {
+                    UriNavigationCommands.UriNavigationCommand.Execute("classisland://plugins/IslandCaller/Run");
+                });
+            });
+        }
+
         //规则
         rulesetService.RegisterRuleHandler("extraIsland.rule.todayIs",TodayIs.Rule);
     }
