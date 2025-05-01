@@ -16,9 +16,8 @@ namespace ExtraIsland.Components;
     "展示前台窗口标题"
 )]
 public partial class LiveActivity {
-    public LiveActivity(ILessonsService lessonsService, ILogger<LiveActivity> logger) {
+    public LiveActivity(ILessonsService lessonsService) {
         LessonsService = lessonsService;
-        Logger = logger;
         IsLyricsIslandLoaded = EiUtils.IsLyricsIslandInstalled();
         InitializeComponent();
         _labelAnimator = new Animators.ClockTransformControlAnimator(CurrentLabel);
@@ -28,7 +27,6 @@ public partial class LiveActivity {
     }
 
     ILessonsService LessonsService { get; }
-    ILogger<LiveActivity> Logger { get; }
     readonly Animators.ClockTransformControlAnimator _labelAnimator;
     readonly Animators.EmphasizeUiElementAnimator _activityAnimator;
     readonly Animators.EmphasizeUiElementAnimator _lyricsAnimator;
@@ -67,7 +65,6 @@ public partial class LiveActivity {
                                     ShowName = Settings.SleepyDevice,
                                     Using = true
                                 }.Post(Settings.SleepyUrl);
-                                Logger.LogTrace("[LiveActivity]已上传Sleepy数据");
                             }).Start();
                         }
                     }

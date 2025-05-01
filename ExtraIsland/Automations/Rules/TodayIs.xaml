@@ -6,7 +6,7 @@
                             xmlns:local="clr-namespace:ExtraIsland.Automations.Rules"
                             xmlns:ci="http://classisland.tech/schemas/xaml/core"
                             xmlns:actions="clr-namespace:ExtraIsland.Automations.Actions"
-                            xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
+                            xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters" xmlns:controls="clr-namespace:ExtraIsland.Controls"
                             mc:Ignorable="d"
                             Loaded="TodayIs_OnLoaded"
                             Unloaded="TodayIs_OnUnloaded"
@@ -39,5 +39,8 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
+        <controls:FullLogo Margin="4,0,0,0" 
+                           Height="20" 
+                           Opacity="0.5"/>
     </StackPanel>
 </ci:RuleSettingsControlBase>
