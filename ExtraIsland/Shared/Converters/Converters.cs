@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Data;
@@ -70,5 +71,27 @@ public class EnumDescriptionConverter : IValueConverter {
         }
         DescriptionAttribute? attrib = attribArray[0] as DescriptionAttribute;
         return attrib!.Description;
+    }
+}
+
+public class DayOfWeekEnumStringConverter : IValueConverter {
+    object IValueConverter.Convert(object? value,Type targetType,object? parameter,CultureInfo culture) {
+        DayOfWeek day = (DayOfWeek)value!;
+        string description = day switch {
+
+            DayOfWeek.Sunday => "日",
+            DayOfWeek.Monday => "一",
+            DayOfWeek.Tuesday => "二",
+            DayOfWeek.Wednesday => "三",
+            DayOfWeek.Thursday => "四",
+            DayOfWeek.Friday => "五",
+            DayOfWeek.Saturday => "六",
+            _ => "???"
+        };
+        return description;
+    }
+
+    object IValueConverter.ConvertBack(object? value,Type targetType,object? parameter,CultureInfo culture) {
+        return string.Empty;
     }
 }

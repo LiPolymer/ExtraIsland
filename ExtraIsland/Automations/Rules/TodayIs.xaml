@@ -33,9 +33,9 @@
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <DataTemplate.Resources>
-                        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+                        <converters:DayOfWeekEnumStringConverter x:Key="DayOfWeekEnumStringConverter"/>
                     </DataTemplate.Resources>
-                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                    <TextBlock Text="{Binding Converter={StaticResource DayOfWeekEnumStringConverter}}"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>

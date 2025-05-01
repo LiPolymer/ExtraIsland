@@ -92,7 +92,7 @@ public class Plugin : PluginBase {
             Console.ForegroundColor = defaultColor;
             services.AddComponent<Sleepy,SleepySettings>();
         }
-        if (GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled | true) {
+        if (GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) {
             services.AddComponent<ActionButton,ActionButtonSettings>();
         }
         if (GlobalConstants.Handlers.MainConfig.Data.IsExperimentalModeActivated) {

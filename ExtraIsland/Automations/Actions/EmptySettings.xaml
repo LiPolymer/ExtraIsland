@@ -1,0 +1,16 @@
+﻿<ci:ActionSettingsControlBase x:Class="ExtraIsland.Automations.Actions.EmptySettings"
+                              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                              xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                              xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
+                              xmlns:actions1="clr-namespace:ExtraIsland.Automations.Actions"
+                              xmlns:controls="clr-namespace:ExtraIsland.Controls"
+                              mc:Ignorable="d">
+    <StackPanel Orientation="Horizontal">
+        <controls:FullLogo Margin="4,0,0,0" 
+                           Height="20" 
+                           Opacity="0.5"/>
+    </StackPanel>
+</ci:ActionSettingsControlBase>

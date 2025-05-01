@@ -7,6 +7,7 @@
                               xmlns:ci="http://classisland.tech/schemas/xaml/core"
                               xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
                               xmlns:actions1="clr-namespace:ExtraIsland.Automations.Actions"
+                              xmlns:controls="clr-namespace:ExtraIsland.Controls"
                               mc:Ignorable="d">
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=actions1:MainWindowOperator}}"
                 Orientation="Horizontal">
@@ -24,5 +25,8 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
+        <controls:FullLogo Margin="4,0,0,0" 
+                           Height="20" 
+                           Opacity="0.5"/>
     </StackPanel>
 </ci:ActionSettingsControlBase>
