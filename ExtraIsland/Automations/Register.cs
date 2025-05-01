@@ -37,6 +37,8 @@ public class Register : IHostedService {
         // 规则
         services.AddRule<TodayIsConfig, TodayIs>
             ("extraIsland.rule.todayIs", "今天是", PackIconKind.Calendar);
+        services.AddRule<LaterThanConfig, LaterThan>
+            ("extraIsland.rule.laterThan", "时间晚于", PackIconKind.ClockArrow);
         // 触发器
         if (GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) {
             services.AddTrigger<PostMainTimerTicked>();
@@ -63,6 +65,7 @@ public class Register : IHostedService {
 
         //规则
         rulesetService.RegisterRuleHandler("extraIsland.rule.todayIs",TodayIs.Rule);
+        rulesetService.RegisterRuleHandler("extraIsland.rule.laterThan",LaterThan.Rule);
     }
     
     public Task StartAsync(CancellationToken _) {
