@@ -1,8 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Data;
+using ClassIsland.Core.Models.Components;
 
 namespace ExtraIsland.Shared.Converters;
 
@@ -93,5 +95,30 @@ public class DayOfWeekEnumStringConverter : IValueConverter {
 
     object IValueConverter.ConvertBack(object? value,Type targetType,object? parameter,CultureInfo culture) {
         return string.Empty;
+    }
+}
+
+public class ComponentSetHalfConverter : IValueConverter {
+    object IValueConverter.Convert(object? value,Type targetType,object? parameter,CultureInfo culture) {
+        ObservableCollection<ClassIsland.Core.Models.Components.ComponentSettings> set = 
+            (ObservableCollection<ClassIsland.Core.Models.Components.ComponentSettings>)value!;
+        ObservableCollection<ClassIsland.Core.Models.Components.ComponentSettings> buffer = [];
+        int t;
+        if (set.Count == 0) {
+            return buffer;
+        }
+        if (EiUtils.IsOdd(set.Count)) {
+            t = (set.Count + 1)/2;
+        } else {
+            t = set.Count/2;
+        }
+        for (int i = 0; i <= t-1; i++) {
+            buffer.Add(set[i]);
+        }
+        return buffer;
+    }
+
+    object IValueConverter.ConvertBack(object? value,Type targetType,object? parameter,CultureInfo culture) {
+        throw new NotImplementedException();
     }
 }

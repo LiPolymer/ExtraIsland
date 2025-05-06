@@ -32,7 +32,7 @@ public class Register : IHostedService {
             services.AddAction<object, EmptySettings>(
                 "extraIsland.action.islandCaller", 
                 "拉起IslandCaller", 
-                PackIconKind.UserCheck);   
+                PackIconKind.UserCheck); 
         }
         // 规则
         services.AddRule<TodayIsConfig, TodayIs>

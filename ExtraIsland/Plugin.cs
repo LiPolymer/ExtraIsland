@@ -77,6 +77,7 @@ public class Plugin : PluginBase {
         services.AddComponent<Rhesis,RhesisSettings>();
         services.AddComponent<OnDuty,OnDutySettings>();
         services.AddComponent<LiveActivity,LiveActivitySettings>();
+        services.AddComponent<DualLineContainer>();
         //SettingsPages
         services.AddSettingsPage<MainSettingsPage>();
         services.AddSettingsPage<DutySettingsPage>();
