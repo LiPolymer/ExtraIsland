@@ -10,20 +10,20 @@
                   Loaded="DualLineContainer_OnLoaded"
                   mc:Ignorable="d">
     <ci:ComponentBase.Resources>
-        <converters:ComponentSetHalfConverter x:Key="ComponentSetHalfConverter"/>
-        <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter"/>
+        <converters:DoubleMultipleConverter x:Key="DoubleMultipleConverter" />
+        <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter" />
     </ci:ComponentBase.Resources>
-    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:DualLineContainer}}"
-          Width="{Binding Children[0].ActualWidth, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}">
-        <Grid HorizontalAlignment="Left">
+    <Grid x:Name="RootGrid">
+        <Grid HorizontalAlignment="Left"
+              DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:DualLineContainer}}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <ItemsControl Grid.Column="0"
-                      x:Name="UpItemsControl"
-                      Margin="-3,-5.4,0,0"
-                      VerticalAlignment="Top"
-                      VerticalContentAlignment="Stretch">
+                          x:Name="UpItemsControl"
+                          Margin="-3,-5.4,0,0"
+                          VerticalAlignment="Top"
+                          VerticalContentAlignment="Stretch">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />
@@ -32,23 +32,24 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <ci:ComponentPresenter IsOnMainWindow="True" 
-                                               Settings="{Binding}"
-                                               HidingRules="{Binding HidingRules, Mode=OneWay}"
-                                               HideOnRule="{Binding HideOnRule, Mode=OneWay}"
-                                               Margin="6 0" />
+                            <ci:ComponentPresenter IsOnMainWindow="True"
+                                                   Settings="{Binding}"
+                                                   HidingRules="{Binding HidingRules, Mode=OneWay}"
+                                                   HideOnRule="{Binding HideOnRule, Mode=OneWay}"
+                                                   Margin="6 0" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.RenderTransform>
-                    <ScaleTransform ScaleX="0.55" ScaleY="0.55" CenterY="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType=ItemsControl}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}"/>
+                    <ScaleTransform ScaleX="0.55" ScaleY="0.55"
+                                    CenterY="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType=ItemsControl}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}" />
                 </ItemsControl.RenderTransform>
             </ItemsControl>
             <ItemsControl Grid.Column="0"
-                      x:Name="DownItemsControl"
-                      Margin="-3,0,0,-5.4"
-                      VerticalAlignment="Bottom"
-                      VerticalContentAlignment="Stretch">
+                          x:Name="DownItemsControl"
+                          Margin="-3,0,0,-5.4"
+                          VerticalAlignment="Bottom"
+                          VerticalContentAlignment="Stretch">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />
@@ -57,16 +58,17 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <ci:ComponentPresenter IsOnMainWindow="True" 
-                                               Settings="{Binding}"
-                                               HidingRules="{Binding HidingRules, Mode=OneWay}"
-                                               HideOnRule="{Binding HideOnRule, Mode=OneWay}"
-                                               Margin="6 0" />
+                            <ci:ComponentPresenter IsOnMainWindow="True"
+                                                   Settings="{Binding}"
+                                                   HidingRules="{Binding HidingRules, Mode=OneWay}"
+                                                   HideOnRule="{Binding HideOnRule, Mode=OneWay}"
+                                                   Margin="6 0" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.RenderTransform>
-                    <ScaleTransform ScaleX="0.55" ScaleY="0.55" CenterY="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType=ItemsControl}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}"/>
+                    <ScaleTransform ScaleX="0.55" ScaleY="0.55"
+                                    CenterY="{Binding ActualHeight, RelativeSource={RelativeSource FindAncestor, AncestorType=ItemsControl}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}" />
                 </ItemsControl.RenderTransform>
             </ItemsControl>
         </Grid>
