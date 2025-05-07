@@ -1,13 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
 using ExtraIsland.Shared.Converters;
 using MaterialDesignThemes.Wpf;
-using Newtonsoft.Json;
 
 namespace ExtraIsland.Components;
 

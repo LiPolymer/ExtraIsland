@@ -1,11 +1,7 @@
 ﻿using System.Windows;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
-using ExtraIsland.ConfigHandlers;
-using ExtraIsland.Shared;
-using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
-using Action = ClassIsland.Shared.Models.Action.Action;
 
 namespace ExtraIsland.Components;
 

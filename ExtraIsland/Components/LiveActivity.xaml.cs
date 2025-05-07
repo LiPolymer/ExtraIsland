@@ -5,7 +5,6 @@ using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
 using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
-using Microsoft.Extensions.Logging;
 
 namespace ExtraIsland.Components;
 

@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
-using MahApps.Metro.Controls;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ExtraIsland.Automations.Rules;
 

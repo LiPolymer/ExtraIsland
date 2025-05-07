@@ -1,8 +1,4 @@
-﻿using System.ComponentModel;
-using ClassIsland.Core.Abstractions.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
-using ExtraIsland.Shared;
-using MahApps.Metro.Controls;
+﻿using ClassIsland.Core.Abstractions.Controls;
 
 namespace ExtraIsland.Automations.Actions;
 

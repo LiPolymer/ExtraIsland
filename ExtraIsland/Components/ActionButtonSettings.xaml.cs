@@ -1,5 +1,4 @@
-﻿using ClassIsland.Core.Abstractions.Controls;
-using ClassIsland.Core.Abstractions.Services;
+﻿using ClassIsland.Core.Abstractions.Services;
 
 namespace ExtraIsland.Components;
 
