@@ -43,6 +43,7 @@
         <StackPanel
             DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:FluentClock}}"
             HorizontalAlignment="Center"
+            Height="Auto"
             Orientation="Horizontal">
             <Label
                 Content="--"

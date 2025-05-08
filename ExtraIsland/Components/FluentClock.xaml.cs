@@ -167,15 +167,23 @@ public partial class FluentClock {
     
     void SmallSecondsUpdater() {
         this.Invoke(() => {
-            LSecs.FontSize = Settings.IsSecondsSmall!.Value ? 14 : LHours.FontSize;
-            LSecs.Padding = Settings.IsSecondsSmall.Value ?
+            bool isSmall = Settings.IsSecondsSmall!.Value;
+            
+            LSecs.SetResourceReference(FontSizeProperty,
+                isSmall ? "MainWindowSecondaryFontSize" : "MainWindowEmphasizedFontSize");
+            
+            LSecs.Padding = isSmall ?
                 new Thickness(0,3,0,0)
                 : new Thickness(0);
-            SSecs.Padding = Settings.IsSecondsSmall.Value ?
-                new Thickness(0,2,0,0)
+            
+            SSecs.Padding = isSmall ?
+                new Thickness(0,1,0,0)
                 : new Thickness(0,0,0,3);
-            SSecs.FontSize = Settings.IsSecondsSmall.Value ? 16 : SMins.FontSize;
-            TSecs.X = Settings.IsSecondsSmall.Value ? 2 : 0;
+            
+            SSecs.SetResourceReference(FontSizeProperty,
+                isSmall ? "MainWindowSecondaryFontSize" : "MainWindowLargeFontSize");
+            
+            TSecs.X = isSmall ? 2 : 0;
         });
     }
 
