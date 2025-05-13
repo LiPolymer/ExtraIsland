@@ -87,5 +87,15 @@
 	    <XamlRuntime>Wpf</XamlRuntime>
 	    <SubType>Designer</SubType>
 	  </Page>
+	  <Page Update="Automations\Rules\FlagIs.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	    <XamlRuntime>Wpf</XamlRuntime>
+	    <SubType>Designer</SubType>
+	  </Page>
+	  <Page Update="Automations\Actions\SetFlag.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	    <XamlRuntime>Wpf</XamlRuntime>
+	    <SubType>Designer</SubType>
+	  </Page>
 	</ItemGroup>
 </Project>

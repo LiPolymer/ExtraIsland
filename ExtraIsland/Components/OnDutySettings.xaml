@@ -12,8 +12,7 @@
     <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:OnDutySettings}}">
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
         <StackPanel Style="{StaticResource SettingsPageStackPanelStyle}">
-            <materialDesign:ColorZone Background="#204169e1" 
-                                      Panel.ZIndex="1" 
+            <materialDesign:ColorZone Background="#204169e1"
                                       CornerRadius="4"
                                       Margin="0 0 0 5">
                 <Grid>
@@ -25,8 +24,7 @@
                                    Margin="4 0 0 0" >
                             <Run>本页面仅包含</Run><Bold>组件设置</Bold>
                             <Run>要调整值日设置,请转到</Run>
-                            <ci:NavHyperlink 
-                                CommandParameter="classisland://app/settings/extraisland.duty">
+                            <ci:NavHyperlink CommandParameter="classisland://app/settings/extraisland.duty">
                                 ⌈ExtraIsland·值日表⌋
                             </ci:NavHyperlink>
                             <Run>选项卡</Run>

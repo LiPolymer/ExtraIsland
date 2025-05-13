@@ -27,6 +27,12 @@ public class Register : IHostedService {
             "extraIsland.action.mainWindowOperator", 
             "主窗口操作器", 
             PackIconKind.DesktopWindows);
+        
+        services.AddAction<SetFlagConfig, SetFlag>(
+            "extraIsland.action.setFlag", 
+            "设标志", 
+            PackIconKind.FlagAdd);
+        
         if (EiUtils.IsPluginInstalled("Plugin.IslandCaller")) {
             services.AddAction<object, EmptySettings>(
                 "extraIsland.action.islandCaller", 
@@ -36,8 +42,12 @@ public class Register : IHostedService {
         // 规则
         services.AddRule<TodayIsConfig, TodayIs>
             ("extraIsland.rule.todayIs", "今天是", PackIconKind.Calendar);
+        
         services.AddRule<LaterThanConfig, LaterThan>
             ("extraIsland.rule.laterThan", "时间晚于", PackIconKind.ClockArrow);
+        
+        services.AddRule<FlagIsConfig, FlagIs>
+            ("extraIsland.rule.flagIs", "读标志", PackIconKind.FlagCheckered);
         // 触发器
         if (GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) {
             services.AddTrigger<PostMainTimerTicked>();
@@ -54,6 +64,8 @@ public class Register : IHostedService {
         actionService.RegisterActionHandler("extraIsland.action.mainWindowOperator",MainWindowOperator.Action);
         actionService.RegisterRevertHandler("extraIsland.action.mainWindowOperator",MainWindowOperator.Revert);
         
+        actionService.RegisterActionHandler("extraIsland.action.setFlag",SetFlag.Action);
+        
         if (EiUtils.IsPluginInstalled("Plugin.IslandCaller")) {
             actionService.RegisterActionHandler("extraIsland.action.islandCaller",(_,_) => {
                 AppBase.Current.Dispatcher.BeginInvoke(() => {
@@ -65,6 +77,7 @@ public class Register : IHostedService {
         //规则
         rulesetService.RegisterRuleHandler("extraIsland.rule.todayIs",TodayIs.Rule);
         rulesetService.RegisterRuleHandler("extraIsland.rule.laterThan",LaterThan.Rule);
+        rulesetService.RegisterRuleHandler("extraIsland.rule.flagIs",FlagIs.Rule);
     }
     
     public Task StartAsync(CancellationToken _) {
