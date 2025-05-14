@@ -17,8 +17,8 @@
                                    WithSeconds="True"
                                    SelectedTime="{Binding Settings.TargetTime, Mode=TwoWay}"
                                    Width="76" />
-        <controls:FullLogo Margin="4,0,0,0" 
-                           Height="20" 
-                           Opacity="0.5"/>
+        <controls:FullLogoGrayScale Margin="4,0,0,0" 
+                                    Height="20" 
+                                    Opacity="0.5"/>
     </StackPanel>
 </ci:RuleSettingsControlBase>

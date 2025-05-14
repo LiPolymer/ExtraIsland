@@ -15,8 +15,8 @@
         <TextBox Text="{Binding Settings.TargetFlag, Mode=TwoWay}" MinWidth="40" MaxWidth="100" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
         <Label Content="是" VerticalAlignment="Center" Padding="1"/>
         <TextBox Text="{Binding Settings.FlagContent, Mode=TwoWay}" MinWidth="40" MaxWidth="100" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
-        <controls:FullLogo Margin="4,0,0,0" 
-                           Height="20" 
-                           Opacity="0.5"/>
+        <controls:FullLogoGrayScale Margin="4,0,0,0" 
+                                    Height="20" 
+                                    Opacity="0.5"/>
     </StackPanel>
 </ci:RuleSettingsControlBase>

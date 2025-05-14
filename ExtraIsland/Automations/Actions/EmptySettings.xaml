@@ -9,7 +9,7 @@
                               xmlns:controls="clr-namespace:ExtraIsland.Controls"
                               mc:Ignorable="d">
     <StackPanel Orientation="Horizontal">
-        <controls:FullLogo Margin="4,0,0,0" 
+        <controls:FullLogoGrayScale Margin="4,0,0,0" 
                            Height="20" 
                            Opacity="0.5"/>
     </StackPanel>
