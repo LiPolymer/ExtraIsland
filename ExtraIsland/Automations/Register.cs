@@ -49,9 +49,7 @@ public class Register : IHostedService {
         services.AddRule<FlagIsConfig, FlagIs>
             ("extraIsland.rule.flagIs", "读标志", PackIconKind.FlagCheckered);
         // 触发器
-        if (GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) {
-            services.AddTrigger<PostMainTimerTicked>();
-        }
+        services.AddTrigger<TimePassed,TimePassedSettings>();
     }
     
     /// <summary>
