@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Media;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
@@ -45,7 +46,9 @@ public partial class LiveActivity {
                 ? Brushes.DeepSkyBlue
                 : Brushes.LightGreen;
             string? title = WindowsUtils.GetActiveWindowTitle();
-            if (Settings.IgnoreList.Contains(title)) title = null;
+            title ??= "";
+            title = Replacer(title,Settings.ReplacementsList);
+            title = title == "" ? null : title;
             if (title == null & (!Settings.IsLyricsEnabled | _timeCounter <= 0)) {
                 CardChip.Visibility = Visibility.Collapsed;
             } else {
@@ -72,6 +75,21 @@ public partial class LiveActivity {
         });
     }
 
+    string Replacer(string input, IEnumerable<IgnoreItem> replaceList) {
+        foreach (IgnoreItem kvp in replaceList) {
+            try {
+                Regex regex = new Regex(kvp.Regex);
+                if (regex.IsMatch(input)) {
+                    return regex.Replace(input,kvp.Replacement);
+                }
+            }
+            catch {
+                //ignored
+            }
+        }
+        return input;
+    }
+    
     void UpdateMargin() {
         this.BeginInvoke(() => {
             CardChip.Margin = new Thickness {

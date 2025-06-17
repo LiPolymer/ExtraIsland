@@ -1,5 +1,8 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
+using YamlDotNet.Serialization;
 
 namespace ExtraIsland.Components;
 
@@ -12,6 +15,17 @@ public partial class LiveActivitySettings {
         ConflictHintContainer.Visibility = IsLyricsIslandLoaded ? Visibility.Visible : Visibility.Collapsed;
     }
 
+    void DeleteButton_Click(object sender,RoutedEventArgs e) {
+        Button button = (sender as Button)!;
+        if (button.DataContext is IgnoreItem item) {
+            Settings.ReplacementsList.Remove(item);
+        }
+    }
+    
+    void ButtonBase_OnClick(object sender,RoutedEventArgs e) {
+        Settings.ReplacementsList.Add(new IgnoreItem());
+    }
+    
     public bool IsLifeModeEnabled { get; }
     bool IsLyricsIslandLoaded { get; }
     public bool IsLyricsIslandNotLoaded { get => !IsLyricsIslandLoaded; }

@@ -49,30 +49,62 @@
                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                     <Expander.Header>
                         <ci:SettingsControl IconGlyph="FormTextboxLock"
-                                            Margin="-10,-2,0,-2"
+                                            Margin="-10,-2,-10,-2"
                                             Foreground="{DynamicResource MaterialDesignBody}"
-                                            Header="排除列表"
-                                            Description="位于此列表中的窗口名将被忽略,一行一个"
+                                            Header="替换规则"
+                                            Description="可以在此处利用正则表达式匹配并替换展示的标题"
                                             HasSwitcher="True">
                             <ci:SettingsControl.Switcher>
                                 <materialDesign:PackIcon
-                                    Kind="ScriptTextKey"
+                                    Kind="TargetArrow"
                                     Foreground="{DynamicResource MaterialDesignBodyLight}"
                                     VerticalAlignment="Center" />
                             </ci:SettingsControl.Switcher>
                         </ci:SettingsControl>
                     </Expander.Header>
-                    <!-- ReSharper disable once Xaml.DynamicResourceError -->
-                    <Border Background="{DynamicResource MaterialDesignDivider}"
-                            Margin="35,3,20,9"
-                            CornerRadius="5">
-                        <TextBox Text="{Binding Settings.IgnoreListString}"
-                                 Background="Transparent"
-                                 AcceptsReturn="True"
-                                 VerticalContentAlignment="Top"
-                                 TextWrapping="Wrap"
-                                 Margin="6,6,6,6" />
-                    </Border>
+                    <StackPanel Orientation="Vertical">
+                        <DataGrid Margin="12,6,12,6"
+                                  IsReadOnly="False"
+                                  AutoGenerateColumns="False"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  CanUserAddRows="False"
+                                  Height="240"
+                                  ItemsSource="{Binding Settings.ReplacementsList, Mode=TwoWay}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="匹配正则" Width="200" Binding="{Binding Regex}" />
+                                <DataGridTextColumn Header="替换为" Width="200" Binding="{Binding Replacement}" />
+                                <DataGridTemplateColumn Header="操作" Width="60">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Width="20"
+                                                    Height="20"
+                                                    Margin="0"
+                                                    Padding="0"
+                                                    Background="Transparent"
+                                                    BorderBrush="Transparent"
+                                                    Click="DeleteButton_Click">
+                                                <materialDesign:PackIcon Kind="Delete" Foreground="Red" />
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Orientation="Horizontal" Margin="12,0,12,6">
+                            <Button HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                        Width="30"
+                                        Height="30"
+                                        Padding="0"
+                                        Background="{DynamicResource MaterialDesignDivider}"
+                                        BorderBrush="Transparent"
+                                        ToolTip="新建"
+                                        Click="ButtonBase_OnClick">
+                                <materialDesign:PackIcon Kind="Add" Foreground="LightGreen" />
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
                 </Expander>
             </materialDesign:Card>
             <Border x:Name="ConflictHintContainer"
@@ -111,7 +143,7 @@
                                             Description="向一个Sleepy实例上报当前活动数据"
                                             HasSwitcher="True"
                                             IsOn="{Binding Settings.IsSleepyUploaderEnabled, Mode=TwoWay}"
-                                            Margin= "-12 0"/>
+                                            Margin="-12 0" />
                     </Expander.Header>
                     <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
                     <StackPanel Orientation="Vertical" Style="{StaticResource SettingsPageStackPanelStyle}">
@@ -127,28 +159,28 @@
                                          Margin="3,0,3,0" />
                             </ci:SettingsControl.Switcher>
                         </ci:SettingsControl>
-                            <Expander Background="Transparent"
-                                      IsExpanded="False"
-                                      TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                                <Expander.Header>
-                                    <ci:SettingsControl IconGlyph="Key"
-                                                        Header="密钥"
-                                                        Description="目标Sleepy服务的secret字段"
-                                                        HasSwitcher="True"
-                                                        Margin= "-12 0">
-                                        <ci:SettingsControl.Switcher>
-                                            <materialDesign:PackIcon
-                                                Kind="EyeLock"
-                                                Foreground="{DynamicResource MaterialDesignBodyLight}"
-                                                VerticalAlignment="Center" />
-                                        </ci:SettingsControl.Switcher>
-                                    </ci:SettingsControl>   
-                                </Expander.Header>
-                                <TextBox MinWidth="50"
-                                         Foreground="{DynamicResource MaterialDesignBody}"
-                                         Text="{Binding Settings.SleepySecret}"
-                                         Margin="6,0,6,3" />
-                            </Expander>
+                        <Expander Background="Transparent"
+                                  IsExpanded="False"
+                                  TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                            <Expander.Header>
+                                <ci:SettingsControl IconGlyph="Key"
+                                                    Header="密钥"
+                                                    Description="目标Sleepy服务的secret字段"
+                                                    HasSwitcher="True"
+                                                    Margin="-12 0">
+                                    <ci:SettingsControl.Switcher>
+                                        <materialDesign:PackIcon
+                                            Kind="EyeLock"
+                                            Foreground="{DynamicResource MaterialDesignBodyLight}"
+                                            VerticalAlignment="Center" />
+                                    </ci:SettingsControl.Switcher>
+                                </ci:SettingsControl>
+                            </Expander.Header>
+                            <TextBox MinWidth="50"
+                                     Foreground="{DynamicResource MaterialDesignBody}"
+                                     Text="{Binding Settings.SleepySecret}"
+                                     Margin="6,0,6,3" />
+                        </Expander>
                         <ci:SettingsControl IconGlyph="Devices"
                                             Header="设备"
                                             Description="设备名"
