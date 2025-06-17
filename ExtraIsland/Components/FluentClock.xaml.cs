@@ -54,17 +54,11 @@ public partial class FluentClock {
 
         bool sparkSeq = true;
         bool updLock = false;
-        //Null check
-        Settings.IsAccurate ??= true;
-        Settings.IsFocusedMode ??= false;
-        Settings.IsSecondsSmall ??= false;
-        Settings.IsSystemTime ??= false;
-        Settings.IsOClockEmp ??= true;
         //Initialization
         AccurateModeUpdater();
         UpdateTime();
         SilentUpdater();
-        if (Settings.IsSecondsSmall.Value) {
+        if (Settings.IsSecondsSmall) {
             SmallSecondsUpdater();
         }
         //Register Events
@@ -79,32 +73,32 @@ public partial class FluentClock {
         };
         return;
         void MainUpdater() {
-            var handlingTime = Now;
+            DateTime handlingTime = Now;
             if (hours != Now.Hour.ToString()) {
-                if (Settings.IsOClockEmp.Value & Now.Second == 0) {
+                if (Settings.IsOClockEmp & Now.Second == 0) {
                     this.Invoke(()=> {
                         _emphasizeAnimator.Update();
                     });
                 }
                 hours = Now.Hour.ToString();
-                var h = hours;
+                string h = hours;
                 this.Invoke(() => {
-                    _hourAnimator.TargetContent = h;
+                    _hourAnimator.Update(h,true,Settings.IsSwapAnimationEnabled);
                 });
             }
             if (minutes != Now.Minute.ToString()) {
                 minutes = Now.Minute.ToString();
-                var m = minutes;
+                string m = minutes;
                 if (m.Length == 1) {
                     m = "0" + m;
                 }
                 this.Invoke(() => {
-                    _minuAnimator.TargetContent = m;
+                    _minuAnimator.Update(m,true,Settings.IsSwapAnimationEnabled);
                 });
             }
             if (seconds != Now.Second.ToString()) {
                 seconds = Now.Second.ToString();
-                if (Settings.IsAccurate.Value) {
+                if (Settings.IsAccurate) {
                     this.Invoke(() => {
                         SMins.Opacity = 1;
                     });
@@ -113,7 +107,7 @@ public partial class FluentClock {
                         s = "0" + s;
                     }
                     this.Invoke(() => {
-                        _secoAnimator.Update(s, true, !Settings.IsFocusedMode.Value);  
+                        _secoAnimator.Update(s, true, !(Settings.IsFocusedMode|!Settings.IsSwapAnimationEnabled));  
                     });
                 } else {
                     bool seq = sparkSeq;
@@ -151,7 +145,7 @@ public partial class FluentClock {
     
     void ShowEmphasise() {
         this.BeginInvoke(() => {
-            _emphasizeAnimator?.Update();
+            _emphasizeAnimator.Update();
         });
     }
     
@@ -160,14 +154,14 @@ public partial class FluentClock {
     }
 
     void UpdateTime() {
-        Now = !Settings.IsSystemTime!.Value ? 
+        Now = !Settings.IsSystemTime ? 
             ExactTimeService.GetCurrentLocalDateTime()
             : DateTime.Now;
     }
     
     void SmallSecondsUpdater() {
         this.Invoke(() => {
-            bool isSmall = Settings.IsSecondsSmall!.Value;
+            bool isSmall = Settings.IsSecondsSmall;
             
             LSecs.SetResourceReference(FontSizeProperty,
                 isSmall ? "MainWindowSecondaryFontSize" : "MainWindowEmphasizedFontSize");
@@ -190,10 +184,10 @@ public partial class FluentClock {
     void AccurateModeUpdater() {
         this.Invoke(() => {
             SMins.Opacity = 1;
-            LSecs.Visibility = Settings.IsAccurate!.Value ? Visibility.Visible : Visibility.Collapsed;
-            SSecs.Visibility = Settings.IsAccurate!.Value ? Visibility.Visible : Visibility.Collapsed;
-            Placeholder1.Content = Settings.IsAccurate!.Value ? "00:00:00" : "00:00";
-            Placeholder2.Content = Settings.IsAccurate!.Value ? "00:00:00" : "00:00";
+            LSecs.Visibility = Settings.IsAccurate ? Visibility.Visible : Visibility.Collapsed;
+            SSecs.Visibility = Settings.IsAccurate ? Visibility.Visible : Visibility.Collapsed;
+            Placeholder1.Content = Settings.IsAccurate ? "00:00:00" : "00:00";
+            Placeholder2.Content = Settings.IsAccurate ? "00:00:00" : "00:00";
         });
     }
     

@@ -3,8 +3,8 @@
 // ReSharper disable once ClassNeverInstantiated.Global
 public class FluentClockConfig {
 
-    bool? _isAccurate;
-    public bool? IsAccurate {
+    bool _isAccurate = true;
+    public bool IsAccurate {
         get => _isAccurate;
         set {
             if (_isAccurate == value) return;
@@ -13,21 +13,13 @@ public class FluentClockConfig {
         }
     }
     public event Action? OnAccurateChanged;
-    
-    bool? _isFocusedMode;
-    public bool? IsFocusedMode {
-        get => _isFocusedMode;
-        set {
-            if (_isFocusedMode == value) return;
-            _isFocusedMode = value;
-            OnFocusedModeChanged?.Invoke();         
-        }
-    }
-    
-    public event Action? OnFocusedModeChanged;
 
-    bool? _isSecondsSmall;
-    public bool? IsSecondsSmall {
+    public bool IsFocusedMode { get; set; }
+
+    public bool IsSwapAnimationEnabled { get; set; } = true;
+
+    bool _isSecondsSmall;
+    public bool IsSecondsSmall {
         get => _isSecondsSmall;
         set {
             if (_isSecondsSmall == value) return;
@@ -37,15 +29,15 @@ public class FluentClockConfig {
     }
     public event Action? OnSecondsSmallChanged;
 
-    public bool? IsSystemTime { get; set; }
+    public bool IsSystemTime { get; set; }
     
-    bool? _isOClockEmp;
+    bool _isOClockEmp = true;
 
-    public bool? IsOClockEmp {
+    public bool IsOClockEmp {
         get => _isOClockEmp;
         set {
             _isOClockEmp = value;
-            if (_isOClockEmp is true) {
+            if (_isOClockEmp) {
                 OnOClockEmpEnabled?.Invoke();
             }
         }

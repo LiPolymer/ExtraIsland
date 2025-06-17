@@ -15,9 +15,14 @@
                              Header="精确到秒"
                              Description="启用后,将显示秒数,并关闭分隔符闪动"
                              IsOn="{Binding Settings.IsAccurate, Mode=TwoWay}"/>
+            <ci:SettingsCard IconGlyph="AnimationPlus"
+                             Header="启用翻页动画"
+                             Description="禁用后,动画样式将被全部替换为微微闪烁"
+                             IsOn="{Binding Settings.IsSwapAnimationEnabled, Mode=TwoWay}"/>
             <ci:SettingsCard IconGlyph="Microscope"
                              Header="专注模式"
                              Description="启用后,秒数动画将被替换为微微闪烁,避免频繁的移动分散注意力"
+                             IsEnabled = "{Binding Settings.IsSwapAnimationEnabled, Mode=OneWay}"
                              IsOn="{Binding Settings.IsFocusedMode, Mode=TwoWay}"/>
             <ci:SettingsCard IconGlyph="Computer"
                              Header="使用系统时间"
