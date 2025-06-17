@@ -32,9 +32,9 @@
                     <TranslateTransform x:Name="DTt" />
                 </Label.RenderTransform>
             </Label>
-            <Label
-                Padding="0"
+            <Label Padding="0"
                    VerticalAlignment="Center"
+                   x:Name="SDays"
                    Content="{Binding Settings.Separators.Day}" />
             <Label
                 Padding="0"
@@ -50,7 +50,7 @@
                 Padding="0"
                    VerticalAlignment="Center"
                    Content="{Binding Settings.Separators.Hour}"
-                   x:Name="SHour" />
+                   x:Name="SHours" />
             <Label
                 Padding="0"
                    Content="--"
@@ -65,7 +65,7 @@
                 Padding="0"
                    VerticalAlignment="Center"
                    Content="{Binding Settings.Separators.Minute}"
-                   x:Name="SMin" />
+                   x:Name="SMins" />
             <Label
                 Padding="0"
                    VerticalAlignment="Center"

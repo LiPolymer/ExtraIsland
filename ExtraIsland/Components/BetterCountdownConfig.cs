@@ -11,6 +11,15 @@ public class BetterCountdownConfig {
     public string Suffix { get; set; } = "过去了";
     public bool IsSystemTime { get; set; }
     public bool IsCorrectorEnabled { get; set; } = true;
+    bool _isHideZeroEnabled = false;
+    public bool IsHideZeroEnabled {
+        get=>_isHideZeroEnabled;
+        set {
+            if (_isHideZeroEnabled == value) return;
+            _isHideZeroEnabled = value;
+            OnAccuracyChanged?.Invoke();
+        }
+    }
     public CountdownSeparatorConfigs Separators { get; set; } = new CountdownSeparatorConfigs();
 
     bool _isNoGapDisplay;

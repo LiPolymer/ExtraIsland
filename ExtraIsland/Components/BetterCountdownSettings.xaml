@@ -123,6 +123,10 @@
             <ci:SettingsCard IconGlyph="ClockCheck" Header="差一矫正"
                              Description="启用后,使用低精度时末位将向上取整"
                              IsOn="{Binding Settings.IsCorrectorEnabled, Mode=TwoWay}"/>
+            <ci:SettingsCard IconGlyph="Numeric0BoxMultipleOutline"
+                             Header="隐零"
+                             Description="启用后,数值为0的倒计时节点将被隐藏"
+                             IsOn="{Binding Settings.IsHideZeroEnabled, Mode=TwoWay}"/>
             <ci:SettingsCard IconGlyph="AnimationPlay"
                              Header="启用动画"
                              Description="关闭后,动画将不被播放,对低性能设备友好!"

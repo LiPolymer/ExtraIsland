@@ -33,6 +33,7 @@ public partial class BetterCountdown {
     readonly Animators.ClockTransformControlAnimator _scAnimator;
     
     void OnLoad() {
+        //配置迁移
         if (Settings.TargetDate != string.Empty) {
             try {
                 Settings.TargetDateTime = DateTime.Parse(Settings.TargetDate);
@@ -42,6 +43,7 @@ public partial class BetterCountdown {
                 Settings.TargetDate = string.Empty;
             }
         }
+        
         UpdateTime();
         UpdateAccuracy();
         UpdateGap();
@@ -58,9 +60,9 @@ public partial class BetterCountdown {
         LSecs.Visibility = BoolToCollapsedVisible((int)Settings.Accuracy >= 3);
         SSec.Visibility = BoolToCollapsedVisible((int)Settings.Accuracy >= 3);
         LMins.Visibility = BoolToCollapsedVisible((int)Settings.Accuracy >= 2);
-        SMin.Visibility = BoolToCollapsedVisible((int)Settings.Accuracy >= 2);
+        SMins.Visibility = BoolToCollapsedVisible((int)Settings.Accuracy >= 2);
         LHours.Visibility = BoolToCollapsedVisible((int)Settings.Accuracy >= 1);
-        SHour.Visibility = BoolToCollapsedVisible((int)Settings.Accuracy >= 1);
+        SHours.Visibility = BoolToCollapsedVisible((int)Settings.Accuracy >= 1);
     }
 
     readonly Thickness _noGapThick = new Thickness(0);
@@ -69,9 +71,9 @@ public partial class BetterCountdown {
         LSecs.Padding = Settings.IsNoGapDisplay ? _noGapThick : _gapThick;
         SSec.Padding = Settings.IsNoGapDisplay ? _noGapThick : _gapThick;
         LMins.Padding = Settings.IsNoGapDisplay ? _noGapThick : _gapThick;
-        SMin.Padding = Settings.IsNoGapDisplay ? _noGapThick : _gapThick;
+        SMins.Padding = Settings.IsNoGapDisplay ? _noGapThick : _gapThick;
         LHours.Padding = Settings.IsNoGapDisplay ? _noGapThick : _gapThick;
-        SHour.Padding = Settings.IsNoGapDisplay ? _noGapThick : _gapThick;
+        SHours.Padding = Settings.IsNoGapDisplay ? _noGapThick : _gapThick;
         LDays.Padding = Settings.IsNoGapDisplay ? _noGapThick : _gapThick;
         Lp.Padding = Settings.IsNoGapDisplay ? _noGapThick : _gapThick;
         Ls.Padding = Settings.IsNoGapDisplay ? _noGapThick : _gapThick;
@@ -112,23 +114,58 @@ public partial class BetterCountdown {
             int dayI = span.Days;
             int dayCi = (int)Settings.Accuracy == 0 & Settings.IsCorrectorEnabled ? dayI + 1 : dayI;
             _days = dayCi.ToString();
-            _dyAnimator.Update(_days, Settings.IsAnimationEnabled);
+            bool isPassed = false;
+            if ((int)Settings.Accuracy > 0 & Settings.IsHideZeroEnabled) {
+                bool flag = _days == "0";
+                LDays.Visibility = flag ? Visibility.Collapsed : Visibility.Visible;
+                SDays.Visibility = flag ? Visibility.Collapsed : Visibility.Visible;
+                if (flag) {
+                    isPassed = true;
+                }
+            }
+            if (!isPassed) {
+                LDays.Visibility = Visibility.Visible;
+                SDays.Visibility = Visibility.Visible;
+                _dyAnimator.Update(_days, Settings.IsAnimationEnabled);                
+            }
         }
         if ((_hours != span.Hours.ToString() | _isAccurateChanged) & (int)Settings.Accuracy >= 1) {
             int hourI = span.Hours;
             int hourCi = (int)Settings.Accuracy == 1 & Settings.IsCorrectorEnabled ? hourI + 1 : hourI;
             _hours = hourCi.ToString();
-            _hrAnimator.Update(_hours, Settings.IsAnimationEnabled);
+            bool isPassed = false;
+            if ((int)Settings.Accuracy > 1 & Settings.IsHideZeroEnabled) {
+                bool flag = _hours == "0";
+                LHours.Visibility = flag ? Visibility.Collapsed : Visibility.Visible;
+                SHours.Visibility = flag ? Visibility.Collapsed : Visibility.Visible;
+                if (flag) isPassed = true;
+            }
+            if (!isPassed & (int)Settings.Accuracy >= 1) {
+                LHours.Visibility = Visibility.Visible;
+                SHours.Visibility = Visibility.Visible;
+                _hrAnimator.Update(_hours, Settings.IsAnimationEnabled);
+            }
         }
         if ((_minutes != span.Minutes.ToString() | _isAccurateChanged) & (int)Settings.Accuracy >= 2) {
             int minuteI = span.Minutes;
             int minuteCi = (int)Settings.Accuracy == 2 & Settings.IsCorrectorEnabled ? minuteI + 1 : minuteI;
             _minutes = minuteCi.ToString();
-            string m = _minutes;
-            if (m.Length == 1) {
-                m = "0" + m;
+            bool isPassed = false;
+            if ((int)Settings.Accuracy > 2 & Settings.IsHideZeroEnabled) {
+                bool flag = _minutes == "0";
+                LMins.Visibility = flag ? Visibility.Collapsed : Visibility.Visible;
+                SMins.Visibility = flag ? Visibility.Collapsed : Visibility.Visible;
+                if (flag) isPassed = true;
             }
-            _mnAnimator.Update(m, Settings.IsAnimationEnabled);
+            if (!isPassed & (int)Settings.Accuracy >= 2) {
+                LMins.Visibility = Visibility.Visible;
+                SMins.Visibility = Visibility.Visible;
+                string m = _minutes;
+                if (m.Length == 1) {
+                    m = "0" + m;
+                }
+                _mnAnimator.Update(m, Settings.IsAnimationEnabled);   
+            }
         }
         // ReSharper disable once InvertIf
         if ((_seconds != span.Seconds.ToString() | _isAccurateChanged) & (int)Settings.Accuracy >= 3) {
