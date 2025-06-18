@@ -1,8 +1,12 @@
 ﻿using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using ClassIsland.Core.Controls;
 using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
+using MaterialDesignThemes.Wpf;
 
 namespace ExtraIsland.Components;
 
