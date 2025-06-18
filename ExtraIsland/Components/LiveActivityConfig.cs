@@ -29,7 +29,7 @@ public class LiveActivityConfig {
 
     public string IgnoreListString { get; set; } = string.Empty;
 
-    public ObservableCollection<IgnoreItem> ReplacementsList { set; get; } = [];
+    public ObservableCollection<ReplaceItem> ReplacementsList { set; get; } = [];
 
     public bool IsAnimationEnabled { get; set; } = true;
     
@@ -52,7 +52,7 @@ public class LiveActivityConfig {
     public string SleepyDevice { get; set; } = "ExtraIsland Sleepy Interface";
 }
 
-public class IgnoreItem : ObservableObject {
+public class ReplaceItem : ObservableObject {
     string _regex = string.Empty;
     public string Regex {
         get => _regex;

@@ -75,8 +75,8 @@ public partial class LiveActivity {
         });
     }
 
-    string Replacer(string input, IEnumerable<IgnoreItem> replaceList) {
-        foreach (IgnoreItem kvp in replaceList) {
+    string Replacer(string input, IEnumerable<ReplaceItem> replaceList) {
+        foreach (ReplaceItem kvp in replaceList) {
             try {
                 Regex regex = new Regex(kvp.Regex);
                 if (regex.IsMatch(input)) {
@@ -161,6 +161,25 @@ public partial class LiveActivity {
     }
 
     void LiveActivity_OnLoaded(object sender,RoutedEventArgs e) {
+        //配置迁移
+        if (Settings.IgnoreListString != string.Empty) {
+            string[] oldList;
+            try {
+                oldList = Settings.IgnoreListString.Split("\r\n");
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex);
+                oldList = [];
+            }
+            foreach (string item in oldList) {
+                Settings.ReplacementsList.Add(new ReplaceItem {
+                    Regex = $"^{Regex.Escape(item)}$",
+                    Replacement = string.Empty
+                });
+            }
+            Settings.IgnoreListString = string.Empty;
+        }
+        
         if (!GlobalConstants.Handlers.MainConfig!.Data.IsLifeModeActivated) {
             Settings.IsSleepyUploaderEnabled = false;
         }
