@@ -1,5 +1,5 @@
 # ExtraIsland
-⌈R0.40⌋ ⌈[维护暂停](https://lipoly.ink/2024/announcement/)⌋
+⌈R0.40⌋
 
 为[ClassIsland](https://classisland.tech/)扩充一些小小的功能
 

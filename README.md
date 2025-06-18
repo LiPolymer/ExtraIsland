@@ -1,15 +1,5 @@
 <!--markdownlint-disable MD033 MD036-->
 
-> [!IMPORTANT]
->
-> 由于备考压力，[维护暂停](https://lipoly.ink/2024/announcement/)，届时开发将几乎停止，还请见谅 😭🙏
-> 
-> 本项目暂停开发,将在高考结束后恢复
->
-> 当然,如果你觉得这个项目不错，欢迎Star，也可以为本项目创建 PullRequest 来帮助我们变得更好！
-> 
-> 再次感谢大家的喜爱和使用！😋🙏 祝大家学业有成！
-
 <div align="center">
 
 <img src="./ExtraIsland/Assets/fullLogo.svg" alt="ExtraIsland Logo" style="height: 100px;">
