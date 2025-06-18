@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Data;
 
 namespace ExtraIsland.Shared.Converters;
@@ -107,5 +108,21 @@ public class DoubleMultipleConverter : IValueConverter
         if (value is not double v) return null;
         double m = System.Convert.ToDouble(parameter);
         return v / m;
+    }
+}
+
+public class HitokotoVisibilityConverter : IValueConverter {
+    public object Convert(object? value,Type targetType,object? parameter,
+        System.Globalization.CultureInfo culture) {
+        return (RhesisDataSource)value! switch {
+            RhesisDataSource.All => Visibility.Visible,
+            RhesisDataSource.Hitokoto => Visibility.Visible,
+            _ => Visibility.Collapsed
+        };
+    }
+
+    public object ConvertBack(object? value,Type targetType,object? parameter,
+        System.Globalization.CultureInfo culture) {
+        throw new NotSupportedException();
     }
 }

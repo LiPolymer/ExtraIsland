@@ -5,7 +5,7 @@ namespace ExtraIsland.Components;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public class RhesisConfig {
-    public RhesisDataSource DataSource { get; set; } = RhesisDataSource.All;
+    public RhesisDataSource DataSource { get; set; } = RhesisDataSource.SaintJinrishici;
     
     public string IgnoreListString { get; set; } = string.Empty;
     

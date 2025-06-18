@@ -14,6 +14,7 @@
     <ci:ComponentBase.Resources>
         <converters:DoubleToStringConverter x:Key="DoubleToStringConverter" />
         <converters:IntToStringConverter x:Key="IntToStringConverter" />
+        <converters:HitokotoVisibilityConverter x:Key="HitokotoVisibilityConverter"/>
         <local:LimitIntToArgConverter x:Key="LimitIntToArgConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </ci:ComponentBase.Resources>
@@ -21,6 +22,41 @@
         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:RhesisSettings}}">
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
         <StackPanel Style="{StaticResource SettingsPageStackPanelStyle}">
+            <materialDesign:ColorZone Background="#204169e1"
+                                      CornerRadius="4"
+                                      Margin="0 0 0 5">
+                <Grid>
+                    <DockPanel Margin="8 4">
+                        <materialDesign:PackIcon Kind="Info"
+                                                 Height="20" Width="20"/>
+                        <TextBlock TextWrapping="Wrap"
+                                   VerticalAlignment="Center"
+                                   Margin="4 0 0 0" >
+                            <Run>本组件展示的内容</Run><Bold>均由第三方服务商提供给你</Bold>
+                            <Run> 我们不对其内容做任何担保</Run>
+                        </TextBlock>
+                    </DockPanel>
+                </Grid>
+            </materialDesign:ColorZone>
+            <Border Background="#15ff0000"
+                    Visibility="{Binding Settings.DataSource, Converter={StaticResource HitokotoVisibilityConverter}, Mode= OneWay}"
+                    Margin="0,0,0,-7"
+                    Padding="6"
+                    CornerRadius="4">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Alert"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,3,0" />
+                        <TextBlock VerticalAlignment="Center">
+                            <Run>警告   近期收到大量反馈 </Run>
+                            <Bold>一言源中存在部分不良内容</Bold>
+                            <Run> 请注意进行相应过滤设置</Run>
+                        </TextBlock>
+                    </StackPanel>
+                    <Label />
+                </StackPanel>
+            </Border>
             <ci:SettingsCard IconGlyph="GitRepository" Header="数据来源"
                              Description="选择使用的API">
                 <ci:SettingsCard.Switcher>
