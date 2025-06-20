@@ -29,30 +29,29 @@ namespace ExtraIsland;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class Plugin : PluginBase {
     public override void Initialize(HostBuilderContext context, IServiceCollection services) {
+        ChainedTerminal ct = new ChainedTerminal("&aExtraIsland");
         ConsoleColor defaultColor = Console.ForegroundColor;
         //TODO: 重构早加载阶段终端处理器
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("[ExIsLand][Splash]-------------------------------------------------------------------\r\n" 
                           + GlobalConstants.Assets.AsciiLogo
                           + "\r\n Copyright (C) 2024-2025 LiPolymer \r\n Licensed under GNU AGPLv3. \r\n" 
-                          + "[ExIsLand][EarlyLoad]正在初始化...-------------------------------------------------");
+                          + "正在初始化...-------------------------------------------------------------------");
         Console.ForegroundColor = defaultColor;
-        Console.WriteLine("[ExIsLand][EarlyLoad]正在载入主设置...");
+        ChainedTerminal cct = ct.Chain("&3ConfigHandler");
+        cct.WriteLine("正在载入主设置...");
         //Initialize GlobalConstants/ConfigHandlers
         GlobalConstants.PluginConfigFolder = PluginConfigFolder;
         GlobalConstants.Handlers.MainConfig = new MainConfigHandler();
         if (GlobalConstants.Handlers.MainConfig.Data.IsTelemetryActivated) {
-                #if DEBUG
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("[ExIsLand][EarlyLoad][DEBUG]这是调试构建,遥测将被禁用!");
-            Console.ForegroundColor = defaultColor;
-                #endif
+            ChainedTerminal sct = ct.Chain("&5Sentry");
+            #if DEBUG
+                sct.WriteLine("这是调试构建,遥测将被禁用!",Terminal.MessageType.Debug);
+            #endif
                 #if !DEBUG
                 // ReSharper disable once HeuristicUnreachableCode
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("[ExIsLand][EarlyLoad]遥测已启用! 感谢您的帮助(～￣▽￣)～");
-                Console.ForegroundColor = defaultColor;
-                Console.WriteLine("[ExIsLand][EarlyLoad]正在初始化Sentry...");
+                sct.WriteLine("&2遥测已启用! 感谢您的帮助(～￣▽￣)～");
+                sct.WriteLine("正在初始化Sentry...");
             
                 SentrySdk.Init(o => {
                     o.Dsn = "https://0957ca91c84095acea32a5888148bb68@o4508585356165120.ingest.de.sentry.io/4508585358065744";
@@ -65,9 +64,9 @@ public class Plugin : PluginBase {
                 };
                 #endif
         }
-        Console.WriteLine("[ExIsLand][EarlyLoad]正在载入其余配置...");
+        cct.WriteLine("正在载入其余配置...");
         GlobalConstants.Handlers.OnDuty = new OnDutyPersistedConfigHandler();
-        Console.WriteLine("[ExIsLand][EarlyLoad]正在注册ClassIsland要素...");
+        ct.WriteLine("正在注册ClassIsland要素...");
         //Services
         services.AddHostedService<ServicesFetcherService>();
         services.AddHostedService<Register>();
@@ -88,29 +87,24 @@ public class Plugin : PluginBase {
         services.AddAuthorizeProvider<UsbDriveAuthorizer>();
         //LifeMode
         if (GlobalConstants.Handlers.MainConfig.Data.IsLifeModeActivated) {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("[ExIsLand][EarlyLoad]生活模式已启用!");
-            Console.ForegroundColor = defaultColor;
+            ct.WriteLine("&a生活模式已启用!");
             services.AddComponent<Sleepy,SleepySettings>();
         }
         if (GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) {
             services.AddComponent<ActionButton,ActionButtonSettings>();
         }
         if (GlobalConstants.Handlers.MainConfig.Data.IsExperimentalModeActivated) {
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("[ExIsLand][EarlyLoad][Experiment]实验模式已启用! 若出现Bug,请勿报告!");
+            ct.WriteLine("&9实验模式已启用! &7若出现Bug,&c请勿报告&7!",Terminal.MessageType.Warn);
             Console.ForegroundColor = defaultColor;
             services.AddComponent<DebugLyricsHandler>();
             services.AddComponent<DebugSubLyricsHandler>();
         }
         #if DEBUG
-        Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.WriteLine("[ExIsLand][EarlyLoad][DEBUG]这是一个调试构建! 若出现Bug,请勿报告!");
-        Console.ForegroundColor = defaultColor;
+        ct.WriteLine("&d这是一个调试构建! 若出现Bug,请勿报告!",Terminal.MessageType.Debug);
         services.AddSettingsPage<DebugSettingsPage>();
         #endif
-        Console.WriteLine("[ExIsLand][EarlyLoad]完成!");
-        Console.WriteLine("[ExIsLand][EarlyLoad]注册事件...");
+        ct.WriteLine("完成!");
+        ct.WriteLine("注册事件...");
         GlobalConstants.Triggers.OnLoaded += JuniorGuide.Trigger;
         AppBase.Current.AppStarted += (_,_) => {
             GlobalConstants.Handlers.MainWindow = new MainWindowHandler();
@@ -127,7 +121,7 @@ public class Plugin : PluginBase {
                 Environment.Exit(0);
             }).Start();
         };
-        Console.WriteLine("[ExIsLand][EarlyLoadTrigger]完成!");
-        Console.WriteLine("[ExIsLand][EarlyLoad]等待服务主机启动...");
+        ct.WriteLine("完成!");
+        ct.WriteLine("&a等待服务主机启动...");
     }
 }
