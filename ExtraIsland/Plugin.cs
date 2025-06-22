@@ -2,6 +2,7 @@ using ClassIsland.Core;
 using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Extensions.Registry;
+using ClassIsland.Shared;
 using ExtraIsland.AuthorizeProvider;
 using ExtraIsland.Automations;
 using ExtraIsland.Components;
@@ -10,6 +11,7 @@ using ExtraIsland.LifeMode.Components;
 using ExtraIsland.SettingsPages;
 using ExtraIsland.Shared;
 using ExtraIsland.TinyFeatures;
+using LycheeLib.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -106,6 +108,11 @@ public class Plugin : PluginBase {
         #endif
         ct.WriteLine("完成!");
         ct.WriteLine("注册事件...");
+        if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
+            AppBase.Current.AppStarted += (_, _) => {
+                Rendezvous.Load(IAppHost.GetService<ILycheeLyrics>());
+            };
+        }
         GlobalConstants.Triggers.OnLoaded += JuniorGuide.Trigger;
         AppBase.Current.AppStarted += (_,_) => {
             GlobalConstants.Handlers.MainWindow = new MainWindowHandler();

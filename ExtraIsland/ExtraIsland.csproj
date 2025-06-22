@@ -12,6 +12,7 @@
 		<PackageReference Include="ClassIsland.PluginSdk" Version="1.6.0.5">
 			<ExcludeAssets>runtime; native</ExcludeAssets>
 		</PackageReference>
+		<PackageReference Include="LycheeLib.Interface" Version="1.0.0" />
 		<PackageReference Include="Sentry" Version="5.5.0" />
 		<PackageReference Include="System.Management" Version="10.0.0-preview.3.25171.5" />
 	</ItemGroup>
