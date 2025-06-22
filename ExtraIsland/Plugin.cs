@@ -56,6 +56,7 @@ public class Plugin : PluginBase {
                 SentrySdk.Init(o => {
                     o.Dsn = "https://0957ca91c84095acea32a5888148bb68@o4508585356165120.ingest.de.sentry.io/4508585358065744";
                     o.Release = Info.Manifest.Version;
+                    o.AutoSessionTracking = true;
                 });
             
                 AppBase.Current.DispatcherUnhandledException += (_,e) => {
