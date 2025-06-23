@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace ExtraIsland.Shared;
 
-public class LyricsIslandHandler : IDisposable {
+public class LyricsIslandHandler : IDisposable, ILyricsProvider {
 
     public LyricsIslandHandler(string url = "http://127.0.0.1:50063/") {
         Url = url;

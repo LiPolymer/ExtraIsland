@@ -34,7 +34,11 @@ public partial class MainSettingsPage {
             //((Chip)LyricsStatCard.Switcher!).Foreground = Brushes.DarkSlateGray;
             ((Chip)LyricsStatCard.Switcher!).Background = Brushes.Gray;
             ((Chip)LyricsStatCard.Switcher!).Content = "未使用";
-        } else if (GlobalConstants.Handlers.LyricsIsland == null) {
+        } else if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
+            ((Chip)LyricsStatCard.Switcher!).Background = Brushes.Gray;
+            ((Chip)LyricsStatCard.Switcher!).Content = "Lychee";
+        }
+        else if (GlobalConstants.Handlers.LyricsIsland == null) {
             ((Chip)LyricsStatCard.Switcher!).Background = Brushes.Gray;
             ((Chip)LyricsStatCard.Switcher!).Content = "未使用";
         } else {

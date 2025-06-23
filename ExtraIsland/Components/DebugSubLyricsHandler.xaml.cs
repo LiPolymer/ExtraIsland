@@ -14,15 +14,19 @@ namespace ExtraIsland.Components;
 )]
 public partial class DebugSubLyricsHandler {
     public DebugSubLyricsHandler() {
-        GlobalConstants.Handlers.LyricsIsland ??= new LyricsIslandHandler();
+        if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
+            _handler = new LycheeLyricsProvider();
+        } else {
+            GlobalConstants.Handlers.LyricsIsland ??= new LyricsIslandHandler();
+            _handler = GlobalConstants.Handlers.LyricsIsland;   
+        }
         InitializeComponent();
-        _handler = GlobalConstants.Handlers.LyricsIsland;
         _handler.OnLyricsChanged += UpdateLyrics;
         _animator = new Animators.ClockTransformControlAnimator(LyricsLabel,-0.3);
         new Thread(CounterDaemon).Start();
     }
 
-    readonly LyricsIslandHandler _handler;
+    readonly ILyricsProvider _handler;
     readonly Animators.ClockTransformControlAnimator _animator;
 
     int _timeCounter = 10;

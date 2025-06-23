@@ -108,11 +108,14 @@ public class Plugin : PluginBase {
         #endif
         ct.WriteLine("完成!");
         ct.WriteLine("注册事件...");
+        
+        //初始化LycheeLib
         if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
             AppBase.Current.AppStarted += (_, _) => {
                 Rendezvous.Load(IAppHost.GetService<ILycheeLyrics>());
             };
         }
+        
         GlobalConstants.Triggers.OnLoaded += JuniorGuide.Trigger;
         AppBase.Current.AppStarted += (_,_) => {
             GlobalConstants.Handlers.MainWindow = new MainWindowHandler();

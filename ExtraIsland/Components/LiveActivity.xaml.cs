@@ -31,7 +31,7 @@ public partial class LiveActivity {
     readonly Animators.EmphasizeUiElementAnimator _activityAnimator;
     readonly Animators.EmphasizeUiElementAnimator _lyricsAnimator;
     readonly Animators.ClockTransformControlAnimator _lyricsLabelAnimator;
-    LyricsIslandHandler? _lyricsHandler;
+    ILyricsProvider? _lyricsHandler;
     string _postName = string.Empty;
 
     bool IsLyricsIslandLoaded { get; }
@@ -107,8 +107,12 @@ public partial class LiveActivity {
             return;
         }
         if (Settings.IsLyricsEnabled) {
-            GlobalConstants.Handlers.LyricsIsland ??= new LyricsIslandHandler();
-            _lyricsHandler = GlobalConstants.Handlers.LyricsIsland;
+            if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
+                _lyricsHandler = new LycheeLyricsProvider();
+            } else {
+                GlobalConstants.Handlers.LyricsIsland ??= new LyricsIslandHandler();
+                _lyricsHandler = GlobalConstants.Handlers.LyricsIsland;   
+            }
             _lyricsHandler.OnLyricsChanged += UpdateLyrics;
             new Thread(() => {
                 while (true) {
