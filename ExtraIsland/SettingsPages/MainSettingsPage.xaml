@@ -119,8 +119,8 @@
             </Border>
             <ci:SettingsCard x:Name="LyricsStatCard"
                              IconGlyph="LibraryMusic"
-                             Description="显示内置 LyricsIsland 协议接口的状态"
-                             Header="LyricsIsland">
+                             Description="显示歌词协议接口的状态,接口支持LycheeLib"
+                             Header="歌词接口状态">
                 <ci:SettingsCard.Switcher>
                     <materialDesign:Chip Background="Gray" 
                                          Foreground="LightGray"
