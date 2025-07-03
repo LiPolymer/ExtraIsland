@@ -98,11 +98,26 @@ public partial class Rhesis {
             Title = data.Title;
             Author = data.Author;
             if (Settings.IgnoreListString.Split("\r\n").Any(keyWord => Showing.Contains(keyWord) && keyWord != "")) return;
+            object subObj;
+            if (Settings.IsAuthorShowEnabled & Settings.IsTitleShowEnabled) {
+                subObj = _infoGrid;
+            } else if (Settings.IsAuthorShowEnabled) {
+                subObj = Author;
+            } else if (Settings.IsTitleShowEnabled) {
+                subObj = Title;
+            } else {
+                subObj = string.Empty;
+            }
             this.BeginInvoke(() => {
                 _titleLabel.Content = Title;
                 _authorLabel.Content = Author;
                 _mainLabelAnimator.Update(Showing,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
-                _subLabelAnimator.Update(_infoGrid,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
+                if (Settings.IsAuthorShowEnabled | Settings.IsTitleShowEnabled) {
+                    SubLabel.Visibility =  Visibility.Visible;
+                    _subLabelAnimator.Update(subObj,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);   
+                } else {
+                    SubLabel.Visibility =  Visibility.Collapsed;
+                }
             });
         });
     }

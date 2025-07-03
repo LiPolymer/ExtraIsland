@@ -15,15 +15,14 @@
             <Label x:Name="MainLabel"
                    VerticalAlignment="Center"
                    FontSize="{DynamicResource MainWindowLargeFontSize}"
-                   Content="{Binding Showing, Mode=OneWay}">
+                   Content="{Binding Showing, Mode=OneTime}">
                 <Label.RenderTransform>
                     <TranslateTransform />
                 </Label.RenderTransform>
             </Label>
             <Label x:Name="SubLabel"
                    VerticalAlignment="Center"
-                   FontSize="{DynamicResource MainWindowLargeFontSize}"
-                   Content="{Binding Showing, Mode=OneWay}">
+                   FontSize="{DynamicResource MainWindowEmphasizedFontSize}">
                 <Label.RenderTransform>
                     <TranslateTransform />
                 </Label.RenderTransform>
