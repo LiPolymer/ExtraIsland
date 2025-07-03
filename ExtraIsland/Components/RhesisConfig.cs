@@ -45,6 +45,4 @@ public class RhesisConfig {
     public bool IsAuthorShowEnabled { get; set; }
 
     public bool IsTitleShowEnabled { get; set; }
-    
-    public bool IsHitokotoWarnConfirmed { get; set; }
 }

@@ -128,10 +128,31 @@ public static class Animators {
                 });
             });
         }
+        public void Update(object targetContent,bool isAnimated = true,bool isSwapAnimEnabled = true,bool isForced = false) {
+            if (!isAnimated) {
+                _targetLabel.Content = targetContent;
+                return;
+            }
+            _renderLock = true;
+            if (isSwapAnimEnabled) {
+                _swapStoryboard.Begin();
+            } else {
+                _fadeStoryboard.Begin();
+            }
+            Task.Run(() => {
+                Thread.Sleep(110);
+                _targetLabel.Dispatcher.InvokeAsync(() => {
+                    _targetLabel.Content = targetContent;
+                });
+            });
+        }
 
         public void SilentUpdate(string targetContent) {
             _targetContent = targetContent;
             _targetLabel.Content = _targetContent;
+        }
+        public void SilentUpdate(object targetContent) {
+            _targetLabel.Content = targetContent;
         }
     }
 

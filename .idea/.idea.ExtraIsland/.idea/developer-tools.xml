@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DeveloperToolsToolWindowSettingsV1" lastSelectedContentNodeId="text-case-transformer" pluginVersion="7.1.0">
+    <developerToolsConfigurations>
+      <developerToolConfiguration developerToolId="color-picker" id="eefd2ac1-a5a3-4b54-a4e0-16332fded36c" name="Workbench">
+        <properties>
+          <property key="selectedColor" type="INPUT" value="com.intellij.ui.JBColor|-7425837" />
+        </properties>
+      </developerToolConfiguration>
+      <developerToolConfiguration developerToolId="ascii-art" id="1ce4228e-6098-47c8-9bd9-a8749cb30abe" name="Workbench">
+        <properties>
+          <property key="textInput" type="INPUT" value="kotlin.String|ShulkerRDK" />
+          <property key="selectedFontFileName" type="CONFIGURATION" value="kotlin.String|slant.flf" />
+        </properties>
+      </developerToolConfiguration>
+      <developerToolConfiguration developerToolId="text-case-transformer" id="88b58fd8-aa34-4c86-b36d-59c3feb73803" name="Workbench">
+        <properties>
+          <property key="outputTextCase" type="CONFIGURATION" value="TextCaseTransformer-TextCase|UPPER_CASE" />
+        </properties>
+      </developerToolConfiguration>
+      <developerToolConfiguration developerToolId="hashing-transformer" id="ee577d56-ac27-47eb-b5dc-0a23badbb3cb" name="Workbench">
+        <properties>
+          <property key="sourceFile" type="INPUT" value="kotlin.String|C:\Users\LithiumFish\Downloads\tumblr_mjphnqLpNy1s5jjtzo1_400.gif" />
+          <property key="algorithm" type="CONFIGURATION" value="kotlin.String|MD5" />
+        </properties>
+      </developerToolConfiguration>
+    </developerToolsConfigurations>
+    <expandedGroupNodeIds />
+  </component>
+</project>

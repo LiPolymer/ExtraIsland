@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
@@ -8,29 +9,63 @@ using MaterialDesignThemes.Wpf;
 namespace ExtraIsland.Components;
 
 [ComponentInfo(
-    "FBB380C2-5480-4FED-8349-BA5F4EAD2688",
-    "名句一言",
-    PackIconKind.MessageOutline,
-    "显示一句古今名言,可使用三个API"
-)]
+                  "FBB380C2-5480-4FED-8349-BA5F4EAD2688",
+                  "名句一言",
+                  PackIconKind.MessageOutline,
+                  "显示一句古今名言,可使用三个API"
+              )]
 public partial class Rhesis {
     public Rhesis(ILessonsService lessonsService) {
+        _authorLabel = new Label {
+            Content = Title,
+            Margin = new Thickness(0,4,0,0),
+            Padding = new Thickness(0),
+            VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left
+        };
+        Grid.SetRow(_authorLabel,0);
+        _authorLabel.SetResourceReference(FontSizeProperty, "MainWindowSecondaryFontSize");
+
+        _titleLabel = new Label {
+            Content = Author,
+            Margin = new Thickness(0,0,0,4),
+            Padding = new Thickness(0),
+            VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left
+        };
+        Grid.SetRow(_titleLabel,1);
+        _titleLabel.SetResourceReference(FontSizeProperty, "MainWindowSecondaryFontSize");
+        
+        _infoGrid = new Grid {
+            VerticalAlignment = VerticalAlignment.Center,
+            RowDefinitions = {
+                new RowDefinition { Height = GridLength.Auto },
+                new RowDefinition { Height = GridLength.Auto }
+            },
+            Children = {
+                _authorLabel,
+                _titleLabel
+            }
+        };
+        
         LessonsService = lessonsService;
         InitializeComponent();
-        _labelAnimator1 = new Animators.ClockTransformControlAnimator(Label1);
-        _labelAnimator2 = new Animators.ClockTransformControlAnimator(Label2);
-        _labelAnimator3 = new Animators.ClockTransformControlAnimator(Label3);
+        _mainLabelAnimator = new Animators.ClockTransformControlAnimator(MainLabel);
+        _subLabelAnimator = new Animators.ClockTransformControlAnimator(SubLabel);
     }
 
     ILessonsService LessonsService { get; }
 
     public string Showing { get; private set; } = "-----------------";
-    public string Author { get; private set; }
-    public string Title { get; private set; }
+    public string Author { get; private set; } = "";
+    public string Title { get; private set; } = "";
     readonly RhesisHandler.Instance _rhesisHandler = new RhesisHandler.Instance();
-    readonly Animators.ClockTransformControlAnimator _labelAnimator1;
-    readonly Animators.ClockTransformControlAnimator _labelAnimator2;
-    readonly Animators.ClockTransformControlAnimator _labelAnimator3;
+    readonly Animators.ClockTransformControlAnimator _mainLabelAnimator;
+    readonly Animators.ClockTransformControlAnimator _subLabelAnimator;
+    readonly Grid _infoGrid;
+    readonly Label _titleLabel;
+    readonly Label _authorLabel;
+    
     void Rhesis_OnLoaded(object sender,RoutedEventArgs e) {
         Settings.LastUpdate = DateTime.Now;
         Update();
@@ -50,41 +85,79 @@ public partial class Rhesis {
 
     void Update() {
         Task.Run(() => {
-            var data = _rhesisHandler.LegacyGet(Settings.DataSource,Settings.HitokotoProp switch {
-                    "" => "https://v1.hitokoto.cn/",
-                    _ => $"https://v1.hitokoto.cn/?{Settings.HitokotoLengthArgs}{Settings.HitokotoProp}"
-                },
-                Settings.SainticProp switch {
-                    "" => "https://open.saintic.com/api/sentence/",
-                    _ => $"https://open.saintic.com/api/sentence/{Settings.HitokotoProp}.json"
-                },
-                Settings.LengthLimitation);
+            RhesisData data = _rhesisHandler.LegacyGet(Settings.DataSource,Settings.HitokotoProp switch {
+                                                           "" => "https://v1.hitokoto.cn/",
+                                                           _ => $"https://v1.hitokoto.cn/?{Settings.HitokotoLengthArgs}{Settings.HitokotoProp}"
+                                                       },
+                                                       Settings.SainticProp switch {
+                                                           "" => "https://open.saintic.com/api/sentence/",
+                                                           _ => $"https://open.saintic.com/api/sentence/{Settings.HitokotoProp}.json"
+                                                       },
+                                                       Settings.LengthLimitation);
             Showing = data.Content;
+            Title = data.Title;
+            Author = data.Author;
             if (Settings.IgnoreListString.Split("\r\n").Any(keyWord => Showing.Contains(keyWord) && keyWord != "")) return;
-            if (Settings.IsAuthorShowEnabled && data.Author != null && data.Author != string.Empty) {
-                Author = $"{data.Author}";
-                this.BeginInvoke(() => Label2.Visibility = Visibility.Visible);
-            } else {
-                Author = string.Empty;
-                this.BeginInvoke(() => Label2.Visibility = Visibility.Hidden);
-            }
-            if (Settings.IsTitleShowEnabled && data.Title != null && data.Title != string.Empty) {
-                Title = $"{data.Title}";
-                this.BeginInvoke(() => Label3.Visibility = Visibility.Visible);
-            } else {
-                Title = string.Empty;
-                this.BeginInvoke(() => Label3.Visibility = Visibility.Hidden);
-            }
             this.BeginInvoke(() => {
-                _labelAnimator1.Update(Showing,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
+                _titleLabel.Content = Title;
+                _authorLabel.Content = Author;
+                _mainLabelAnimator.Update(Showing,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
+                _subLabelAnimator.Update(_infoGrid,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
             });
-            this.BeginInvoke(() => {
-                _labelAnimator2.Update(Author,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
-            });
-            this.BeginInvoke(() => {
-                _labelAnimator3.Update(Title,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
-            });
-
         });
+    }
+
+    StackPanel GenerateInfoStack() {
+        return new StackPanel {
+            Orientation = Orientation.Vertical,
+            Children = {
+                new Label {
+                    Content = Title,
+                    Padding = new Thickness(0),
+                    FontSize = (double)FindResource("MainWindowSecondaryFontSize") - 1.5
+                },
+                new Label {
+                    Content = Author,
+                    Padding = new Thickness(0),
+                    FontSize = (double)FindResource("MainWindowSecondaryFontSize") - 1.5
+                }
+            }
+        };
+    }
+
+    Grid GenerateInfoGrid() {
+        Grid mainGrid = new Grid {
+            VerticalAlignment = VerticalAlignment.Center,
+            RowDefinitions = {
+                new RowDefinition { Height = GridLength.Auto },
+                new RowDefinition { Height = GridLength.Auto }
+            },
+        };
+
+        Label dualLabelUp = new Label {
+            Content = Title,
+            Margin = new Thickness(0,4,0,0),
+            Padding = new Thickness(0),
+            VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left
+        };
+
+        Grid.SetRow(dualLabelUp,0);
+
+        Label dualLabelDown = new Label {
+            Content = Author,
+            Margin = new Thickness(0,0,0,4),
+            Padding = new Thickness(0),
+            VerticalContentAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Left
+        };
+
+        Grid.SetRow(dualLabelDown,1);
+        mainGrid.Children.Add(dualLabelUp);
+        mainGrid.Children.Add(dualLabelDown);
+        
+        dualLabelUp.SetResourceReference(FontSizeProperty, "MainWindowSecondaryFontSize");
+        dualLabelDown.SetResourceReference(FontSizeProperty, "MainWindowSecondaryFontSize");
+        return mainGrid;
     }
 }
