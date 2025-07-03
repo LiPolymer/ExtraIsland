@@ -116,7 +116,7 @@
                              Description="将出处作为额外信息展示,未获取到则不显示"
                              IsOn="{Binding Settings.IsTitleShowEnabled, Mode=TwoWay}"/>
             <ci:SettingsCard IconGlyph="StopwatchAdd" Header="额外信息展示时长"
-                             Description="为0时将与句子同时展示,否则在切换句子前单独展示,该项不得大于切换间隔-3">
+                             Description="为0时将与句子同时展示,否则在切换句子前单独展示,该项不得大于切换间隔-1">
                 <ci:SettingsCard.Switcher>
                     <Grid>
                         <StackPanel Orientation="Horizontal">
@@ -136,7 +136,7 @@
                              IsOn="{Binding Settings.IsAnimationEnabled, Mode=TwoWay}"/>
             <ci:SettingsCard IconGlyph="AnimationPlus"
                              Header="启用翻页动画"
-                             Description="启用后,切换动画样式将被替换为翻页"
+                             Description="启用后,切换动画样式将被替换为翻页(额外信息不受影响)"
                              IsEnabled="{Binding Settings.IsAnimationEnabled, Mode=OneWay}"
                              IsOn="{Binding Settings.IsSwapAnimationEnabled, Mode=TwoWay}"/>
             <materialDesign:Card Margin="0 0 0 6">

@@ -122,7 +122,7 @@ public partial class Rhesis {
                         _subLabelAnimator.Update(subObj,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
                     } else {
                         SubLabel.Visibility =  Visibility.Collapsed;
-                        if (Settings.AttributesShowingInterval > (Settings.UpdateTimeGapSeconds - 3)) {
+                        if (Settings.AttributesShowingInterval > (Settings.UpdateTimeGapSeconds - 1)) {
                             Settings.AttributesShowingInterval = 0;
                         } else { 
                             new Thread(() => {

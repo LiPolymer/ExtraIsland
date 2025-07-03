@@ -1,13 +1,14 @@
 ﻿using System.Text.Json.Serialization;
 using ClassIsland.Core.Controls;
 using ClassIsland.Core.Controls.CommonDialog;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ExtraIsland.Shared;
 using MaterialDesignThemes.Wpf;
 
 namespace ExtraIsland.Components;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class RhesisConfig {
+public class RhesisConfig : ObservableObject {
     public RhesisDataSource DataSource { get; set; } = RhesisDataSource.SaintJinrishici;
 
     public string IgnoreListString { get; set; } = string.Empty;
@@ -44,5 +45,14 @@ public class RhesisConfig {
 
     public bool IsAuthorShowEnabled { get; set; }
     public bool IsTitleShowEnabled { get; set; }
-    public int AttributesShowingInterval { get; set; }
+
+    int _attributesShowingInterval;
+    public int AttributesShowingInterval {
+        get => _attributesShowingInterval;
+        set {
+            if(_attributesShowingInterval == value) return;
+            _attributesShowingInterval = value;
+            OnPropertyChanged();
+        }
+    }
 }
