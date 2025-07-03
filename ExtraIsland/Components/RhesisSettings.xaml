@@ -106,15 +106,30 @@
                 </ci:SettingsCard.Switcher>
             </ci:SettingsCard>
             <ci:SettingsCard IconGlyph="PeopleCheck"
-                             Header="显示作者"
+                             Header="展示作者"
                              Visibility="{Binding MainConfig.IsExperimentalModeActivated, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
-                             Description="(待优化)将会在末尾添加作者，未获取到则不显示"
+                             Description="将作者作为额外信息展示,未获取到则不显示"
                              IsOn="{Binding Settings.IsAuthorShowEnabled, Mode=TwoWay}"/>
             <ci:SettingsCard IconGlyph="BookCheck"
-                             Header="显示出处"
+                             Header="展示出处"
                              Visibility="{Binding MainConfig.IsExperimentalModeActivated, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
-                             Description="(待优化)将会在末尾添加出处，未获取到则不显示"
+                             Description="将出处作为额外信息展示,未获取到则不显示"
                              IsOn="{Binding Settings.IsTitleShowEnabled, Mode=TwoWay}"/>
+            <ci:SettingsCard IconGlyph="StopwatchAdd" Header="额外信息展示时长"
+                             Description="为0时将与句子同时展示,否则在切换句子前单独展示,该项不得大于切换间隔-3">
+                <ci:SettingsCard.Switcher>
+                    <Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox
+                                Text="{Binding Settings.AttributesShowingInterval, Converter={StaticResource IntToStringConverter}, Mode=TwoWay}"
+                                VerticalAlignment="Center"
+                                InputMethod.IsInputMethodEnabled="False"
+                                PreviewTextInput="TextBoxNumberCheck"
+                                MinWidth="30"/>
+                        </StackPanel>
+                    </Grid>
+                </ci:SettingsCard.Switcher>
+            </ci:SettingsCard>
             <ci:SettingsCard IconGlyph="AnimationPlay"
                              Header="启用动画"
                              Description="禁用后,将不再播放动画,对低性能设备友好!"

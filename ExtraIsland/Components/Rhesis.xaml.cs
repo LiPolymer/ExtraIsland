@@ -100,7 +100,11 @@ public partial class Rhesis {
             if (Settings.IgnoreListString.Split("\r\n").Any(keyWord => Showing.Contains(keyWord) && keyWord != "")) return;
             object subObj;
             if (Settings.IsAuthorShowEnabled & Settings.IsTitleShowEnabled) {
-                subObj = _infoGrid;
+                if (Settings.AttributesShowingInterval == 0) {
+                    subObj = _infoGrid;   
+                } else {
+                    subObj = $"{Author} {Title}";
+                }
             } else if (Settings.IsAuthorShowEnabled) {
                 subObj = Author;
             } else if (Settings.IsTitleShowEnabled) {
@@ -113,8 +117,22 @@ public partial class Rhesis {
                 _authorLabel.Content = Author;
                 _mainLabelAnimator.Update(Showing,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
                 if (Settings.IsAuthorShowEnabled | Settings.IsTitleShowEnabled) {
-                    SubLabel.Visibility =  Visibility.Visible;
-                    _subLabelAnimator.Update(subObj,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);   
+                    if (Settings.AttributesShowingInterval == 0) {
+                        SubLabel.Visibility =  Visibility.Visible;
+                        _subLabelAnimator.Update(subObj,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
+                    } else {
+                        SubLabel.Visibility =  Visibility.Collapsed;
+                        if (Settings.AttributesShowingInterval > (Settings.UpdateTimeGapSeconds - 3)) {
+                            Settings.AttributesShowingInterval = 0;
+                        } else { 
+                            new Thread(() => {
+                                Thread.Sleep(Settings.AttributesShowingInterval * 1000);
+                                this.BeginInvoke(() => {
+                                    _mainLabelAnimator.Update(subObj,Settings.IsAnimationEnabled,false); 
+                                });
+                            }).Start();
+                        }
+                    }
                 } else {
                     SubLabel.Visibility =  Visibility.Collapsed;
                 }

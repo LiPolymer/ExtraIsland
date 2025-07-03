@@ -43,6 +43,6 @@ public class RhesisConfig {
     public bool IsSwapAnimationEnabled { get; set; }
 
     public bool IsAuthorShowEnabled { get; set; }
-
     public bool IsTitleShowEnabled { get; set; }
+    public int AttributesShowingInterval { get; set; }
 }
