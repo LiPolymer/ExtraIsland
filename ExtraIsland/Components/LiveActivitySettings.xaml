@@ -63,7 +63,7 @@
                         </ci:SettingsControl>
                     </Expander.Header>
                     <StackPanel Orientation="Vertical">
-                        <DataGrid Margin="12,6,12,6"
+                        <DataGrid Margin="12,6,70,6"
                                   IsReadOnly="False"
                                   AutoGenerateColumns="False"
                                   CanUserResizeColumns="False"
@@ -72,8 +72,8 @@
                                   Height="240"
                                   ItemsSource="{Binding Settings.ReplacementsList, Mode=TwoWay}">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="匹配正则" Width="200" Binding="{Binding Regex}" />
-                                <DataGridTextColumn Header="替换为" Width="200" Binding="{Binding Replacement}" />
+                                <DataGridTextColumn Header="匹配正则" Width="Auto" MinWidth="90" MaxWidth="290" Binding="{Binding Regex}" />
+                                <DataGridTextColumn Header="替换为" Width="Auto" MinWidth="90" MaxWidth="290" Binding="{Binding Replacement}" />
                                 <DataGridTemplateColumn Header="操作" Width="60">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -225,9 +225,8 @@
                 Added by ExtraIsland
             </Label>
             <Label HorizontalAlignment="Center"
-                   Foreground="{DynamicResource MaterialDesignBodyLight}">
-                Lyrics Powered by LyricsIsland
-            </Label>
+                   Foreground="{DynamicResource MaterialDesignBodyLight}"
+                   Content="Lyrics Powered by LyricsIsland Protocol &amp; LycheeLib"/>
         </StackPanel>
     </ScrollViewer>
 </ci:ComponentBase>
