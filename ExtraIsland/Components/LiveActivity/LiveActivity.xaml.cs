@@ -110,7 +110,7 @@ public partial class LiveActivity {
             if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
                 _lyricsHandler = new LycheeLyricsProvider();
             } else {
-                GlobalConstants.Handlers.LyricsIsland ??= new LyricsIslandHandler();
+                GlobalConstants.Handlers.LyricsIsland ??= new LyricsIslandLyricsProvider();
                 _lyricsHandler = GlobalConstants.Handlers.LyricsIsland;   
             }
             _lyricsHandler.OnLyricsChanged += UpdateLyrics;

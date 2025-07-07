@@ -7,17 +7,17 @@ namespace ExtraIsland.Components;
 
 // TODO: 调试结束后移除此组件
 [ComponentInfo(
-    "D61B565D-5BC9-9999-6666-2EDB22F9756E",
-    "调试 · 歌词",
+    "D61B565D-5BC9-9999-8888-2EDB22F9756E",
+    "调试 · 副歌词",
     PackIconKind.Bug,
-    "测试歌词岛接口封装类LyricsIslandHandler()"
+    "继续测试歌词岛封装类LyricsIslandHandler()"
 )]
-public partial class DebugLyricsHandler {
-    public DebugLyricsHandler() {
+public partial class DebugSubLyricsHandler {
+    public DebugSubLyricsHandler() {
         if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
             _handler = new LycheeLyricsProvider();
         } else {
-            GlobalConstants.Handlers.LyricsIsland ??= new LyricsIslandHandler();
+            GlobalConstants.Handlers.LyricsIsland ??= new LyricsIslandLyricsProvider();
             _handler = GlobalConstants.Handlers.LyricsIsland;   
         }
         InitializeComponent();
@@ -34,7 +34,7 @@ public partial class DebugLyricsHandler {
     void UpdateLyrics() {
         this.BeginInvoke(() => {
             _timeCounter = 10;
-            _animator.Update(_handler.Lyrics, isForced:true);
+            _animator.Update(_handler.SubLyrics, isForced:true);
         });
     }
 
