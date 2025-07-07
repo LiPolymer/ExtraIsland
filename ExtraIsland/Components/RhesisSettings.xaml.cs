@@ -32,6 +32,11 @@ public partial class RhesisSettings {
         RhesisDataSource.Saint,
         RhesisDataSource.SaintJinrishici
     ];
+    
+    public List<RhesisConfig.AttributesDisplayRule> AttributesRules { get; } = [
+        RhesisConfig.AttributesDisplayRule.Sametime,
+        RhesisConfig.AttributesDisplayRule.Separate
+    ];
 }
 
 public class LimitIntToArgConverter : IValueConverter {

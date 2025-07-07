@@ -117,13 +117,13 @@ public partial class Rhesis {
                 _authorLabel.Content = Author;
                 _mainLabelAnimator.Update(Showing,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
                 if (Settings.IsAuthorShowEnabled | Settings.IsTitleShowEnabled) {
-                    if (Settings.AttributesShowingInterval == 0) {
+                    if (Settings.AttributesRule == RhesisConfig.AttributesDisplayRule.Sametime) {
                         SubLabel.Visibility =  Visibility.Visible;
                         _subLabelAnimator.Update(subObj,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
                     } else {
                         SubLabel.Visibility =  Visibility.Collapsed;
                         if (Settings.AttributesShowingInterval > (Settings.UpdateTimeGapSeconds - 1)) {
-                            Settings.AttributesShowingInterval = 0;
+                            Settings.AttributesShowingInterval = 3;
                         } else { 
                             new Thread(() => {
                                 Thread.Sleep(Settings.AttributesShowingInterval * 1000);

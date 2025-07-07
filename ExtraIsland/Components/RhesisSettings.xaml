@@ -15,6 +15,7 @@
         <converters:DoubleToStringConverter x:Key="DoubleToStringConverter" />
         <converters:IntToStringConverter x:Key="IntToStringConverter" />
         <converters:HitokotoVisibilityConverter x:Key="HitokotoVisibilityConverter"/>
+        <converters:SeparateAttributesDisplayVisibilityConverter x:Key="AttributesDisplayVisibilityConverter"/>
         <local:LimitIntToArgConverter x:Key="LimitIntToArgConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </ci:ComponentBase.Resources>
@@ -105,6 +106,26 @@
                     </StackPanel>
                 </ci:SettingsCard.Switcher>
             </ci:SettingsCard>
+            <ci:SettingsCard IconGlyph="TagAdd" Header="额外信息展示方法"
+                             Description="选择如何展示额外信息,没有则不展示">
+                <ci:SettingsCard.Switcher>
+                    <Grid>
+                        <ComboBox
+                            MinWidth="20"
+                            SelectedItem="{Binding Settings.AttributesRule}"
+                            ItemsSource="{Binding AttributesRules}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <DataTemplate.Resources>
+                                        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+                                    </DataTemplate.Resources>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+                </ci:SettingsCard.Switcher>
+            </ci:SettingsCard>
             <ci:SettingsCard IconGlyph="PeopleCheck"
                              Header="展示作者"
                              Visibility="{Binding MainConfig.IsExperimentalModeActivated, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
@@ -116,7 +137,8 @@
                              Description="将出处作为额外信息展示,未获取到则不显示"
                              IsOn="{Binding Settings.IsTitleShowEnabled, Mode=TwoWay}"/>
             <ci:SettingsCard IconGlyph="StopwatchAdd" Header="额外信息展示时长"
-                             Description="为0时将与句子同时展示,否则在切换句子前单独展示,该项不得大于切换间隔-1">
+                             Visibility="{Binding Settings.AttributesRule, Converter={StaticResource AttributesDisplayVisibilityConverter}, Mode=OneWay}"
+                             Description="请注意该项不能大于切换间隔-1">
                 <ci:SettingsCard.Switcher>
                     <Grid>
                         <StackPanel Orientation="Horizontal">

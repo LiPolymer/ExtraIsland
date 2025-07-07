@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
+using System.Windows;
 using ClassIsland.Core.Controls;
 using ClassIsland.Core.Controls.CommonDialog;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -9,7 +11,15 @@ namespace ExtraIsland.Components;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public class RhesisConfig : ObservableObject {
-    public RhesisDataSource DataSource { get; set; } = RhesisDataSource.SaintJinrishici;
+    RhesisDataSource _dataSource = RhesisDataSource.SaintJinrishici;
+    public RhesisDataSource DataSource { 
+        get => _dataSource;
+        set {
+            if (_dataSource == value) return;
+            _dataSource = value;
+            OnPropertyChanged();
+        } 
+    }
 
     public string IgnoreListString { get; set; } = string.Empty;
     
@@ -46,7 +56,7 @@ public class RhesisConfig : ObservableObject {
     public bool IsAuthorShowEnabled { get; set; }
     public bool IsTitleShowEnabled { get; set; }
 
-    int _attributesShowingInterval;
+    int _attributesShowingInterval = 3;
     public int AttributesShowingInterval {
         get => _attributesShowingInterval;
         set {
@@ -54,5 +64,22 @@ public class RhesisConfig : ObservableObject {
             _attributesShowingInterval = value;
             OnPropertyChanged();
         }
+    }
+
+    AttributesDisplayRule _attributesRule = AttributesDisplayRule.Sametime;
+    public AttributesDisplayRule AttributesRule {
+        get => _attributesRule;
+        set {
+            if (value == _attributesRule) return;
+            _attributesRule = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public enum AttributesDisplayRule {
+        [Description("同时展示")]
+        Sametime,
+        [Description("分开展示")]
+        Separate
     }
 }

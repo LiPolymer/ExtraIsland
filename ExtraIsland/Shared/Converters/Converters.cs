@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
+using ExtraIsland.Components;
 
 namespace ExtraIsland.Shared.Converters;
 
@@ -117,6 +118,21 @@ public class HitokotoVisibilityConverter : IValueConverter {
         return (RhesisDataSource)value! switch {
             RhesisDataSource.All => Visibility.Visible,
             RhesisDataSource.Hitokoto => Visibility.Visible,
+            _ => Visibility.Collapsed
+        };
+    }
+
+    public object ConvertBack(object? value,Type targetType,object? parameter,
+        System.Globalization.CultureInfo culture) {
+        throw new NotSupportedException();
+    }
+}
+
+public class SeparateAttributesDisplayVisibilityConverter : IValueConverter {
+    public object Convert(object? value,Type targetType,object? parameter,
+        System.Globalization.CultureInfo culture) {
+        return (RhesisConfig.AttributesDisplayRule)value! switch {
+            RhesisConfig.AttributesDisplayRule.Separate => Visibility.Visible,
             _ => Visibility.Collapsed
         };
     }
