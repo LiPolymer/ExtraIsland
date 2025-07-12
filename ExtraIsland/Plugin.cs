@@ -33,7 +33,6 @@ public class Plugin : PluginBase {
     public override void Initialize(HostBuilderContext context, IServiceCollection services) {
         ChainedTerminal ct = new ChainedTerminal("&aExtraIsland");
         ConsoleColor defaultColor = Console.ForegroundColor;
-        //TODO: 重构早加载阶段终端处理器
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("[ExIsLand][Splash]-------------------------------------------------------------------\r\n" 
                           + GlobalConstants.Assets.AsciiLogo
