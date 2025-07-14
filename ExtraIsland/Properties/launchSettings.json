@@ -1,10 +1,10 @@
 {
   "profiles": {
-    "ClasssIsland 插件": {
+    "ClassIsland 插件": {
       "commandName": "Executable",
-      "executablePath": "$(ClassIsland_DebugBinaryFile)",
+      "executablePath": "C:\\Users\\LithiumFish\\source\\repos\\ClassIsland\\ClassIsland.Desktop\\bin\\Debug\\net8.0-windows7\\ClassIsland.Desktop.exe",
       "commandLineArgs": "-epp $(TargetDir)",
-      "workingDirectory": "$(ClassIsland_DebugBinaryDirectory)"
+      "workingDirectory": "C:\\Users\\LithiumFish\\source\\repos\\ClassIsland\\ClassIsland.Desktop\\bin\\Debug\\net8.0-windows7\\"
     }
   }
 }

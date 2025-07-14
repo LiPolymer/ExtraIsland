@@ -12,7 +12,7 @@ public static class GlobalConstants {
         public static MainConfigHandler? MainConfig { get; set; }
         public static LyricsIslandLyricsProvider? LyricsIsland { get; set; }
         
-        public static MainWindowHandler? MainWindow { get; set; }
+        //public static MainWindowHandler? MainWindow { get; set; }
     }
 
     public static class Triggers {

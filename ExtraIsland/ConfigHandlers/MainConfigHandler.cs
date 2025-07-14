@@ -117,7 +117,7 @@ public class MainConfigData : ObservableObject {
                 OnPropertyChanged();
             }
         }
-
+/*
         MainWindowHandler.AccentHelper.AccentState _accentState = MainWindowHandler.AccentHelper.AccentState.AccentEnableBlurbehind;
         public MainWindowHandler.AccentHelper.AccentState AccentState {
             get => _accentState;
@@ -127,7 +127,7 @@ public class MainConfigData : ObservableObject {
                 OnPropertyChanged();
                 GlobalConstants.Handlers.MainWindow?.UpdateAccent(value);
             }
-        }
+        }*/
     }
     
     public TinyFeaturesConfig TinyFeatures { get; set; } = new TinyFeaturesConfig();

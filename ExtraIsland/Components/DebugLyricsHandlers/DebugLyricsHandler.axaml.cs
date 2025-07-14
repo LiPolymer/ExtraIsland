@@ -1,7 +1,6 @@
-﻿using ClassIsland.Core.Attributes;
+﻿using ClassIsland.Core.Abstractions.Controls;
+using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
-using MahApps.Metro.Controls;
-using MaterialDesignThemes.Wpf;
 
 namespace ExtraIsland.Components;
 
@@ -9,10 +8,10 @@ namespace ExtraIsland.Components;
 [ComponentInfo(
     "D61B565D-5BC9-9999-6666-2EDB22F9756E",
     "调试 · 歌词",
-    PackIconKind.Bug,
+    "\ue31c",
     "测试歌词岛接口封装类LyricsIslandHandler()"
 )]
-public partial class DebugLyricsHandler {
+public partial class DebugLyricsHandler: ComponentBase {
     public DebugLyricsHandler() {
         if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
             _handler = new LycheeLyricsProvider();
@@ -22,23 +21,25 @@ public partial class DebugLyricsHandler {
         }
         InitializeComponent();
         _handler.OnLyricsChanged += UpdateLyrics;
-        _animator = new Animators.ClockTransformControlAnimator(LyricsLabel,-0.3);
+        //_animator = new Animators.ClockTransformControlAnimator(LyricsLabel,-0.3);
         new Thread(CounterDaemon).Start();
     }
 
     readonly ILyricsProvider _handler;
-    readonly Animators.ClockTransformControlAnimator _animator;
+    //readonly Animators.ClockTransformControlAnimator _animator;
 
     int _timeCounter = 10;
     
     void UpdateLyrics() {
+        /*
         this.BeginInvoke(() => {
             _timeCounter = 10;
             _animator.Update(_handler.Lyrics, isForced:true);
-        });
+        });*/
     }
 
     void CounterDaemon() {
+        /*
         while (true) {
             _timeCounter -= 1;
             if (_timeCounter <= 0 & _animator.TargetContent != string.Empty) {
@@ -48,6 +49,7 @@ public partial class DebugLyricsHandler {
             }
             Thread.Sleep(1000);
         }
+        */
         // ReSharper disable once FunctionNeverReturns
     }
 }

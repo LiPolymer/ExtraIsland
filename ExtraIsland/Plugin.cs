@@ -3,14 +3,14 @@ using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Extensions.Registry;
 using ClassIsland.Shared;
-using ExtraIsland.AuthorizeProvider;
-using ExtraIsland.Automations;
+//using ExtraIsland.AuthorizeProvider;
+//using ExtraIsland.Automations;
 using ExtraIsland.Components;
 using ExtraIsland.ConfigHandlers;
-using ExtraIsland.LifeMode.Components;
-using ExtraIsland.SettingsPages;
+//using ExtraIsland.LifeMode.Components;
+//using ExtraIsland.SettingsPages;
 using ExtraIsland.Shared;
-using ExtraIsland.TinyFeatures;
+//using ExtraIsland.TinyFeatures;
 using LycheeLib.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -60,10 +60,10 @@ public class Plugin : PluginBase {
                     o.AutoSessionTracking = true;
                 });
             
-                AppBase.Current.DispatcherUnhandledException += (_,e) => {
-                    if (e.Exception.StackTrace == null) SentrySdk.CaptureException(e.Exception);
-                    else if (e.Exception.StackTrace.Contains("ExtraIsland")) SentrySdk.CaptureException(e.Exception);
-                };
+                //AppBase.Current.DispatcherUnhandledException += (_,e) => {
+                //    if (e.Exception.StackTrace == null) SentrySdk.CaptureException(e.Exception);
+                //    else if (e.Exception.StackTrace.Contains("ExtraIsland")) SentrySdk.CaptureException(e.Exception);
+                //};
                 #endif
         }
         cct.WriteLine("正在载入其余配置...");
@@ -71,35 +71,35 @@ public class Plugin : PluginBase {
         ct.WriteLine("正在注册ClassIsland要素...");
         //Services
         services.AddHostedService<ServicesFetcherService>();
-        services.AddHostedService<Register>();
+        //services.AddHostedService<Register>();
         //Components
-        services.AddComponent<BetterCountdown,BetterCountdownSettings>();
-        services.AddComponent<FluentClock,FluentClockSettings>();
-        services.AddComponent<Rhesis,RhesisSettings>();
-        services.AddComponent<OnDuty,OnDutySettings>();
-        services.AddComponent<LiveActivity,LiveActivitySettings>();
-        services.AddComponent<DualLineContainer>();
+        //services.AddComponent<BetterCountdown,BetterCountdownSettings>();
+        //services.AddComponent<FluentClock,FluentClockSettings>();
+        //services.AddComponent<Rhesis,RhesisSettings>();
+        //services.AddComponent<OnDuty,OnDutySettings>();
+        //services.AddComponent<LiveActivity,LiveActivitySettings>();
+        //services.AddComponent<DualLineContainer>();
         //SettingsPages
-        services.AddSettingsPage<MainSettingsPage>();
-        services.AddSettingsPage<DutySettingsPage>();
-        services.AddSettingsPage<TinyFeaturesSettingsPage>();
+        //services.AddSettingsPage<MainSettingsPage>();
+        //services.AddSettingsPage<DutySettingsPage>();
+        //services.AddSettingsPage<TinyFeaturesSettingsPage>();
         //Actions
-        Register.Claim(services);
+        //Register.Claim(services);
         //Authorizer
-        services.AddAuthorizeProvider<UsbDriveAuthorizer>();
+        //services.AddAuthorizeProvider<UsbDriveAuthorizer>();
         //LifeMode
         if (GlobalConstants.Handlers.MainConfig.Data.IsLifeModeActivated) {
             ct.WriteLine("&a生活模式已启用!");
-            services.AddComponent<Sleepy,SleepySettings>();
+            //services.AddComponent<Sleepy,SleepySettings>();
         }
         if (GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) {
-            services.AddComponent<ActionButton,ActionButtonSettings>();
+            //services.AddComponent<ActionButton,ActionButtonSettings>();
         }
         if (GlobalConstants.Handlers.MainConfig.Data.IsExperimentalModeActivated) {
             ct.WriteLine("&9实验模式已启用! &7若出现Bug,&c请勿报告&7!",Terminal.MessageType.Warn);
             Console.ForegroundColor = defaultColor;
-            services.AddComponent<DebugLyricsHandler>();
-            services.AddComponent<DebugSubLyricsHandler>();
+            //services.AddComponent<DebugLyricsHandler>();
+            //services.AddComponent<DebugSubLyricsHandler>();
         }
         #if DEBUG
         ct.WriteLine("&d这是一个调试构建! 若出现Bug,请勿报告!",Terminal.MessageType.Debug);
@@ -115,11 +115,11 @@ public class Plugin : PluginBase {
             };
         }
         
-        GlobalConstants.Triggers.OnLoaded += JuniorGuide.Trigger;
+        //GlobalConstants.Triggers.OnLoaded += JuniorGuide.Trigger;
         AppBase.Current.AppStarted += (_,_) => {
-            GlobalConstants.Handlers.MainWindow = new MainWindowHandler();
-            if (!GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) return;
-            GlobalConstants.Handlers.MainWindow!.InitBar(accentState: GlobalConstants.Handlers.MainConfig.Data.Dock.AccentState);
+            //GlobalConstants.Handlers.MainWindow = new MainWindowHandler();
+            //if (!GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) return;
+            //GlobalConstants.Handlers.MainWindow!.InitBar(accentState: GlobalConstants.Handlers.MainConfig.Data.Dock.AccentState);
         };
         AppBase.Current.AppStopping += (_,_) => {
             if (GlobalConstants.Handlers.LyricsIsland == null) return;
