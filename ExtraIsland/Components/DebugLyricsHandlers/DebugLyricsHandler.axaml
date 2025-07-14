@@ -4,6 +4,8 @@
                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                         xmlns:ci="http://classisland.tech/schemas/xaml/core"
                         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-                        x:Class="ExtraIsland.Components.DebugLyricsHandler">
-    
+                        x:Class="ExtraIsland.Components.DebugLyricsHandler"
+                        Loaded="Control_OnLoaded"
+                        Unloaded="Control_OnUnloaded">
+    <Label x:Name="Label" VerticalAlignment="Center"/>
 </ci:ComponentBase>

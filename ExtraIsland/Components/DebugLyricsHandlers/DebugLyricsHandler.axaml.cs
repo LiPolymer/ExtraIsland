@@ -1,4 +1,6 @@
-﻿using ClassIsland.Core.Abstractions.Controls;
+﻿using Avalonia.Interactivity;
+using Avalonia.Threading;
+using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
 
@@ -22,7 +24,6 @@ public partial class DebugLyricsHandler: ComponentBase {
         InitializeComponent();
         _handler.OnLyricsChanged += UpdateLyrics;
         //_animator = new Animators.ClockTransformControlAnimator(LyricsLabel,-0.3);
-        new Thread(CounterDaemon).Start();
     }
 
     readonly ILyricsProvider _handler;
@@ -32,24 +33,38 @@ public partial class DebugLyricsHandler: ComponentBase {
     
     void UpdateLyrics() {
         /*
+         //Legacy Code
         this.BeginInvoke(() => {
             _timeCounter = 10;
             _animator.Update(_handler.Lyrics, isForced:true);
         });*/
+        
+        Dispatcher.UIThread.InvokeAsync(() => {
+            _timeCounter = 10;
+            _nowDisplaying = _handler.Lyrics;
+            Label.Content = _nowDisplaying;
+        });
     }
 
+    string _nowDisplaying = string.Empty;
     void CounterDaemon() {
-        /*
-        while (true) {
+        while (_daemonEnabled) {
             _timeCounter -= 1;
-            if (_timeCounter <= 0 & _animator.TargetContent != string.Empty) {
-                this.BeginInvoke(() => {
-                    _animator.Update(string.Empty);
+            if (_timeCounter <= 0 & _nowDisplaying != string.Empty) {
+                _nowDisplaying = string.Empty;
+                Dispatcher.UIThread.InvokeAsync(() => {
+                    Label.Content = _nowDisplaying;
                 });
             }
             Thread.Sleep(1000);
         }
-        */
-        // ReSharper disable once FunctionNeverReturns
+    }
+    bool _daemonEnabled;
+    void Control_OnLoaded(object? sender,RoutedEventArgs e) {
+        _daemonEnabled = true;
+        new Thread(CounterDaemon).Start();
+    }
+    void Control_OnUnloaded(object? sender,RoutedEventArgs e) {
+        _daemonEnabled = false;
     }
 }
