@@ -145,7 +145,129 @@ public static class Animators {
         }
     }
 
-    public class SeparatorControlAnimator {
+    public class SeparatorVisualAnimator {
+        // ReSharper disable once ConvertToPrimaryConstructor
+        public SeparatorVisualAnimator(Visual target) {
+            _target = target;
+            _fadeOutAnimation = new Animation {
+                Children = {
+                    new KeyFrame {
+                        Cue = new Cue(0),
+                        Setters = {
+                            new Setter(Visual.OpacityProperty, 1.0)
+                        }
+                    },
+                    new KeyFrame {
+                        Cue = new Cue(1),
+                        Setters = {
+                            new Setter(Visual.OpacityProperty, 0.0)
+                        }
+                    }
+                },
+                Duration = TimeSpan.FromMilliseconds(125),
+                FillMode = FillMode.Forward,
+                Easing = new QuadraticEaseIn()
+            };
+            _fadeInAnimation = new Animation {
+                Children = {
+                    new KeyFrame {
+                        Cue = new Cue(0),
+                        Setters = {
+                            new Setter(Visual.OpacityProperty, 0.0)
+                        }
+                    },
+                    new KeyFrame {
+                        Cue = new Cue(1),
+                        Setters = {
+                            new Setter(Visual.OpacityProperty, 1.0)
+                        }
+                    }
+                },
+                Duration = TimeSpan.FromMilliseconds(125),
+                FillMode = FillMode.Forward,
+                Easing = new QuadraticEaseOut()
+            };
+        }
+        readonly Visual _target;
+        readonly Animation _fadeOutAnimation;
+        readonly Animation _fadeInAnimation;
+        string _targetContent = string.Empty;
         
+        public void Update(bool isInvisible = false) {
+            Dispatcher.UIThread.InvokeAsync(() => {
+                if (isInvisible) {
+                    _fadeOutAnimation.RunAsync(_target);
+                } else {
+                    _fadeInAnimation.RunAsync(_target);
+                }
+            });
+        }
+    }
+
+    public class EmphasizerVisualAnimator {
+        // ReSharper disable once ConvertToPrimaryConstructor
+        public EmphasizerVisualAnimator(Visual target, double timeMultiple = 1) {
+            _target = target;
+            _fadeOutAnimation = new Animation {
+                Children = {
+                    new KeyFrame {
+                        Cue = new Cue(0),
+                        Setters = {
+                            new Setter(Visual.OpacityProperty, 1.0)
+                        }
+                    },
+                    new KeyFrame {
+                        Cue = new Cue(1),
+                        Setters = {
+                            new Setter(Visual.OpacityProperty, 0.0)
+                        }
+                    }
+                },
+                Duration = TimeSpan.FromMilliseconds(125 * timeMultiple),
+                FillMode = FillMode.Forward,
+                Easing = new SineEaseIn()
+            };
+            _fadeInAnimation = new Animation {
+                Children = {
+                    new KeyFrame {
+                        Cue = new Cue(0),
+                        Setters = {
+                            new Setter(Visual.OpacityProperty, 0.0)
+                        }
+                    },
+                    new KeyFrame {
+                        Cue = new Cue(1),
+                        Setters = {
+                            new Setter(Visual.OpacityProperty, 1.0)
+                        }
+                    }
+                },
+                Duration = TimeSpan.FromMilliseconds(125 * timeMultiple),
+                FillMode = FillMode.Forward,
+                Easing = new SineEaseOut()
+            };
+        }
+        readonly Visual _target;
+        readonly Animation _fadeOutAnimation;
+        readonly Animation _fadeInAnimation;
+        string _targetContent = string.Empty;
+
+        public void Update(bool? stat = null) {
+            Dispatcher.UIThread.InvokeAsync(async () => {
+                switch (stat) {
+                    case null:
+                        await _fadeOutAnimation.RunAsync(_target);
+                        await Task.Delay(TimeSpan.FromSeconds(3));
+                        await _fadeInAnimation.RunAsync(_target);
+                        break;
+                    case true:
+                        await _fadeInAnimation.RunAsync(_target);
+                        break;
+                    case false:
+                        await _fadeOutAnimation.RunAsync(_target);
+                        break;
+                }
+            });
+        }
     }
 }
