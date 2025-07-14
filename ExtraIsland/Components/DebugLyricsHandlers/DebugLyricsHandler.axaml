@@ -7,5 +7,9 @@
                         x:Class="ExtraIsland.Components.DebugLyricsHandler"
                         Loaded="Control_OnLoaded"
                         Unloaded="Control_OnUnloaded">
-    <Label x:Name="Label" VerticalAlignment="Center"/>
+    <Label x:Name="Label" VerticalAlignment="Center">
+        <Label.RenderTransform>
+            <TranslateTransform/>
+        </Label.RenderTransform>
+    </Label>
 </ci:ComponentBase>

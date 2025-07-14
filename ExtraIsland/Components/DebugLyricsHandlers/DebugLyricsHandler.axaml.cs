@@ -10,9 +10,11 @@ namespace ExtraIsland.Components;
 [ComponentInfo(
     "D61B565D-5BC9-9999-6666-2EDB22F9756E",
     "调试 · 歌词",
-    "\ue31c",
+    "\uEBCA",
     "测试歌词岛接口封装类LyricsIslandHandler()"
 )]
+
+// ReSharper disable once ClassNeverInstantiated.Global
 public partial class DebugLyricsHandler: ComponentBase {
     public DebugLyricsHandler() {
         if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
@@ -23,27 +25,18 @@ public partial class DebugLyricsHandler: ComponentBase {
         }
         InitializeComponent();
         _handler.OnLyricsChanged += UpdateLyrics;
-        //_animator = new Animators.ClockTransformControlAnimator(LyricsLabel,-0.3);
+        _animator = new Animators.GenericContentSwapAnimator(Label,-0.5);
     }
 
     readonly ILyricsProvider _handler;
-    //readonly Animators.ClockTransformControlAnimator _animator;
+    readonly Animators.GenericContentSwapAnimator _animator;
 
     int _timeCounter = 10;
     
     void UpdateLyrics() {
-        /*
-         //Legacy Code
-        this.BeginInvoke(() => {
-            _timeCounter = 10;
-            _animator.Update(_handler.Lyrics, isForced:true);
-        });*/
-        
-        Dispatcher.UIThread.InvokeAsync(() => {
-            _timeCounter = 10;
-            _nowDisplaying = _handler.Lyrics;
-            Label.Content = _nowDisplaying;
-        });
+        _timeCounter = 10;
+        _nowDisplaying = _handler.Lyrics;
+        _animator.Update(_nowDisplaying,true,true,true);
     }
 
     string _nowDisplaying = string.Empty;
@@ -52,9 +45,7 @@ public partial class DebugLyricsHandler: ComponentBase {
             _timeCounter -= 1;
             if (_timeCounter <= 0 & _nowDisplaying != string.Empty) {
                 _nowDisplaying = string.Empty;
-                Dispatcher.UIThread.InvokeAsync(() => {
-                    Label.Content = _nowDisplaying;
-                });
+                _animator.Update(_nowDisplaying);
             }
             Thread.Sleep(1000);
         }
