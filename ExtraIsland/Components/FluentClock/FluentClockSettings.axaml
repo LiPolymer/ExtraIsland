@@ -1,0 +1,64 @@
+﻿<ci:ComponentBase xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ci="http://classisland.tech/schemas/xaml/core"
+             xmlns:components="clr-namespace:ExtraIsland.Components"
+             xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ExtraIsland.Components.FluentClockSettings"
+             x:TypeArguments="components:FluentClockConfig">
+        <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=components:FluentClockSettings}}">
+        <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+        <!-- ReSharper disable once Xaml.StyleClassNotFound -->
+        <StackPanel Classes="settings-container animated-intro" Margin="0">
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xF361;}"
+                                       Header="精确到秒"
+                                       Description="启用后,将显示秒数,并关闭分隔符闪动">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsAccurate, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE095;}"
+                                       Header="启用翻页动画"
+                                       Description="禁用后,动画样式将被全部替换为微微闪烁">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsSwapAnimationEnabled, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEB94;}"
+                                       Header="专注模式"
+                                       Description="启用后,秒数动画将被替换为微微闪烁,避免频繁的移动分散注意力">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsEnabled="{Binding Settings.IsSwapAnimationEnabled, Mode=OneWay}"
+                                  IsChecked="{Binding Settings.IsFocusedMode, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4D4;}"
+                                       Header="使用系统时间"
+                                       Description="启用后,将直接使用系统时间,无视ClassIsland设置">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsSystemTime, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE02B;}"
+                                       Header="启用整点强调特效"
+                                       Description="启用后,整点时将显示一个强调特效">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsOClockEmp, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xF273;}"
+                                       Header="秒数小字号"
+                                       Description="启用后,秒数将使用较小字体展示">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsSecondsSmall, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <Label HorizontalAlignment="Center" 
+                   Foreground="{DynamicResource MaterialDesignBodyLight}">
+                Added by ExtraIsland
+            </Label>
+        </StackPanel>
+    </ScrollViewer>
+</ci:ComponentBase>

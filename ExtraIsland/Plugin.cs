@@ -75,6 +75,7 @@ public class Plugin : PluginBase {
         //Components
         //services.AddComponent<BetterCountdown,BetterCountdownSettings>();
         //services.AddComponent<FluentClock,FluentClockSettings>();
+        services.AddComponent<FluentClock,FluentClockSettings>();
         //services.AddComponent<Rhesis,RhesisSettings>();
         //services.AddComponent<OnDuty,OnDutySettings>();
         //services.AddComponent<LiveActivity,LiveActivitySettings>();

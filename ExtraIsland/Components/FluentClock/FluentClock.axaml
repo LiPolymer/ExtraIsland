@@ -1,0 +1,92 @@
+﻿<ci:ComponentBase xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  xmlns:components="clr-namespace:ExtraIsland.Components"
+                  mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+                  x:Class="ExtraIsland.Components.FluentClock"
+                  x:TypeArguments="components:FluentClockConfig">
+     <ci:ComponentBase.Resources>
+        <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter"/>
+    </ci:ComponentBase.Resources>
+    <Grid Margin="0" ClipToBounds="True">
+        <Grid x:Name="EmpBack" Opacity="0">
+            <Border Background="{DynamicResource PrimaryHueMidBrush}"
+                    ClipToBounds="True"
+                    BorderThickness="1"
+                    Padding="0"
+                    Opacity="0.3"
+                    VerticalAlignment="Center"
+                    CornerRadius="{Binding ActualHeight, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}">
+                <Label x:Name="Placeholder1"
+                       Margin="6,-4"
+                       Content="▯"
+                       Opacity="0"
+                       FontSize="{DynamicResource MainWindowEmphasizedFontSize}"/>
+            </Border>
+            <Border ClipToBounds="True"
+                    BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                    BorderThickness="1"
+                    Padding="0 0"
+                    VerticalAlignment="Center"
+                    CornerRadius="{Binding ActualHeight, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}">
+                <Label x:Name="Placeholder2"
+                       Margin="6,-4"
+                       Content="▯"
+                       Opacity="0"
+                       FontSize="{DynamicResource MainWindowEmphasizedFontSize}"/>
+            </Border>
+        </Grid>
+        <StackPanel
+            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=components:FluentClock}}"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Label
+                Content="--"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="{DynamicResource MainWindowEmphasizedFontSize}"
+                Padding="0,2,2,2"
+                x:Name="LHours">
+                <Label.RenderTransform>
+                    <TranslateTransform />
+                </Label.RenderTransform>
+            </Label>
+            <Label
+                VerticalAlignment="Center"
+                FontSize="{DynamicResource MainWindowLargeFontSize}"
+                Padding="0,0,0,3"
+                Content=":"
+                x:Name="SMins" />
+            <Label
+                Content="--"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Padding="2"
+                FontSize="{DynamicResource MainWindowEmphasizedFontSize}"
+                x:Name="LMins">
+                <Label.RenderTransform>
+                    <TranslateTransform />
+                </Label.RenderTransform>
+            </Label>
+            <Label
+                VerticalAlignment="Center"
+                FontSize="{DynamicResource MainWindowLargeFontSize}"
+                Content=":"
+                Padding="0,0,0,3"
+                x:Name="SSecs" />
+            <Label
+                Content="--"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Padding="2,2,0,2"
+                FontSize="{DynamicResource MainWindowEmphasizedFontSize}"
+                x:Name="LSecs">
+                <Label.RenderTransform>
+                    <TranslateTransform/>
+                </Label.RenderTransform>
+            </Label>
+        </StackPanel>
+    </Grid>   
+</ci:ComponentBase>
