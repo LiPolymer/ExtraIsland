@@ -8,9 +8,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ClassIsland.Core" Version="1.7.102" />
-		<PackageReference Include="ClassIsland.PluginSdk" Version="1.7.102" />
-		<PackageReference Include="ClassIsland.Shared" Version="1.7.102" />
+        <PackageReference Include="ClassIsland.Core" Version="1.7.102">
+            <Private>false</Private>
+            <ExcludeAssets>runtime; native</ExcludeAssets>
+        </PackageReference>
+        <PackageReference Include="ClassIsland.PluginSdk" Version="1.7.102">
+            <Private>false</Private>
+            <ExcludeAssets>runtime; native</ExcludeAssets>
+        </PackageReference>
+        <PackageReference Include="ClassIsland.Shared" Version="1.7.102">
+            <Private>false</Private>
+            <ExcludeAssets>runtime; native</ExcludeAssets>
+        </PackageReference>
 		<PackageReference Include="LycheeLib.Interface" Version="1.0.0" />
 		<PackageReference Include="Sentry" Version="5.5.0" />
 		<PackageReference Include="System.Management" Version="10.0.0-preview.3.25171.5" />
