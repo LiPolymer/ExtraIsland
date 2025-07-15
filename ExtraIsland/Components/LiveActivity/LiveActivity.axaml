@@ -1,0 +1,66 @@
+﻿<ci:ComponentBase x:Class="ExtraIsland.Components.LiveActivity"
+                  x:TypeArguments="local:LiveActivityConfig"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:ExtraIsland.Components"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  mc:Ignorable="d"
+                  ClipToBounds="False"
+                  Loaded="LiveActivity_OnLoaded"
+                  Unloaded="LiveActivity_OnUnloaded"
+                  d:DesignHeight="300" d:DesignWidth="300">
+    <ci:ComponentBase.Resources>
+        <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter"/>
+    </ci:ComponentBase.Resources>
+    <Border x:Name="CardChip"
+            ClipToBounds="True"
+            CornerRadius="{Binding Bounds.Height, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Padding="12,4,12,2"
+            Background="Gray">
+        <Grid>
+            <StackPanel x:Name="ActivityStack" 
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                <!--todo:改成透明背景-->
+                <ci:FluentIcon x:Name="Icon"
+                               Glyph="&#xE453;" 
+                               Foreground="Gray"
+                               VerticalAlignment="Center"
+                               Margin="-4,0,0,4"
+                               FontSize="20"/>
+                <Label x:Name="CurrentLabel" 
+                       ClipToBounds="True"
+                       Content="---" 
+                       Margin="0,0,-4,0"
+                       VerticalAlignment="Center">
+                    <Label.RenderTransform>
+                        <TranslateTransform/>
+                    </Label.RenderTransform>
+                </Label>
+            </StackPanel>
+            <StackPanel x:Name="LyricsStack" 
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Opacity="0"
+                        ClipToBounds="True">
+                <ci:FluentIcon Glyph="&#xEBC7;" 
+                               Foreground="DarkTurquoise"
+                               VerticalAlignment="Center"
+                               Margin="-4,0,0,4"
+                               FontSize="20"/>
+                <Label x:Name="LyricsLabel" 
+                       Content="---" 
+                       Margin="0,0,-4,0"
+                       VerticalAlignment="Center">
+                    <Label.RenderTransform>
+                        <TranslateTransform/>
+                    </Label.RenderTransform>
+                </Label>
+            </StackPanel>
+        </Grid>
+    </Border>
+</ci:ComponentBase>

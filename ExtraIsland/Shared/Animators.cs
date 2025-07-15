@@ -261,10 +261,10 @@ public static class Animators {
                         await _fadeOutAnimation.RunAsync(_target);
                         break;
                     case true:
-                        await _fadeInAnimation.RunAsync(_target);
+                        await _fadeOutAnimation.RunAsync(_target);
                         break;
                     case false:
-                        await _fadeOutAnimation.RunAsync(_target);
+                        await _fadeInAnimation.RunAsync(_target);
                         break;
                 }
             });

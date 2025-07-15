@@ -1,0 +1,176 @@
+﻿<ci:ComponentBase x:Class="ExtraIsland.Components.LiveActivitySettings"
+                  x:TypeArguments="local:LiveActivityConfig"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:ExtraIsland.Components"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                  xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                  mc:Ignorable="d"
+                  d:DesignHeight="300" d:DesignWidth="300">
+    <ScrollViewer
+        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LiveActivitySettings}}">
+        <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+        <StackPanel Classes="settings-container animated-intro">
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE093;}"
+                                       Header="左右间距"
+                                       Description="启用后,对应侧的元素边界将收缩至适合圆角">
+                <controls:SettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="(左"
+                               Foreground="Gray" />
+                        <ToggleButton Margin="0,0,5,0"
+                                      IsChecked="{Binding Settings.IsLeftNegativeMargin, Mode=TwoWay}">
+                        </ToggleButton>
+                        <Label Content="(O --)"
+                               Foreground="Gray" />
+                        <ToggleButton Margin="5,0,0,0"
+                                      IsChecked="{Binding Settings.IsRightNegativeMargin, Mode=TwoWay}" />
+                        <Label Content="右)"
+                               Foreground="Gray" />
+                    </StackPanel>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE051;}"
+                                       Header="启用动画"
+                                       Description="禁用后,将不再播放动画,对低性能设备友好!">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsAnimationEnabled, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xF196;}"
+                                       Header="替换规则"
+                                       Description="可以在此处利用正则表达式匹配并替换展示的标题">
+                <controls:SettingsExpander.Footer>
+                    <ci:FluentIcon Glyph="&#xF191;"/>
+                </controls:SettingsExpander.Footer>
+                                    <StackPanel Orientation="Vertical">
+                        <DataGrid Margin="12,6,70,6"
+                                  IsReadOnly="False"
+                                  AutoGenerateColumns="False"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
+                                  MaxHeight="240"
+                                  ItemsSource="{Binding Settings.ReplacementsList, Mode=TwoWay}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="匹配正则" Width="Auto" MinWidth="90" MaxWidth="290" Binding="{Binding Regex}" />
+                                <DataGridTextColumn Header="替换为" Width="Auto" MinWidth="90" MaxWidth="290" Binding="{Binding Replacement}" />
+                                <DataGridTemplateColumn Header="操作" Width="60">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Width="20"
+                                                    Height="20"
+                                                    Margin="0"
+                                                    Padding="0"
+                                                    Background="Transparent"
+                                                    BorderBrush="Transparent"
+                                                    Click="DeleteButton_Click">
+                                                <ci:FluentIcon Glyph="&#xE61C;" Foreground="Red" />
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Orientation="Horizontal" Margin="12,0,12,6">
+                            <Button HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                        Width="30"
+                                        Height="30"
+                                        Padding="0"
+                                        Background="{DynamicResource MaterialDesignDivider}"
+                                        BorderBrush="Transparent"
+                                        Click="ButtonBase_OnClick">
+                                <ci:FluentIcon Glyph="&#xE013;" Foreground="LightGreen" />
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+            </controls:SettingsExpander>
+            <Border x:Name="ConflictHintContainer"
+                    Background="#1500F0F0"
+                    Margin="0 0 0 5"
+                    CornerRadius="4">
+                    <StackPanel Orientation="Horizontal">
+                        <ci:FluentIcon Glyph="&#xE9E3;"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,0,3,0" />
+                        <TextBlock VerticalAlignment="Center">
+                            <Run>检测到LyricsIsland已安装,</Run>
+                            <Bold>歌词获取端口无法多开</Bold>
+                            <Run>,为确保兼容性,故禁用本功能</Run>
+                        </TextBlock>
+                    </StackPanel>
+            </Border>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEBC8;}"
+                                       Header="启用歌词"
+                                       Description="启用后,将在组件显示歌词,使用LyricsIsland协议或LycheeLib">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsEnabled="{Binding IsLyricsIslandNotLoaded}"
+                                  IsChecked="{Binding Settings.IsLyricsEnabled, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE1F5;}"
+                                       Header="Sleepy上报"
+                                       IsVisible="{Binding IsLifeModeEnabled}"
+                                       Description="向一个Sleepy实例上报当前活动数据"
+                                       IsExpanded="{Binding Settings.IsSleepyUploaderEnabled, Mode=OneWay}">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsSleepyUploaderEnabled, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+                <controls:SettingsExpanderItem Content="目标URL">
+                    <controls:SettingsExpanderItem.Footer>
+                        <TextBox MinWidth="50"
+                                 Foreground="{DynamicResource MaterialDesignBody}"
+                                 Text="{Binding Settings.SleepyUrl}"
+                                 Margin="3,0,3,0" />
+                    </controls:SettingsExpanderItem.Footer>
+                </controls:SettingsExpanderItem>
+                <Expander Background="Transparent"
+                          IsExpanded="False"
+                          TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                    <Expander.Header>
+                        <controls:SettingsExpanderItem Content="密钥"/>
+                    </Expander.Header>
+                    <TextBox MinWidth="50"
+                             Foreground="{DynamicResource MaterialDesignBody}"
+                             Text="{Binding Settings.SleepySecret}"
+                             Margin="6,0,6,3" />
+                </Expander>
+                <controls:SettingsExpanderItem Content="设备名">
+                    <controls:SettingsExpanderItem.Footer>
+                        <TextBox MinWidth="50"
+                                 Foreground="{DynamicResource MaterialDesignBody}"
+                                 Text="{Binding Settings.SleepyDevice}"
+                                 Margin="3,0,3,0" />
+                    </controls:SettingsExpanderItem.Footer>
+                </controls:SettingsExpanderItem>
+                <controls:SettingsExpanderItem Content="设备ID">
+                    <controls:SettingsExpanderItem.Footer>
+                        <TextBox MinWidth="20"
+                                 Foreground="{DynamicResource MaterialDesignBody}"
+                                 Text="{Binding Settings.SleepyDeviceId}"
+                                 Margin="3,0,3,0" />
+                    </controls:SettingsExpanderItem.Footer>
+                </controls:SettingsExpanderItem>
+                <controls:SettingsExpanderItem Content="上传格式">
+                    <controls:SettingsExpanderItem.Footer>
+                        <TextBox MinWidth="20"
+                                 Foreground="{DynamicResource MaterialDesignBody}"
+                                 Text="{Binding Settings.SleepyPattern}"
+                                 Margin="3,0,3,0" />
+                    </controls:SettingsExpanderItem.Footer>
+                </controls:SettingsExpanderItem>
+            </controls:SettingsExpander>
+            <Label HorizontalAlignment="Center"
+                   Foreground="{DynamicResource MaterialDesignBodyLight}">
+                Added by ExtraIsland
+            </Label>
+            <Label HorizontalAlignment="Center"
+                   Foreground="{DynamicResource MaterialDesignBodyLight}"
+                   Content="Lyrics Powered by LyricsIsland Protocol &amp; LycheeLib"/>
+        </StackPanel>
+    </ScrollViewer>
+</ci:ComponentBase>
