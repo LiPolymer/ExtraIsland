@@ -47,7 +47,7 @@
                     <ci:FluentIcon Glyph="&#xF191;"/>
                 </controls:SettingsExpander.Footer>
                                     <StackPanel Orientation="Vertical">
-                        <DataGrid Margin="12,6,70,6"
+                        <DataGrid Margin="20,6,70,6"
                                   IsReadOnly="False"
                                   AutoGenerateColumns="False"
                                   CanUserResizeColumns="False"
@@ -57,7 +57,7 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="匹配正则" Width="Auto" MinWidth="90" MaxWidth="290" Binding="{Binding Regex}" />
                                 <DataGridTextColumn Header="替换为" Width="Auto" MinWidth="90" MaxWidth="290" Binding="{Binding Replacement}" />
-                                <DataGridTemplateColumn Header="操作" Width="60">
+                                <DataGridTemplateColumn Header="操作" Width="Auto">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Width="20"
@@ -66,6 +66,7 @@
                                                     Padding="0"
                                                     Background="Transparent"
                                                     BorderBrush="Transparent"
+                                                    HorizontalAlignment="Left"
                                                     Click="DeleteButton_Click">
                                                 <ci:FluentIcon Glyph="&#xE61C;" Foreground="Red" />
                                             </Button>
@@ -74,13 +75,12 @@
                                 </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <StackPanel Orientation="Horizontal" Margin="12,0,12,6">
+                        <StackPanel Orientation="Horizontal" Margin="20,0,12,6">
                             <Button HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                         Width="30"
                                         Height="30"
                                         Padding="0"
-                                        Background="{DynamicResource MaterialDesignDivider}"
                                         BorderBrush="Transparent"
                                         Click="ButtonBase_OnClick">
                                 <ci:FluentIcon Glyph="&#xE013;" Foreground="LightGreen" />
