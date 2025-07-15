@@ -20,12 +20,11 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Padding="12,4,12,2"
-            Background="Gray">
+            Background="{DynamicResource ControlAltFillColorQuarternaryBrush}">
         <Grid>
             <StackPanel x:Name="ActivityStack" 
                         HorizontalAlignment="Center"
                         Orientation="Horizontal">
-                <!--todo:改成透明背景-->
                 <ci:FluentIcon x:Name="Icon"
                                Glyph="&#xE453;" 
                                Foreground="Gray"
