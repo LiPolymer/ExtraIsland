@@ -29,11 +29,6 @@
 # You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
 
 # place project specific paths in variables to make the rest of the script more generic
-variables:
-  NUGET_PATH: 'C:\NuGet\nuget.exe'
-  MSBUILD_PATH: 'C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe'
-  NUNIT_PATH: 'C:\Program Files (x86)\NUnit.org\nunit-console\nunit3-console.exe'
-
 stages:
   - build
 
