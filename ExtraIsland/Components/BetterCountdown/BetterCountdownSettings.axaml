@@ -1,0 +1,166 @@
+﻿<ci:ComponentBase x:Class="ExtraIsland.Components.BetterCountdownSettings"
+                  x:TypeArguments="components:BetterCountdownConfig"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:components="clr-namespace:ExtraIsland.Components"
+                  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                  xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                  mc:Ignorable="d">
+    <ScrollViewer
+        DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=components:BetterCountdownSettings}}">
+        <!-- ReSharper disable once Xaml.StyleClassNotFound -->
+        <StackPanel Classes="settings-container animated-intro" Margin="0">
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xECA5;}"
+                                       Header="文案设置">
+                <controls:SettingsExpander.Footer>
+                    <Grid Grid.Row="1" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 Text="{Binding Settings.Prefix, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 MinWidth="16" />
+                        <Label Grid.Column="1"
+                               VerticalContentAlignment="Center">
+                            11
+                        </Label>
+                        <TextBox Grid.Column="2"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 MinWidth="16"
+                                 Text="{Binding Settings.Separators.Day, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Label Grid.Column="3"
+                               VerticalContentAlignment="Center">
+                            4
+                        </Label>
+                        <TextBox Grid.Column="4"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 MinWidth="16"
+                                 Text="{Binding Settings.Separators.Hour, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Label Grid.Column="5"
+                               VerticalContentAlignment="Center">
+                            5
+                        </Label>
+                        <TextBox Grid.Column="6"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 MinWidth="16"
+                                 Text="{Binding Settings.Separators.Minute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <Label Grid.Column="7"
+                               VerticalContentAlignment="Center">
+                            14
+                        </Label>
+                        <TextBox Grid.Column="8"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 MinWidth="16"
+                                 Text="{Binding Settings.Separators.Second, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Grid.Column="9"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Center"
+                                 Text="{Binding Settings.Suffix, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="2,0,0,0"
+                                 MinWidth="16" />
+                    </Grid>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE324;}"
+                                       Header="目标时间"
+                                       Description="倒计时设定的日期和时间">
+                <controls:SettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal">
+                        <!--DatePicker SelectedDate="{Binding Settings.TargetDateTime, Mode=TwoWay}"
+                                    Margin="10 8 0 0" MaxWidth="320" /-->
+                        <!--TimePicker SelectedTime="{Binding Settings.TargetDateTime, Mode=TwoWay}"
+                                    UseSeconds="True"
+                                    Margin="4 8 0 0" MaxWidth="320" /-->
+                        <CalendarDatePicker
+                            VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            Padding="3,5,0,3"
+                            SelectedDate="{Binding Settings.TargetDateTime, Mode=TwoWay}"
+                            Width="120" />
+                    </StackPanel>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE5E5;}"
+                                       Header="时间精度"
+                                       Description="倒计时显示的差值精度">
+                <controls:SettingsExpander.Footer>
+                    <ComboBox
+                        MinWidth="20"
+                        SelectedItem="{Binding Settings.Accuracy}"
+                        ItemsSource="{Binding CountdownAccuracies}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4D4;}"
+                                       Header="使用系统时间"
+                                       Description="启用后,将直接使用系统时间,无视ClassIsland设置">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsSystemTime, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEC42;}"
+                                       Header="无隙并置"
+                                       Description="启用后,将移除不同元素间的间距">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsNoGapDisplay, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEC14;}"
+                                       Header="差一矫正"
+                                       Description="启用后,使用低精度时末位将向上取整">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsCorrectorEnabled, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEC3A;}"
+                                       Header="隐零"
+                                       Description="启用后,数值为0的倒计时节点将被隐藏">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsHideZeroEnabled, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE051;}"
+                                       Header="启用动画"
+                                       Description="关闭后,动画将不被播放,对低性能设备友好!">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsAnimationEnabled, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEB94;}"
+                                       Header="专注模式"
+                                       Description="启用后,秒数动画将被替换为微微闪烁,避免频繁的移动分散注意力">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsEnabled="{Binding Settings.IsAnimationEnabled, Mode=OneWay}"
+                                  IsChecked="{Binding Settings.IsFocusedModeEnabled, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <Label HorizontalAlignment="Center"
+                   Foreground="{DynamicResource MaterialDesignBodyLight}">
+                Added by ExtraIsland
+            </Label>
+        </StackPanel>
+    </ScrollViewer>
+</ci:ComponentBase>

@@ -1,0 +1,91 @@
+﻿<ci:ComponentBase x:Class="ExtraIsland.Components.BetterCountdown"
+                  x:TypeArguments="components:BetterCountdownConfig"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  xmlns:local="clr-namespace:ExtraIsland"
+                  xmlns:components="clr-namespace:ExtraIsland.Components"
+                  mc:Ignorable="d"
+                  d:DesignHeight="35"
+                  ClipToBounds="True"
+                  Loaded="BetterCountdown_OnLoaded"
+                  Unloaded="BetterCountdown_OnUnloaded">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=components:BetterCountdown}}"
+          VerticalAlignment="Center"
+          TextElement.FontSize="{DynamicResource MainWindowEmphasizedFontSize}"
+          Row="2">
+        <StackPanel Orientation="Horizontal">
+            <Label
+                Padding="0"
+                   VerticalAlignment="Center"
+                   Content="{Binding Settings.Prefix}"
+                   x:Name="Lp" />
+            <Label
+                Padding="0"
+                   Content="---"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   x:Name="LDays">
+                <Label.RenderTransform>
+                    <TranslateTransform/>
+                </Label.RenderTransform>
+            </Label>
+            <Label Padding="0"
+                   VerticalAlignment="Center"
+                   x:Name="SDays"
+                   Content="{Binding Settings.Separators.Day}"/>
+            <Label
+                Padding="0"
+                   Content="--"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   x:Name="LHours">
+                <Label.RenderTransform>
+                    <TranslateTransform/>
+                </Label.RenderTransform>
+            </Label>
+            <Label
+                Padding="0"
+                   VerticalAlignment="Center"
+                   Content="{Binding Settings.Separators.Hour}"
+                   x:Name="SHours" />
+            <Label
+                Padding="0"
+                   Content="--"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   x:Name="LMins">
+                <Label.RenderTransform>
+                    <TranslateTransform/>
+                </Label.RenderTransform>
+            </Label>
+            <Label
+                Padding="0"
+                   VerticalAlignment="Center"
+                   Content="{Binding Settings.Separators.Minute}"
+                   x:Name="SMins" />
+            <Label
+                Padding="0"
+                   VerticalAlignment="Center"
+                   Content="--"
+                   HorizontalAlignment="Center"
+                   x:Name="LSecs">
+                <Label.RenderTransform>
+                    <TranslateTransform/>
+                </Label.RenderTransform>
+            </Label>
+            <Label
+                Padding="0.5"
+                   VerticalAlignment="Center"
+                   Content="{Binding Settings.Separators.Second}"
+                   x:Name="SSec" />
+            <Label
+                Padding="0"
+                   VerticalAlignment="Center"
+                   Content="{Binding Settings.Suffix}"
+                   x:Name="Ls" />
+        </StackPanel>
+    </Grid>
+</ci:ComponentBase>

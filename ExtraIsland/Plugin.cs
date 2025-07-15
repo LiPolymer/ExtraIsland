@@ -73,8 +73,7 @@ public class Plugin : PluginBase {
         services.AddHostedService<ServicesFetcherService>();
         //services.AddHostedService<Register>();
         //Components
-        //services.AddComponent<BetterCountdown,BetterCountdownSettings>();
-        //services.AddComponent<FluentClock,FluentClockSettings>();
+        services.AddComponent<BetterCountdown,BetterCountdownSettings>();
         services.AddComponent<FluentClock,FluentClockSettings>();
         //services.AddComponent<Rhesis,RhesisSettings>();
         //services.AddComponent<OnDuty,OnDutySettings>();
