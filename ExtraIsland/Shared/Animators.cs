@@ -256,9 +256,9 @@ public static class Animators {
             Dispatcher.UIThread.InvokeAsync(async () => {
                 switch (stat) {
                     case null:
-                        await _fadeOutAnimation.RunAsync(_target);
-                        await Task.Delay(TimeSpan.FromSeconds(3));
                         await _fadeInAnimation.RunAsync(_target);
+                        await Task.Delay(TimeSpan.FromSeconds(3));
+                        await _fadeOutAnimation.RunAsync(_target);
                         break;
                     case true:
                         await _fadeInAnimation.RunAsync(_target);

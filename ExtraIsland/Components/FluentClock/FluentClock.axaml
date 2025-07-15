@@ -6,19 +6,22 @@
                   xmlns:components="clr-namespace:ExtraIsland.Components"
                   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                   x:Class="ExtraIsland.Components.FluentClock"
-                  x:TypeArguments="components:FluentClockConfig">
+                  x:TypeArguments="components:FluentClockConfig"
+                  Loaded="OnLoaded" 
+                  Unloaded="OnUnloaded">
      <ci:ComponentBase.Resources>
         <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter"/>
     </ci:ComponentBase.Resources>
     <Grid Margin="0" ClipToBounds="True">
         <Grid x:Name="EmpBack" Opacity="0">
-            <Border Background="{DynamicResource PrimaryHueMidBrush}"
+            <!--todo:强调特效轻微错位-->
+            <Border Background="{DynamicResource Rainy}"
                     ClipToBounds="True"
                     BorderThickness="1"
                     Padding="0"
                     Opacity="0.3"
                     VerticalAlignment="Center"
-                    CornerRadius="{Binding ActualHeight, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}">
+                    CornerRadius="{Binding Bounds.Height, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}">
                 <Label x:Name="Placeholder1"
                        Margin="6,-4"
                        Content="▯"
@@ -26,11 +29,11 @@
                        FontSize="{DynamicResource MainWindowEmphasizedFontSize}"/>
             </Border>
             <Border ClipToBounds="True"
-                    BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                    BorderBrush="{DynamicResource Rainy}"
                     BorderThickness="1"
                     Padding="0 0"
                     VerticalAlignment="Center"
-                    CornerRadius="{Binding ActualHeight, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}">
+                    CornerRadius="{Binding Bounds.Height, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}">
                 <Label x:Name="Placeholder2"
                        Margin="6,-4"
                        Content="▯"
@@ -38,9 +41,11 @@
                        FontSize="{DynamicResource MainWindowEmphasizedFontSize}"/>
             </Border>
         </Grid>
+        <!--todo:字号绑定全炸了-->
         <StackPanel
             DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=components:FluentClock}}"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Orientation="Horizontal">
             <Label
                 Content="--"

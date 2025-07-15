@@ -1,7 +1,9 @@
-﻿namespace ExtraIsland.Components;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace ExtraIsland.Components;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class FluentClockConfig {
+public class FluentClockConfig : ObservableObject {
 
     bool _isAccurate = true;
     public bool IsAccurate {
@@ -16,7 +18,15 @@ public class FluentClockConfig {
 
     public bool IsFocusedMode { get; set; }
 
-    public bool IsSwapAnimationEnabled { get; set; } = true;
+    bool _isSwapAnimationEnabled = true;
+    public bool IsSwapAnimationEnabled { 
+        get => _isSwapAnimationEnabled;
+        set {
+            if (_isSwapAnimationEnabled == value) return;
+            _isSwapAnimationEnabled = value;
+            OnPropertyChanged();
+        } 
+    }
 
     bool _isSecondsSmall;
     public bool IsSecondsSmall {
