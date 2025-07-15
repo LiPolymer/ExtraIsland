@@ -1,0 +1,32 @@
+﻿<ci:ComponentBase x:Class="ExtraIsland.Components.Rhesis"
+                  x:TypeArguments="local:RhesisConfig"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:ExtraIsland.Components"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  mc:Ignorable="d"
+                  Loaded="Rhesis_OnLoaded"
+                  Unloaded="Rhesis_OnUnloaded">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:Rhesis}}"
+          ClipToBounds="True">
+        <StackPanel Orientation="Horizontal">
+            <Label x:Name="MainLabel"
+                   VerticalAlignment="Center"
+                   FontSize="{DynamicResource MainWindowLargeFontSize}"
+                   Content="{Binding Showing, Mode=OneTime}">
+                <Label.RenderTransform>
+                    <TranslateTransform />
+                </Label.RenderTransform>
+            </Label>
+            <Label x:Name="SubLabel"
+                   VerticalAlignment="Center"
+                   FontSize="{DynamicResource MainWindowEmphasizedFontSize}">
+                <Label.RenderTransform>
+                    <TranslateTransform />
+                </Label.RenderTransform>
+            </Label>
+        </StackPanel>
+    </Grid>
+</ci:ComponentBase>
