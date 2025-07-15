@@ -8,7 +8,11 @@
                   xmlns:components="clr-namespace:ExtraIsland.Components"
                   xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                   xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                  xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
                   mc:Ignorable="d">
+    <ci:ComponentBase.Resources>
+        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+    </ci:ComponentBase.Resources>
     <ScrollViewer
         DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=components:BetterCountdownSettings}}">
         <!-- ReSharper disable once Xaml.StyleClassNotFound -->
@@ -108,7 +112,7 @@
                         ItemsSource="{Binding CountdownAccuracies}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding}" />
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
