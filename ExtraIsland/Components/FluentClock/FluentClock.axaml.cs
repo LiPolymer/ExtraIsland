@@ -168,7 +168,6 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
                 isSmall ? "MainWindowSecondaryFontSize" : "MainWindowLargeFontSize");
 
             TSecs.X = isSmall ? 2 : 0; */
-            
             bool isSmall = Settings.IsSecondsSmall;
             LSecs.Bind(FontSizeProperty,
                        new DynamicResourceExtension(isSmall ? "MainWindowSecondaryFontSize" : "MainWindowEmphasizedFontSize")
@@ -179,8 +178,6 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
     void AccurateModeUpdater() {
         Dispatcher.UIThread.InvokeAsync(() => {
             SMins.Opacity = 1;
-            //LSecs.Visibility = Settings.IsAccurate ? Visibility.Visible : Visibility.Collapsed;
-            //SSecs.Visibility = Settings.IsAccurate ? Visibility.Visible : Visibility.Collapsed;
             LSecs.IsVisible = Settings.IsAccurate;
             SSecs.IsVisible = Settings.IsAccurate;
             Placeholder1.Content = Settings.IsAccurate ? "00:00:00" : "00:00";

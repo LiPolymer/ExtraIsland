@@ -7,6 +7,7 @@
                   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                   x:Class="ExtraIsland.Components.FluentClock"
                   x:TypeArguments="components:FluentClockConfig"
+                  ClipToBounds="True"
                   Loaded="OnLoaded" 
                   Unloaded="OnUnloaded">
      <ci:ComponentBase.Resources>
@@ -14,7 +15,6 @@
     </ci:ComponentBase.Resources>
     <Grid Margin="0" ClipToBounds="True">
         <Grid x:Name="EmpBack" Opacity="0">
-            <!--todo:强调特效轻微错位-->
             <Border Background="{DynamicResource Rainy}"
                     ClipToBounds="True"
                     BorderThickness="1"
@@ -23,7 +23,7 @@
                     VerticalAlignment="Center"
                     CornerRadius="{Binding Bounds.Height, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}">
                 <Label x:Name="Placeholder1"
-                       Margin="6,-4"
+                       Margin="6,0,6,-4"
                        Content="▯"
                        Opacity="0"
                        FontSize="{DynamicResource MainWindowEmphasizedFontSize}"/>
@@ -35,7 +35,7 @@
                     VerticalAlignment="Center"
                     CornerRadius="{Binding Bounds.Height, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}">
                 <Label x:Name="Placeholder2"
-                       Margin="6,-4"
+                       Margin="6,0,6,-4"
                        Content="▯"
                        Opacity="0"
                        FontSize="{DynamicResource MainWindowEmphasizedFontSize}"/>

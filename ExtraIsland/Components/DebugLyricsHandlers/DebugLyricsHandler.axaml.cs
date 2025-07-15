@@ -45,7 +45,7 @@ public partial class DebugLyricsHandler: ComponentBase {
             _timeCounter -= 1;
             if (_timeCounter <= 0 & _nowDisplaying != string.Empty) {
                 _nowDisplaying = string.Empty;
-                _animator.Update(_nowDisplaying);
+                _animator.Update(_nowDisplaying,true,false);
             }
             Thread.Sleep(1000);
         }
