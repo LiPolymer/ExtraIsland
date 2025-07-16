@@ -7,6 +7,7 @@ using ClassIsland.Shared;
 //using ExtraIsland.Automations;
 using ExtraIsland.Components;
 using ExtraIsland.ConfigHandlers;
+using ExtraIsland.SettingsPages;
 //using ExtraIsland.LifeMode.Components;
 //using ExtraIsland.SettingsPages;
 using ExtraIsland.Shared;
@@ -83,7 +84,7 @@ public class Plugin : PluginBase {
         //SettingsPages
         //services.AddSettingsPage<MainSettingsPage>();
         //services.AddSettingsPage<DutySettingsPage>();
-        //services.AddSettingsPage<TinyFeaturesSettingsPage>();
+        services.AddSettingsPage<TinyFeaturesSettingsPage>();
         //Actions
         //Register.Claim(services);
         //Authorizer
