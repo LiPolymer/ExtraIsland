@@ -19,16 +19,16 @@
         <StackPanel Classes="settings-container animated-intro">
             <Label FontSize="20"
                    VerticalAlignment="Center"
-                   Foreground="{DynamicResource MaterialDesignBodyLight}">
+                   Foreground="{DynamicResource TextFillColorTertiaryBrush}">
                 ExtraIsland
             </Label>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
                 <ci:FluentIcon
                     FontSize="60"
                     Glyph="&#xEDC4;"
-                    Foreground="{DynamicResource MaterialDesignBodyLight}"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     VerticalAlignment="Center"/>
-                <Label VerticalAlignment="Center" FontSize="30">全局 · 微功能</Label>
+                <Label VerticalAlignment="Center" Margin="0,5,0,0" FontSize="30">全局 · 微功能</Label>
             </StackPanel>
             <controls:SettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xF1AE;}"
                                        Header="导引界面"
@@ -46,7 +46,7 @@
                 </controls:SettingsExpanderItem>
                 <controls:SettingsExpanderItem Content="内容">
                     <controls:SettingsExpanderItem.Footer>
-                        <ci:FluentIcon Glyph="[md]"/>
+                        <ci:FluentIcon Glyph="&#xEB5D;"/>
                     </controls:SettingsExpanderItem.Footer>
                 </controls:SettingsExpanderItem>
                 <Border Background="{DynamicResource MaterialDesignDivider}"
@@ -65,7 +65,7 @@
                                 Padding="0"
                                 Width="33">
                             <Button.Content>
-                                <ci:FluentIcon Glyph="[>]"/>
+                                <ci:FluentIcon Glyph="&#xEEA0;" Margin="2,6,3,6"/>
                             </Button.Content>
                         </Button>
                     </controls:SettingsExpanderItem.Footer>
