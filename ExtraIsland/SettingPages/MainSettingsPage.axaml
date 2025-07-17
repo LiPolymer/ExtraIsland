@@ -11,9 +11,7 @@
                      xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                      mc:Ignorable="d">
     <ci:SettingsPageBase.Resources>
-        <sc:IntToStringConverter x:Key="IntToStringConverter"/>
-        <sc:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
-        <sc:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+        <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter"/>
     </ci:SettingsPageBase.Resources>
     <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MainSettingsPage}}">
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
@@ -102,11 +100,13 @@
                 </StackPanel>
             </Border>
             <controls1:SettingsExpander x:Name="LyricsStatCard" 
-                                        IconSource="{ci:FluentIconSource Glyph=[]}"
+                                        IconSource="{ci:FluentIconSource Glyph=&#xEDC7;}"
                                         Description="显示歌词协议接口的状态,支持LycheeLib"
                                         Header="歌词接口状态">
                 <controls1:SettingsExpander.Footer>
                     <Border Background="Gray"
+                            CornerRadius="{Binding Bounds.Height, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}"
+                            Padding="12,4,12,2"
                             Margin="0,0,-3,0">
                         <Label Foreground="LightGray"
                                Content="IDLE"/>
@@ -115,14 +115,14 @@
             </controls1:SettingsExpander>
             
             <controls1:SettingsExpander x:Name="LifeModeCard"
-                                        IconSource="{ci:FluentIconSource Glyph=&#xE0BB;}"
+                                        IconSource="{ci:FluentIconSource Glyph=&#xE436;}"
                                         Header="生活模式"
                                         Description="启用不适用于课堂环境的功能">
                 <controls1:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsLifeModeActivated, Mode=TwoWay}"/>
                 </controls1:SettingsExpander.Footer>
             </controls1:SettingsExpander>
-            <controls1:SettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xE0BB;}"
+            <controls1:SettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xE647;}"
                                         Header="允许遥测"
                                         Description="允许我们通过Sentry采集崩溃报告,以便更好地改进本插件">
                 <controls1:SettingsExpander.Footer>
@@ -130,7 +130,7 @@
                 </controls1:SettingsExpander.Footer>
             </controls1:SettingsExpander>
             <controls1:SettingsExpander x:Name="ExpModeCard"
-                                        IconSource="{ci:FluentIconSource Glyph=&#xE0BB;}"
+                                        IconSource="{ci:FluentIconSource Glyph=&#xE2C8;}"
                                         Description="启用尚未开发完成,已经知道有Bug的功能(启用后请勿提交Bug)"
                                         Header="实验性功能">
                 <controls1:SettingsExpander.Footer>
