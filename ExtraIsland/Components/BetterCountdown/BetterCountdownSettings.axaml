@@ -94,9 +94,6 @@
                                     UseSeconds="True"
                                     Margin="4 8 0 0" MaxWidth="320" /-->
                         <CalendarDatePicker
-                            VerticalContentAlignment="Center"
-                            HorizontalContentAlignment="Center"
-                            Padding="3,5,0,3"
                             SelectedDate="{Binding Settings.TargetDateTime, Mode=TwoWay}"
                             Width="120" />
                     </StackPanel>
