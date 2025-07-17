@@ -82,7 +82,7 @@ public class Plugin : PluginBase {
         //services.AddComponent<DualLineContainer>();
         services.AddComponent<DebugLyricsHandler>();
         //SettingsPages
-        //services.AddSettingsPage<MainSettingsPage>();
+        services.AddSettingsPage<MainSettingsPage>();
         //services.AddSettingsPage<DutySettingsPage>();
         services.AddSettingsPage<TinyFeaturesSettingsPage>();
         //Actions

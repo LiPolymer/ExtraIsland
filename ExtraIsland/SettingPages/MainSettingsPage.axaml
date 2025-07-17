@@ -1,0 +1,142 @@
+﻿<ci:SettingsPageBase x:Class="ExtraIsland.SettingsPages.MainSettingsPage"
+                     xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:local="clr-namespace:ExtraIsland.SettingsPages"
+                     xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                     xmlns:sc="clr-namespace:ExtraIsland.Shared.Converters"
+                     xmlns:controls="clr-namespace:ExtraIsland.Controls"
+                     xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                     mc:Ignorable="d">
+    <ci:SettingsPageBase.Resources>
+        <sc:IntToStringConverter x:Key="IntToStringConverter"/>
+        <sc:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
+        <sc:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+    </ci:SettingsPageBase.Resources>
+    <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MainSettingsPage}}">
+        <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+        <StackPanel Classes="settings-container animated-intro">
+            <Label FontSize="20"
+                   VerticalAlignment="Center"
+                   Foreground="{DynamicResource MaterialDesignBodyLight}">
+                ExtraIsland
+            </Label>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                <ci:FluentIcon FontSize="60"
+                    Glyph="&#xE519;"
+                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    VerticalAlignment="Center" />
+                <Label VerticalAlignment="Center" FontSize="30">全局 · 主设置</Label>
+            </StackPanel>
+            <StackPanel TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+                        Classes="cardContainer"
+                        Margin="0,6,0,6">
+                <Grid HorizontalAlignment="Stretch" Margin="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <controls:FullLogo
+                            Height="55"
+                            Width="55"
+                            Margin="0,-2,4,0"
+                            VerticalAlignment="Center" />
+                        <TextBlock Margin="4 0 0 0">
+                                    <Run Text="ExtraIsland" FontSize="24" />
+                                    <Run Text="R0.50" />
+                                    <LineBreak />
+                                    <Run Text="Copyright © 2024-2025 LiPolymer"/>
+                                    <LineBreak />
+                                    <Run Foreground="Gray"
+                                         FontSize="10"
+                                         Text="Licensed under GNU AGPLv3."/>
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" 
+                                Margin="-5"
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Right" 
+                                VerticalAlignment="Top">
+                        <Button Padding="8,5,8,5"
+                                BorderBrush="Transparent"
+                                Background="Transparent"
+                                Command="{x:Static ci:UriNavigationCommands.UriNavigationCommand}"
+                                CommandParameter="https://github.com/LiPolymer/ExtraIsland">
+                        </Button>
+                        <Button Padding="8,5,8,5"
+                                BorderBrush="Transparent"
+                                Background="Transparent"
+                                Command="{x:Static ci:UriNavigationCommands.UriNavigationCommand}"
+                                CommandParameter="https://gitlab.com/LiPolymer/ExtraIsland">
+                        </Button>
+                        <Button Padding="8,5,8,5"
+                                BorderBrush="Transparent"
+                                Background="Transparent"
+                                Command="{x:Static ci:UriNavigationCommands.UriNavigationCommand}"
+                                CommandParameter="https://docs.lipoly.ink/ExtraIsland">
+                            <ci:FluentIcon Glyph="&#xE909;"
+                                           Foreground="{DynamicResource MaterialDesignBody}"
+                                           FontSize="20"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+            <Border x:Name="MessageZone"
+                    IsVisible="False"
+                    Background="#15ff0000" 
+                    Margin="0,0,0,-7" 
+                    Padding="6" 
+                    CornerRadius="4">
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <ci:FluentIcon Glyph="[]"
+                                       Foreground="{DynamicResource MaterialDesignBody}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,3,0"/>
+                        <Label x:Name="ErrorMessage"/>
+                    </StackPanel>
+                    <Label/>
+                </StackPanel>
+            </Border>
+            <controls1:SettingsExpander x:Name="LyricsStatCard" 
+                                        IconSource="{ci:FluentIconSource Glyph=[]}"
+                                        Description="显示歌词协议接口的状态,支持LycheeLib"
+                                        Header="歌词接口状态">
+                <controls1:SettingsExpander.Footer>
+                    <Border Background="Gray"
+                            Margin="0,0,-3,0">
+                        <Label Foreground="LightGray"
+                               Content="IDLE"/>
+                    </Border>
+                </controls1:SettingsExpander.Footer>
+            </controls1:SettingsExpander>
+            
+            <controls1:SettingsExpander x:Name="LifeModeCard"
+                                        IconSource="{ci:FluentIconSource Glyph=&#xE0BB;}"
+                                        Header="生活模式"
+                                        Description="启用不适用于课堂环境的功能">
+                <controls1:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsLifeModeActivated, Mode=TwoWay}"/>
+                </controls1:SettingsExpander.Footer>
+            </controls1:SettingsExpander>
+            <controls1:SettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xE0BB;}"
+                                        Header="允许遥测"
+                                        Description="允许我们通过Sentry采集崩溃报告,以便更好地改进本插件">
+                <controls1:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsTelemetryActivated, Mode=TwoWay}"/>
+                </controls1:SettingsExpander.Footer>
+            </controls1:SettingsExpander>
+            <controls1:SettingsExpander x:Name="ExpModeCard"
+                                        IconSource="{ci:FluentIconSource Glyph=&#xE0BB;}"
+                                        Description="启用尚未开发完成,已经知道有Bug的功能(启用后请勿提交Bug)"
+                                        Header="实验性功能">
+                <controls1:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsExperimentalModeActivated, Mode=TwoWay}"/>
+                </controls1:SettingsExpander.Footer>
+            </controls1:SettingsExpander>
+        </StackPanel>
+    </ScrollViewer>
+</ci:SettingsPageBase>

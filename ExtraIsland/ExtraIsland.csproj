@@ -63,7 +63,7 @@
 	    <XamlRuntime>Wpf</XamlRuntime>
 	    <SubType>Designer</SubType>
 	  </Page>
-	  <Page Update="Controls\FullLogoGrayScale.xaml">
+	  <Page Update="Controls\FullLogoGrayScale.axaml">
 	    <Generator>MSBuild:Compile</Generator>
 	    <XamlRuntime>Wpf</XamlRuntime>
 	    <SubType>Designer</SubType>
