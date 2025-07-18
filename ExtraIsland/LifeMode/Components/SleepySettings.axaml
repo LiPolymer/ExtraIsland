@@ -1,0 +1,75 @@
+﻿<ci:ComponentBase x:Class="ExtraIsland.LifeMode.Components.SleepySettings"
+                  x:TypeArguments="local:SleepyConfig"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:ExtraIsland.LifeMode.Components"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                  xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
+                  xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                  mc:Ignorable="d"
+                  d:DesignHeight="300" d:DesignWidth="300">
+    <ci:ComponentBase.Resources>
+        <converters:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
+        <converters:IntToStringConverter x:Key="IntToStringConverter"/>
+    </ci:ComponentBase.Resources>
+    <ScrollViewer
+        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:SleepySettings}}">
+        <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+        <StackPanel Classes="settings-container animated-intro">
+            <controls:SettingsExpander
+                IconSource="{ci:FluentIconSource Glyph=A}"
+                Header = "请求API"
+                Description="连接你要视奸的人(bushi">
+                <controls:SettingsExpander.Footer>
+                    <TextBox Text="{Binding Settings.ApiUrl, Mode=TwoWay}"
+                             MinWidth="30"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander
+                IconSource="{ci:FluentIconSource Glyph=A}"
+                Header = "更新间隔"
+                Description="你要多久视奸别人一次(雾">
+                <controls:SettingsExpander.Footer>
+                    <TextBox
+                        Text="{Binding Settings.UpdateIntervalSeconds, Converter={StaticResource IntToStringConverter}, Mode=TwoWay}"
+                        VerticalAlignment="Center"
+                        InputMethod.IsInputMethodEnabled="False"
+                        MinWidth="30"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander
+                IconSource="{ci:FluentIconSource Glyph=A}"
+                Header = "轮播间隔"
+                Description="多久切换一次展示的信息,设为0即关闭">
+                <controls:SettingsExpander.Footer>
+                    <TextBox
+                        Text="{Binding Settings.DeviceInfoShowingIntervalSeconds, Converter={StaticResource IntToStringConverter}, Mode=TwoWay}"
+                        VerticalAlignment="Center"
+                        InputMethod.IsInputMethodEnabled="False"
+                        MinWidth="30"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE051;}"
+                                       Header="启用动画"
+                                       Description="禁用后,将不再播放动画,对低性能设备友好!">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsAnimationEnabled, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE095;}"
+                                       Header="启用翻页动画"
+                                       Description="启用后,切换动画样式将被替换为翻页(额外信息不受影响)">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsAnimationEnabled, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <Label HorizontalAlignment="Center"
+                   Foreground="{DynamicResource MaterialDesignBodyLight}">
+                Added by ExtraIsland
+            </Label>
+        </StackPanel>
+    </ScrollViewer>
+</ci:ComponentBase>

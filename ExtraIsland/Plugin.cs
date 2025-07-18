@@ -7,6 +7,7 @@ using ClassIsland.Shared;
 //using ExtraIsland.Automations;
 using ExtraIsland.Components;
 using ExtraIsland.ConfigHandlers;
+using ExtraIsland.LifeMode.Components;
 using ExtraIsland.SettingsPages;
 //using ExtraIsland.LifeMode.Components;
 //using ExtraIsland.SettingsPages;
@@ -92,14 +93,13 @@ public class Plugin : PluginBase {
         //LifeMode
         if (GlobalConstants.Handlers.MainConfig.Data.IsLifeModeActivated) {
             ct.WriteLine("&a生活模式已启用!");
-            //services.AddComponent<Sleepy,SleepySettings>();
+            services.AddComponent<Sleepy,SleepySettings>();
         }
         if (GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) {
             //services.AddComponent<ActionButton,ActionButtonSettings>();
         }
         if (GlobalConstants.Handlers.MainConfig.Data.IsExperimentalModeActivated) {
             ct.WriteLine("&9实验模式已启用! &7若出现Bug,&c请勿报告&7!",Terminal.MessageType.Warn);
-            Console.ForegroundColor = defaultColor;
             //services.AddComponent<DebugLyricsHandler>();
             //services.AddComponent<DebugSubLyricsHandler>();
         }

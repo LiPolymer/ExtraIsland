@@ -1,0 +1,24 @@
+﻿<ci:ComponentBase x:Class="ExtraIsland.LifeMode.Components.Sleepy"
+                  x:TypeArguments="local:SleepyConfig"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:ExtraIsland.LifeMode.Components"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  mc:Ignorable="d"
+                  Loaded="Sleepy_OnLoaded"
+                  Unloaded="Sleepy_OnUnloaded"
+                  d:DesignHeight="300" d:DesignWidth="300">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:Sleepy}}" 
+          ClipToBounds="True">
+        <Label x:Name="StatLabel"
+               VerticalAlignment="Center"
+               FontSize="{DynamicResource MainWindowLargeFontSize}"
+               Content="{Binding Data.Info.Name, Mode=OneWay}">
+            <Label.RenderTransform>
+                <TranslateTransform/>
+            </Label.RenderTransform>
+        </Label>
+    </Grid>
+</ci:ComponentBase>
