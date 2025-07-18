@@ -28,9 +28,8 @@
                     VerticalAlignment="Center" />
                 <Label VerticalAlignment="Center" FontSize="30">全局 · 主设置</Label>
             </StackPanel>
-            <StackPanel TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-                        Classes="cardContainer"
-                        Margin="0,6,0,6">
+            <Border ClipToBounds="True" CornerRadius="4">
+            <controls1:SettingsExpanderItem>
                 <Grid HorizontalAlignment="Stretch" Margin="12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -81,7 +80,8 @@
                         </Button>
                     </StackPanel>
                 </Grid>
-            </StackPanel>
+            </controls1:SettingsExpanderItem>
+            </Border>
             <Border x:Name="MessageZone"
                     IsVisible="False"
                     Background="#15ff0000" 

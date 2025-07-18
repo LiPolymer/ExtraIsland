@@ -105,7 +105,7 @@ public class Plugin : PluginBase {
         }
         #if DEBUG
         ct.WriteLine("&d这是一个调试构建! 若出现Bug,请勿报告!",Terminal.MessageType.Debug);
-        services.AddSettingsPage<DebugSettingsPage>();
+        //services.AddSettingsPage<DebugSettingsPage>();
         #endif
         ct.WriteLine("完成!");
         ct.WriteLine("注册事件...");
