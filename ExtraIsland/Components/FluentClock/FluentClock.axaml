@@ -41,18 +41,18 @@
                        FontSize="{DynamicResource MainWindowEmphasizedFontSize}"/>
             </Border>
         </Grid>
-        <!--todo:字号绑定全炸了-->
         <StackPanel
             DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=components:FluentClock}}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            Margin="0,3,0,0"
             Orientation="Horizontal">
             <Label
                 Content="--"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="{DynamicResource MainWindowEmphasizedFontSize}"
-                Padding="0,2,2,2"
+                Padding="0,0,2,0"
                 x:Name="LHours">
                 <Label.RenderTransform>
                     <TranslateTransform />
@@ -61,14 +61,14 @@
             <Label
                 VerticalAlignment="Center"
                 FontSize="{DynamicResource MainWindowLargeFontSize}"
-                Padding="0,0,0,3"
+                Padding="0,0,0,4"
                 Content=":"
                 x:Name="SMins" />
             <Label
                 Content="--"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Padding="2"
+                Padding="2,0,2,0"
                 FontSize="{DynamicResource MainWindowEmphasizedFontSize}"
                 x:Name="LMins">
                 <Label.RenderTransform>
@@ -79,13 +79,13 @@
                 VerticalAlignment="Center"
                 FontSize="{DynamicResource MainWindowLargeFontSize}"
                 Content=":"
-                Padding="0,0,0,3"
+                Padding="0,0,0,4"
                 x:Name="SSecs" />
             <Label
                 Content="--"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Padding="2,2,0,2"
+                Padding="2,0,0,0"
                 FontSize="{DynamicResource MainWindowEmphasizedFontSize}"
                 x:Name="LSecs">
                 <Label.RenderTransform>
