@@ -1,105 +1,79 @@
-﻿using Avalonia;
+﻿using System.Numerics;
+using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Rendering.Composition;
+using Avalonia.Rendering.Composition.Animations;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 
 namespace ExtraIsland.Shared;
 
 public static class Animators {
     public class GenericContentSwapAnimator {
         // ReSharper disable once ConvertToPrimaryConstructor
-        public GenericContentSwapAnimator(ContentControl targetLabel, double motionMultiple = 0.5) {
-            _targetLabel = targetLabel;
-            _swapOutAnimation = new Animation {
-                Children = {
-                    new KeyFrame {
-                        Cue = new Cue(0),
-                        Setters = {
-                            new Setter(TranslateTransform.YProperty, 0.0),
-                            new Setter(Visual.OpacityProperty, 1.0)
-                        }
-                    },
-                    new KeyFrame {
-                        Cue = new Cue(1),
-                        Setters = {
-                            new Setter(TranslateTransform.YProperty, 40.0 * motionMultiple),
-                            new Setter(Visual.OpacityProperty, 0.0)
-                        }
-                    }
-                },
-                Duration = TimeSpan.FromMilliseconds(125),
-                FillMode = FillMode.Forward,
-                Easing = new QuadraticEaseIn()
-            };
-            _swapInAnimation = new Animation {
-                Children = {
-                    new KeyFrame {
-                        Cue = new Cue(0),
-                        Setters = {
-                            new Setter(TranslateTransform.YProperty, -40.0 * motionMultiple),
-                            new Setter(Visual.OpacityProperty, 0.0)
-                        }
-                    },
-                    new KeyFrame {
-                        Cue = new Cue(1),
-                        Setters = {
-                            new Setter(TranslateTransform.YProperty, 0.0),
-                            new Setter(Visual.OpacityProperty, 1.0)
-                        }
-                    }
-                },
-                Duration = TimeSpan.FromMilliseconds(125),
-                FillMode = FillMode.Forward,
-                Easing = new QuadraticEaseOut()
-            };
-            _fadeOutAnimation = new Animation {
-                Children = {
-                    new KeyFrame {
-                        Cue = new Cue(0),
-                        Setters = {
-                            new Setter(Visual.OpacityProperty, 1.0)
-                        }
-                    },
-                    new KeyFrame {
-                        Cue = new Cue(1),
-                        Setters = {
-                            new Setter(Visual.OpacityProperty, 0.0)
-                        }
-                    }
-                },
-                Duration = TimeSpan.FromMilliseconds(125),
-                FillMode = FillMode.Forward,
-                Easing = new QuadraticEaseIn()
-            };
-            _fadeInAnimation = new Animation {
-                Children = {
-                    new KeyFrame {
-                        Cue = new Cue(0),
-                        Setters = {
-                            new Setter(Visual.OpacityProperty, 0.0)
-                        }
-                    },
-                    new KeyFrame {
-                        Cue = new Cue(1),
-                        Setters = {
-                            new Setter(Visual.OpacityProperty, 1.0)
-                        }
-                    }
-                },
-                Duration = TimeSpan.FromMilliseconds(125),
-                FillMode = FillMode.Forward,
-                Easing = new QuadraticEaseOut()
-            };
+        public GenericContentSwapAnimator(ContentControl target, double motionMultiple = 0.5) {
+            _target = target;
+            if (_target.IsAttachedToVisualTree()) {
+                InitializeComposition();
+            } else {
+                _target.AttachedToVisualTree += (_, _) => InitializeComposition();
+            }
+
+            void InitializeComposition() {
+                _visual = ElementComposition.GetElementVisual(target)!;
+                Compositor compositor = _visual.Compositor;
+                
+                _swapAnimationGroup = compositor.CreateAnimationGroup();
+                
+                Vector3DKeyFrameAnimation swapOutAnimation = compositor.CreateVector3DKeyFrameAnimation();
+                swapOutAnimation.Target = "Offset";
+                swapOutAnimation.InsertKeyFrame(0.0f, _visual.Offset with { Y = 0 } , new QuadraticEaseIn());
+                swapOutAnimation.InsertKeyFrame(1.0f, _visual.Offset with { Y = 40 * motionMultiple } , new QuadraticEaseIn());
+                swapOutAnimation.Duration = TimeSpan.FromMilliseconds(125);
+                _swapAnimationGroup.Add(swapOutAnimation);
+
+                Vector3DKeyFrameAnimation swapInAnimation = compositor.CreateVector3DKeyFrameAnimation();
+                swapInAnimation.Target = "Offset";
+                swapInAnimation.InsertKeyFrame(0.0f, _visual.Offset with { Y = -40 * motionMultiple } , new QuadraticEaseIn());
+                swapInAnimation.InsertKeyFrame(1.0f, _visual.Offset with { Y = 0 }, new QuadraticEaseIn());
+                swapInAnimation.DelayTime = TimeSpan.FromMilliseconds(125);
+                swapInAnimation.DelayBehavior = AnimationDelayBehavior.SetInitialValueAfterDelay;
+                swapInAnimation.Duration = TimeSpan.FromMilliseconds(125);
+                _swapAnimationGroup.Add(swapInAnimation);
+
+                _fadeAnimationGroup = compositor.CreateAnimationGroup();
+                
+                ScalarKeyFrameAnimation fadeOutAnimation = compositor.CreateScalarKeyFrameAnimation();
+                fadeOutAnimation.Target = "Opacity";
+                fadeOutAnimation.InsertKeyFrame(0.0f, 1.0f, new QuadraticEaseIn());
+                fadeOutAnimation.InsertKeyFrame(1.0f, 0.0f, new QuadraticEaseIn());
+                fadeOutAnimation.Duration = TimeSpan.FromMilliseconds(125);
+                _fadeAnimationGroup.Add(fadeOutAnimation);
+            
+                ScalarKeyFrameAnimation fadeInAnimation = compositor.CreateScalarKeyFrameAnimation();
+                fadeInAnimation.Target = "Opacity";
+                fadeInAnimation.InsertKeyFrame(0.0f, 0.0f, new QuadraticEaseIn());
+                fadeInAnimation.InsertKeyFrame(1.0f, 1.0f, new QuadraticEaseIn());
+                fadeInAnimation.DelayTime = TimeSpan.FromMilliseconds(125);
+                fadeInAnimation.DelayBehavior = AnimationDelayBehavior.SetInitialValueAfterDelay;
+                fadeInAnimation.Duration = TimeSpan.FromMilliseconds(125);
+                _fadeAnimationGroup.Add(fadeInAnimation);
+
+                _isInitialized = true;
+            }
         }
-        readonly ContentControl _targetLabel;
-        readonly Animation _swapOutAnimation;
-        readonly Animation _swapInAnimation;
-        readonly Animation _fadeOutAnimation;
-        readonly Animation _fadeInAnimation;
+        readonly ContentControl _target;
+        CompositionVisual _visual;
+
+        CompositionAnimationGroup _swapAnimationGroup;
+        CompositionAnimationGroup _fadeAnimationGroup;
+        
         string _targetContent = string.Empty;
+        bool _isInitialized;
         
         public string TargetContent {
             get => _targetContent;
@@ -115,21 +89,23 @@ public static class Animators {
         }
 
         public void Update(object content, bool isAnimated = true, bool isSwapAnimEnabled = true) {
+            if (!_isInitialized) return;
             if (_renderLock) return;
             _renderLock = true;
+            // TODO: 待修复:只播放后半段
             Dispatcher.UIThread.InvokeAsync(async () => {
                 if (!isAnimated) {
-                    _targetLabel.Content = content;
                 } else if (isSwapAnimEnabled) {
-                    await _swapOutAnimation.RunAsync(_targetLabel);
-                    _targetLabel.Content = content;
-                    await _swapInAnimation.RunAsync(_targetLabel);
+                    _visual.StartAnimationGroup(_swapAnimationGroup);
+                    await Task.Delay(TimeSpan.FromMilliseconds(125));
+
                 } else {
-                    await _fadeOutAnimation.RunAsync(_targetLabel);
-                    _targetLabel.Content = content;
-                    await _fadeInAnimation.RunAsync(_targetLabel);
+                    _visual.StartAnimationGroup(_fadeAnimationGroup);
+                    await Task.Delay(TimeSpan.FromMilliseconds(125));
                 }
+                _target.Content = content;
                 _renderLock = false;
+                return Task.CompletedTask;
             });
         }
 
@@ -140,7 +116,7 @@ public static class Animators {
         
         public void SilentUpdate(object content) {
             Dispatcher.UIThread.InvokeAsync(() => {
-                _targetLabel.Content = content;
+                _target.Content = content;
             });
         }
     }
