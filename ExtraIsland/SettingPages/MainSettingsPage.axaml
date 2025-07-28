@@ -33,7 +33,7 @@
                 <Grid HorizontalAlignment="Stretch" Margin="12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="140"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <controls:FullLogo
@@ -61,20 +61,35 @@
                                 BorderBrush="Transparent"
                                 Background="Transparent"
                                 Command="{x:Static ci:UriNavigationCommands.UriNavigationCommand}"
+                                CommandParameter="https://afdian.tv/a/lipolymer">
+                            <ci:LucideIcon Glyph="&#xE47B;"
+                                           Foreground="{DynamicResource MaterialDesignBody}"
+                                           FontSize="18"/>
+                        </Button>
+                        <Button Padding="8,5,8,5"
+                                BorderBrush="Transparent"
+                                Background="Transparent"
+                                Command="{x:Static ci:UriNavigationCommands.UriNavigationCommand}"
                                 CommandParameter="https://github.com/LiPolymer/ExtraIsland">
+                            <ci:LucideIcon Glyph="&#xE0EA;"
+                                           Foreground="{DynamicResource MaterialDesignBody}"
+                                           FontSize="18"/>
                         </Button>
                         <Button Padding="8,5,8,5"
                                 BorderBrush="Transparent"
                                 Background="Transparent"
                                 Command="{x:Static ci:UriNavigationCommands.UriNavigationCommand}"
                                 CommandParameter="https://gitlab.com/LiPolymer/ExtraIsland">
+                            <ci:LucideIcon Glyph="&#xE0EB;"
+                                           Foreground="{DynamicResource MaterialDesignBody}"
+                                           FontSize="18"/>
                         </Button>
                         <Button Padding="8,5,8,5"
                                 BorderBrush="Transparent"
                                 Background="Transparent"
                                 Command="{x:Static ci:UriNavigationCommands.UriNavigationCommand}"
                                 CommandParameter="https://docs.lipoly.ink/ExtraIsland">
-                            <ci:FluentIcon Glyph="&#xE909;"
+                            <ci:FluentIcon Glyph="&#xE235;"
                                            Foreground="{DynamicResource MaterialDesignBody}"
                                            FontSize="20"/>
                         </Button>
