@@ -1,3 +1,10 @@
+> [!IMPORTANT]
+> 正式发布的版本适用于ClassIsland v1
+>
+> ClassIsland v2适用的版本已经基本可用
+>
+> 代码位于 `v1` 分支,可从[`Gitlab Pipelines`](https://gitlab.com/LiPolymer/ExtraIsland/-/pipelines)获取[自动构建](#尝鲜版本)使用
+
 # 快速开始
 
 欢迎使用 ExtraIsland！要开始使用,首先需要 __安装__ 本插件
@@ -19,6 +26,8 @@ __推荐通过插件市场进行安装!__
 #### 尝鲜版本
 > [!CAUTION]
 > （；´д｀）ゞ 稍等一下!
+> 
+> 当前,此渠道获取的版本均仅适用于ClassIsland v2
 > 
 > 尝鲜版本包含最新修改,但是可能也包含最新Bug!
 > 
