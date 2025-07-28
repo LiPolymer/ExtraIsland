@@ -11,6 +11,13 @@
 [![GitHub](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/LiPolymer/ExtraIsland)
 [![GitLab](https://img.shields.io/badge/GitLab-FC6D26?logo=gitlab&logoColor=fff)](https://gitlab.com/LiPolymer/ExtraIsland)
 
+> [!IMPORTANT]
+> 本分支适用于ClassIsland v1
+> 
+> ClassIsland v2版本适用的版本已经基本可用 
+> 
+> 代码位于 `v1` 分支,可从GitLab Pipeline获取自动构建使用
+
 ![Repobeatsa](https://repobeats.axiom.co/api/embed/1f18128f350eea1c2612fe115498942e5c4fefff.svg "Repobeats Analytics Image")
 
 [ExtraIsland](https://docs.lipoly.ink/ExtraIsland) 是一款 [ClassIsland](https://classisland.tech/) 的实用插件，为 ClassIsland 增加了更好的倒计日、流畅时钟、名句一言、值日表、换届导引、Sleepy 等组件和功能！
