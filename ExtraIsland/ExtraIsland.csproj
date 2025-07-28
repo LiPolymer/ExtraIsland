@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ClassIsland.PluginSdk" Version="1.7.103-dev-v2">
+		<PackageReference Include="ClassIsland.PluginSdk" Version="1.7.104-dev-v2">
 			<ExcludeAssets>runtime; native</ExcludeAssets>
 		</PackageReference>
 		<PackageReference Include="LycheeLib.Interface" Version="1.0.0" />
