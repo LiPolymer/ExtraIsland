@@ -30,7 +30,7 @@
                     VerticalAlignment="Center"/>
                 <Label VerticalAlignment="Center" Margin="0,5,0,0" FontSize="30">全局 · 微功能</Label>
             </StackPanel>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xF1AE;}"
+            <!--controls:SettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xF1AE;}"
                                        Header="导引界面"
                                        Description="下次启动开始将显示导引界面,直到选择不再显示">
                 <controls:SettingsExpander.Footer>
@@ -86,7 +86,7 @@
                                  Margin="3,0,3,0"/>
                     </controls:SettingsExpanderItem.Footer>
                 </controls:SettingsExpanderItem>
-            </controls:SettingsExpander>
+            </-->
             <controls:SettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xE0BB;}"
                                        Header="(隐藏设置) 主界面启用鼠标点击"
                                        Description="允许鼠标与主界面上的控件交互"
