@@ -1,0 +1,25 @@
+﻿<ci:RuleSettingsControlBase x:TypeArguments="local:LaterThanConfig" x:Class="ExtraIsland.Automations.Rules.LaterThan"
+                            xmlns="https://github.com/avaloniaui"
+                            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                            xmlns:local="clr-namespace:ExtraIsland.Automations.Rules"
+                            xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                            xmlns:actions="clr-namespace:ExtraIsland.Automations.Actions"
+                            xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
+                            xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:controls="clr-namespace:ExtraIsland.Controls"
+                            mc:Ignorable="d"
+                            d:DesignHeight="300" d:DesignWidth="300">
+    <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LaterThan}}" 
+                Orientation="Horizontal">
+        <!--todo:替换时间选择控件-->
+        <!--materialDesign:TimePicker Margin="4,0,0,0"
+                                    Is24Hours="True"
+                                   WithSeconds="True"
+                                   SelectedTime="{Binding Settings.TargetTime, Mode=TwoWay}"
+                                   Width="76" /-->
+        <controls:FullLogoGrayScale Margin="4,0,0,0" 
+                                    Height="20" 
+                                    Opacity="0.5"/>
+    </StackPanel>
+</ci:RuleSettingsControlBase>

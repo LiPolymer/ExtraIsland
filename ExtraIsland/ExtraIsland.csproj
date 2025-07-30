@@ -148,4 +148,11 @@
 	    <SubType>Designer</SubType>
 	  </Page>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Controls\FullLogoGrayScale.axaml.cs">
+	    <DependentUpon>FullLogoGrayScale.axaml</DependentUpon>
+	    <SubType>Code</SubType>
+	  </Compile>
+	</ItemGroup>
 </Project>
