@@ -9,11 +9,11 @@
                                xmlns:controls="clr-namespace:ExtraIsland.Controls"
                                mc:Ignorable="d">
     <StackPanel Orientation="Horizontal" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TimePassedSettings}}">
-        <!--todo: 使用数字选择控件-->
-        <TextBox VerticalAlignment="Center" 
+        <NumericUpDown VerticalAlignment="Center" 
                  VerticalContentAlignment="Center"
                  HorizontalContentAlignment="Center"
-                 Text="{Binding Settings.TimeGapSeconds}"
+                 FormatString="0"
+                 Value="{Binding Settings.TimeGapSeconds}"
                  InputMethod.IsInputMethodEnabled="False"
                  MinWidth="30"/>
         <Label VerticalAlignment="Center" 
