@@ -1,14 +1,14 @@
-﻿using ClassIsland.Core.Attributes;
-using ExtraIsland.ConfigHandlers;
-using ExtraIsland.Shared;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Media;
 using ClassIsland.Core.Abstractions.Controls;
+using ClassIsland.Core.Attributes;
+using ExtraIsland.ConfigHandlers;
+using ExtraIsland.Shared;
 // ReSharper disable once RedundantUsingDirective
-using ClassIsland.Core;
 
-namespace ExtraIsland.SettingsPages;
+namespace ExtraIsland.SettingPages;
 
+[HidePageTitle]
 [SettingsPageInfo("extraisland.master","ExtraIsland·主设置","\uE51A","\uE519")]
 public partial class MainSettingsPage : SettingsPageBase {
     public MainSettingsPage() {

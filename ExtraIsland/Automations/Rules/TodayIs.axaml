@@ -13,6 +13,7 @@
                             d:DesignHeight="300" d:DesignWidth="300">
     <ci:RuleSettingsControlBase.Resources>
         <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+        <converters:DayOfWeekEnumStringConverter x:Key="DayOfWeekEnumStringConverter"/>
     </ci:RuleSettingsControlBase.Resources>
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:TodayIs}}" 
                 Orientation="Horizontal">

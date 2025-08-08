@@ -9,7 +9,7 @@ using ExtraIsland.Automations;
 using ExtraIsland.Components;
 using ExtraIsland.ConfigHandlers;
 using ExtraIsland.LifeMode.Components;
-using ExtraIsland.SettingsPages;
+using ExtraIsland.SettingPages;
 //using ExtraIsland.LifeMode.Components;
 //using ExtraIsland.SettingsPages;
 using ExtraIsland.Shared;
