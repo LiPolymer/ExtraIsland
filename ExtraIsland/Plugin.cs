@@ -3,12 +3,13 @@ using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Extensions.Registry;
 using ClassIsland.Shared;
+using ExtraIsland.Automations;
 //using ExtraIsland.AuthorizeProvider;
 //using ExtraIsland.Automations;
 using ExtraIsland.Components;
 using ExtraIsland.ConfigHandlers;
 using ExtraIsland.LifeMode.Components;
-using ExtraIsland.SettingsPages;
+using ExtraIsland.SettingPages;
 //using ExtraIsland.LifeMode.Components;
 //using ExtraIsland.SettingsPages;
 using ExtraIsland.Shared;
@@ -73,7 +74,7 @@ public class Plugin : PluginBase {
         ct.WriteLine("正在注册ClassIsland要素...");
         //Services
         services.AddHostedService<ServicesFetcherService>();
-        //services.AddHostedService<Register>();
+        services.AddHostedService<Register>();
         //Components
         services.AddComponent<BetterCountdown,BetterCountdownSettings>();
         services.AddComponent<FluentClock,FluentClockSettings>();
@@ -87,7 +88,7 @@ public class Plugin : PluginBase {
         //services.AddSettingsPage<DutySettingsPage>();
         services.AddSettingsPage<TinyFeaturesSettingsPage>();
         //Actions
-        //Register.Claim(services);
+        Register.Claim(services);
         //Authorizer
         //services.AddAuthorizeProvider<UsbDriveAuthorizer>();
         //LifeMode

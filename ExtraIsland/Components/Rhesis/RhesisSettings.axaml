@@ -74,10 +74,11 @@
                 <controls:SettingsExpander.Footer>
                     <Grid>
                         <StackPanel Orientation="Horizontal">
-                            <!--todo:输入时验证数字-->
-                            <TextBox
-                                Text="{Binding Settings.LengthLimitation, Converter={StaticResource IntToStringConverter}, Mode=TwoWay}"
+                            <NumericUpDown
+                                Value="{Binding Settings.LengthLimitation, Mode=TwoWay}"
                                 VerticalAlignment="Center"
+                                FormatString="0"
+                                Minimum="0"
                                 InputMethod.IsInputMethodEnabled="False"
                                 MinWidth="30"/>
                         </StackPanel>
@@ -89,9 +90,11 @@
                                        Description="设定自动刷新的时间间隔,单位为秒,设为0即禁用">
                 <controls:SettingsExpander.Footer>
                     <StackPanel Orientation="Horizontal">
-                        <TextBox
-                            Text="{Binding Settings.UpdateTimeGapSeconds, Converter={StaticResource DoubleToStringConverter}, Mode=TwoWay}"
+                        <NumericUpDown
+                            Value="{Binding Settings.UpdateTimeGapSeconds, Mode=TwoWay}"
                             VerticalAlignment="Center"
+                            FormatString="0.0"
+                            Minimum="0"
                             InputMethod.IsInputMethodEnabled="False"
                             MinWidth="30" />
                     </StackPanel>
@@ -132,13 +135,16 @@
             <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEE39;}"
                                        IsVisible="{Binding Settings.AttributesRule, Converter={StaticResource AttributesDisplayVisibilityConverter}, Mode=OneWay}"
                                        Header="额外信息展示时长"
-                                       Description="请注意该项不能大于切换间隔-1">
+                                       Description="设置额外信息被展示的时长">
                 <controls:SettingsExpander.Footer>
                     <Grid>
                         <StackPanel Orientation="Horizontal">
-                            <TextBox
-                                Text="{Binding Settings.AttributesShowingInterval, Converter={StaticResource IntToStringConverter}, Mode=TwoWay}"
+                            <NumericUpDown
+                                Value="{Binding Settings.AttributesShowingInterval, Mode=TwoWay}"
                                 VerticalAlignment="Center"
+                                FormatString="0"
+                                Minimum="0"
+                                Maximum="{Binding Settings.UpdateTimeGapSeconds}"
                                 InputMethod.IsInputMethodEnabled="False"
                                 MinWidth="30"/>
                         </StackPanel>

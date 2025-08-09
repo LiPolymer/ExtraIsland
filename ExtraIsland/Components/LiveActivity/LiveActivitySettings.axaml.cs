@@ -10,8 +10,6 @@ public partial class LiveActivitySettings : ComponentBase<LiveActivityConfig> {
         IsLyricsIslandLoaded = EiUtils.IsLyricsIslandInstalled();
         IsLifeModeEnabled = GlobalConstants.Handlers.MainConfig!.Data.IsLifeModeActivated;
         InitializeComponent();
-        // TODO: 修改为绑定+转换器
-        ConflictHintContainer.IsVisible = IsLyricsIslandLoaded;
     }
 
     void DeleteButton_Click(object sender,RoutedEventArgs e) {

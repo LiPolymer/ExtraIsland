@@ -1,4 +1,4 @@
-﻿<ci:SettingsPageBase x:Class="ExtraIsland.SettingsPages.TinyFeaturesSettingsPage"
+﻿<ci:SettingsPageBase x:Class="ExtraIsland.SettingPages.TinyFeaturesSettingsPage"
                      xmlns="https://github.com/avaloniaui"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -8,14 +8,13 @@
                      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                      xmlns:sc="clr-namespace:ExtraIsland.Shared.Converters"
                      xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                     xmlns:settingPages="clr-namespace:ExtraIsland.SettingPages"
                      mc:Ignorable="d"
                      Unloaded="MiscSettingsPage_OnUnloaded">
     <ci:SettingsPageBase.Resources>
-        <sc:IntToStringConverter x:Key="IntToStringConverter"/>
-        <sc:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
         <sc:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
     </ci:SettingsPageBase.Resources>
-    <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TinyFeaturesSettingsPage}}">
+    <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=settingPages:TinyFeaturesSettingsPage}}">
         <StackPanel Classes="settings-container animated-intro">
             <Label FontSize="20"
                    VerticalAlignment="Center"
@@ -30,7 +29,7 @@
                     VerticalAlignment="Center"/>
                 <Label VerticalAlignment="Center" Margin="0,5,0,0" FontSize="30">全局 · 微功能</Label>
             </StackPanel>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xF1AE;}"
+            <!--controls:SettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xF1AE;}"
                                        Header="导引界面"
                                        Description="下次启动开始将显示导引界面,直到选择不再显示">
                 <controls:SettingsExpander.Footer>
@@ -86,7 +85,7 @@
                                  Margin="3,0,3,0"/>
                     </controls:SettingsExpanderItem.Footer>
                 </controls:SettingsExpanderItem>
-            </controls:SettingsExpander>
+            </-->
             <controls:SettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xE0BB;}"
                                        Header="(隐藏设置) 主界面启用鼠标点击"
                                        Description="允许鼠标与主界面上的控件交互"

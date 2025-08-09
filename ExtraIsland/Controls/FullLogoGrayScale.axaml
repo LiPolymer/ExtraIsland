@@ -1,0 +1,94 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="ExtraIsland.Controls.FullLogoGrayScale">
+        <UserControl.Resources>
+        <DrawingImage x:Key="ExtraIslandFullLogo">
+            <DrawingImage.Drawing>
+                <DrawingGroup ClipGeometry="M0,0 V672 H791 V0 H0 Z">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="#FF8D8D8D"
+                                         Geometry="F1 M791,672z M0,0z M595.801,306.322L585.205,230.923 509.806,241.52 502.741,191.254 578.14,180.657 567.543,105.258 617.809,98.1935 628.406,173.592 703.27,163.071 710.335,213.337 635.471,223.858 646.067,299.258 595.801,306.322z" />
+                        <DrawingGroup>
+                            <DrawingGroup.OpacityMask>
+                                <DrawingBrush Stretch="Uniform"
+                                              TileMode="None">
+                                    <DrawingBrush.Drawing>
+                                        <DrawingGroup>
+                                            <GeometryDrawing Brush="#FFFFFFFF">
+                                                <GeometryDrawing.Geometry>
+                                                    <RectangleGeometry RadiusX="0" RadiusY="0"
+                                                                       Rect="483.577,79.1653,246.218,246.218" />
+                                                </GeometryDrawing.Geometry>
+                                            </GeometryDrawing>
+                                            <GeometryDrawing Brush="#FF000000"
+                                                             Geometry="F1 M595.801,306.322L585.205,230.923 509.806,241.52 502.741,191.254 578.14,180.657 567.543,105.258 617.809,98.1935 628.406,173.592 703.27,163.071 710.335,213.337 635.471,223.858 646.067,299.258 595.801,306.322z" />
+                                        </DrawingGroup>
+                                    </DrawingBrush.Drawing>
+                                </DrawingBrush>
+                            </DrawingGroup.OpacityMask>
+                            <DrawingGroup>
+                                <DrawingGroup.OpacityMask>
+                                    <DrawingBrush Stretch="Uniform"
+                                                  TileMode="None">
+                                        <DrawingBrush.Drawing>
+                                            <DrawingGroup>
+                                                <GeometryDrawing Brush="#FFFFFFFF">
+                                                    <GeometryDrawing.Geometry>
+                                                        <RectangleGeometry RadiusX="0" RadiusY="0"
+                                                                           Rect="483.577,79.1653,246.218,246.218" />
+                                                    </GeometryDrawing.Geometry>
+                                                </GeometryDrawing>
+                                                <GeometryDrawing Brush="#FF000000"
+                                                                 Geometry="F1 M595.801,306.322L585.205,230.923 509.806,241.52 502.741,191.254 578.14,180.657 567.543,105.258 617.809,98.1935 628.406,173.592 703.27,163.071 710.335,213.337 635.471,223.858 646.067,299.258 595.801,306.322z" />
+                                            </DrawingGroup>
+                                        </DrawingBrush.Drawing>
+                                    </DrawingBrush>
+                                </DrawingGroup.OpacityMask>
+                                <GeometryDrawing
+                                    Geometry="F1 M791,672z M0,0z M595.801,306.322L588.869,307.296C589.407,311.125,592.947,313.792,596.776,313.254L595.801,306.322z M585.205,230.923L592.136,229.949C591.598,226.12,588.059,223.453,584.23,223.991L585.205,230.923z M509.806,241.52L502.874,242.494C503.412,246.322,506.951,248.99,510.78,248.452L509.806,241.52z M502.741,191.254L501.767,184.322C497.939,184.86,495.271,188.4,495.809,192.228L502.741,191.254z M578.14,180.657L579.114,187.589C582.943,187.051,585.61,183.511,585.072,179.683L578.14,180.657z M567.543,105.258L566.569,98.3261C562.741,98.8641,560.073,102.404,560.612,106.232L567.543,105.258z M617.809,98.1935L624.741,97.2193C624.203,93.3909,620.664,90.7236,616.835,91.2616L617.809,98.1935z M628.406,173.592L621.474,174.567C622.012,178.395,625.552,181.062,629.38,180.524L628.406,173.592z M703.27,163.071L710.202,162.097C709.664,158.268,706.125,155.601,702.296,156.139L703.27,163.071z M710.335,213.337L711.309,220.269C715.137,219.731,717.805,216.191,717.267,212.363L710.335,213.337z M635.471,223.859L634.496,216.927C630.668,217.465,628.001,221.004,628.539,224.833L635.471,223.859z M646.067,299.257L647.042,306.189C650.87,305.651,653.537,302.112,652.999,298.283L646.067,299.257z M602.733,305.348L592.136,229.949 578.273,231.897 588.869,307.296 602.733,305.348z M584.23,223.991L508.831,234.588 510.78,248.452 586.179,237.855 584.23,223.991z M516.737,240.545L509.673,190.279 495.809,192.228 502.874,242.494 516.737,240.545z M503.715,198.186L579.114,187.589 577.166,173.725 501.767,184.322 503.715,198.186z M585.072,179.683L574.475,104.284 560.612,106.232 571.208,181.631 585.072,179.683z M568.518,112.19L618.784,105.125 616.835,91.2616 566.569,98.3261 568.518,112.19z M610.878,99.1677L621.474,174.567 635.338,172.618 624.741,97.2193 610.878,99.1677z M629.38,180.524L704.245,170.003 702.296,156.139 627.432,166.661 629.38,180.524z M696.339,164.045L703.403,214.311 717.267,212.363 710.202,162.097 696.339,164.045z M709.361,206.405L634.496,216.927 636.445,230.79 711.309,220.269 709.361,206.405z M628.539,224.833L639.135,300.232 652.999,298.283 642.402,222.884 628.539,224.833z M645.093,292.326L594.827,299.39 596.776,313.254 647.042,306.189 645.093,292.326z">
+                                    <GeometryDrawing.Brush>
+                                        <SolidColorBrush Color="#FF9FFFE3" Opacity="0.78" />
+                                    </GeometryDrawing.Brush>
+                                </GeometryDrawing>
+                            </DrawingGroup>
+                        </DrawingGroup>
+                    </DrawingGroup>
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="#FFE2E2E2"
+                                         Geometry="F1 M791,672z M0,0z M677.493,580.2L246.833,637.908 218.438,426.004 649.098,368.296C656.591,367.292 664.177,369.306 670.185,373.894 676.194,378.483 680.134,385.271 681.138,392.764L701.961,548.16C702.965,555.654 700.951,563.239 696.362,569.248 691.774,575.257 684.986,579.196 677.493,580.2z" />
+                    </DrawingGroup>
+                    <GeometryDrawing Brush="#FF999999"
+                                     Geometry="F1 M791,672z M0,0z M380.969,458.152L275.017,472.35 289.214,578.302 395.166,564.104 380.969,458.152z" />
+                    <GeometryDrawing Brush="#FF999999"
+                                     Geometry="F1 M791,672z M0,0z M513.409,440.406L407.457,454.603 421.654,560.555 527.606,546.358 513.409,440.406z" />
+                    <GeometryDrawing Brush="#FF999999"
+                                     Geometry="F1 M791,672z M0,0z M645.813,422.664L539.861,436.861 554.059,542.813 660.011,528.616 645.813,422.664z" />
+                    <GeometryDrawing Brush="#FF959595"
+                                     Geometry="F1 M791,672z M0,0z M426.415,153.665L218.438,426.004 246.833,637.908 454.81,365.569 426.415,153.665z" />
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="#FFF6F6F6"
+                                         Geometry="F1 M791,672z M0,0z M454.81,365.569L73.3828,416.68C65.8894,417.684 58.304,415.67 52.2954,411.082 46.2868,406.493 42.347,399.705 41.3429,392.212L20.5201,236.816C19.516,229.322 21.5298,221.737 26.1184,215.728 30.707,209.719 37.4946,205.78 44.988,204.776L426.415,153.665 454.81,365.569z" />
+                    </DrawingGroup>
+                    <GeometryDrawing Brush="#FFCCCCCC"
+                                     Geometry="F1 M791,672z M0,0z M170.997,232.938L65.0447,247.135 79.2421,353.087 185.194,338.89 170.997,232.938z" />
+                    <GeometryDrawing Brush="#FF949494"
+                                     Geometry="F1 M791,672z M0,0z M397.099,202.641L192.187,230.098 206.385,336.051 411.296,308.593 397.099,202.641z" />
+                    <GeometryDrawing
+                        Geometry="F1 M791,672z M0,0z M430.342,397.609L246.833,637.908 705.747,576.414 702.879,555.012 486.85,390.037 430.342,397.609z">
+                        <GeometryDrawing.Brush>
+                            <LinearGradientBrush StartPoint="350.822,501.739" EndPoint="611.025,700.449" SpreadMethod="Pad" Opacity="1">
+                                <GradientStop Color="#26000000" Offset="0.32" />
+                                <GradientStop Color="#05000000" Offset="0.62" />
+                                <GradientStop Color="#00000000" Offset="1" />
+                            </LinearGradientBrush>
+                        </GeometryDrawing.Brush>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+    </UserControl.Resources>
+    <Image Source="{StaticResource ExtraIslandFullLogo}"/>
+</UserControl>

@@ -5,8 +5,9 @@ using ClassIsland.Core.Attributes;
 using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
 
-namespace ExtraIsland.SettingsPages;
+namespace ExtraIsland.SettingPages;
 
+[HidePageTitle]
 [SettingsPageInfo("extraisland.tiny","ExtraIsland·微功能","\uEDC5","\uEDC4")]
 public partial class TinyFeaturesSettingsPage : SettingsPageBase {
     public TinyFeaturesSettingsPage() {

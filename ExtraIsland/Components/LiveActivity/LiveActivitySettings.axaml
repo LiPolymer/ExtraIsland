@@ -91,7 +91,8 @@
             <Border x:Name="ConflictHintContainer"
                     Background="#1500F0F0"
                     Margin="0 0 0 5"
-                    CornerRadius="4">
+                    CornerRadius="4"
+                    IsVisible="{Binding IsLyricsIslandLoaded}">
                     <StackPanel Orientation="Horizontal">
                         <ci:FluentIcon Glyph="&#xE9E3;"
                                                  VerticalAlignment="Center"

@@ -127,14 +127,14 @@ public partial class Rhesis : ComponentBase<RhesisConfig> {
                         _subLabelAnimator.Update(subObj,Settings.IsAnimationEnabled,Settings.IsSwapAnimationEnabled);
                     } else {
                         SubLabel.IsVisible = false;
-                        if (Settings.AttributesShowingInterval > (Settings.UpdateTimeGapSeconds - 1)) {
-                            Settings.AttributesShowingInterval = 3;
-                        } else { 
-                            new Thread(() => {
-                                Thread.Sleep(Settings.AttributesShowingInterval * 1000);
-                                _mainLabelAnimator.Update(subObj,Settings.IsAnimationEnabled,false); 
-                            }).Start();
+                        if (Math.Abs(Settings.AttributesShowingInterval - Settings.UpdateTimeGapSeconds) < 0.5) {
+                            _mainLabelAnimator.Update(subObj,Settings.IsAnimationEnabled,false);
+                            return;
                         }
+                        new Thread(() => {
+                            Thread.Sleep((int)((Settings.UpdateTimeGapSeconds - Settings.AttributesShowingInterval) * 1000));
+                            _mainLabelAnimator.Update(subObj,Settings.IsAnimationEnabled,false);
+                        }).Start();
                     }
                 } else {
                     SubLabel.IsVisible =  false;
