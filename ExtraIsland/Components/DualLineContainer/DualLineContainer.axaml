@@ -1,0 +1,64 @@
+﻿<ci:ComponentBase x:TypeArguments="local:DualLineContainerConfig"
+                  x:Class="ExtraIsland.Components.DualLineContainer"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:ExtraIsland.Components"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
+                  Loaded="DualLineContainer_OnLoaded"
+                  mc:Ignorable="d">
+    <ci:ComponentBase.Resources>
+        <converters:DoubleMultipleConverter x:Key="DoubleMultipleConverter" />
+        <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter" />
+    </ci:ComponentBase.Resources>
+    <Grid VerticalAlignment="Stretch" DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:DualLineContainer}}">
+        <ItemsControl Margin="-6 0"
+                      VerticalAlignment="Top"
+                      ClipToBounds="False"
+                      ItemsSource="{Binding Settings.UpChildren}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Classes="components-panel" Orientation="Horizontal">
+                        <StackPanel.RenderTransform>
+                            <ScaleTransform ScaleX="0.6" ScaleY="0.6"/>
+                        </StackPanel.RenderTransform>
+                    </StackPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ci:ComponentPresenter IsOnMainWindow="True" 
+                                           ClipToBounds="False"
+                                           Settings="{Binding}"
+                                           HidingRules="{Binding HidingRules, Mode=OneWay}"
+                                           HideOnRule="{Binding HideOnRule, Mode=OneWay}"
+                                           Margin="6 0" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <ItemsControl Margin="-6 0"
+                      VerticalAlignment="Bottom"
+                      ItemsSource="{Binding Settings.DownChildren}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Classes="components-panel" Orientation="Horizontal">
+                        <StackPanel.RenderTransform>
+                            <ScaleTransform ScaleX="0.7" ScaleY="0.7"/>
+                        </StackPanel.RenderTransform>
+                    </StackPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ci:ComponentPresenter IsOnMainWindow="True" 
+                                           Settings="{Binding}"
+                                           HidingRules="{Binding HidingRules, Mode=OneWay}"
+                                           HideOnRule="{Binding HideOnRule, Mode=OneWay}"
+                                           Margin="6 0"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</ci:ComponentBase>

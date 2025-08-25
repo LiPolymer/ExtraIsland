@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using Avalonia;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -6,6 +7,7 @@ using Avalonia.Threading;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
+using ClassIsland.Platforms.Abstraction;
 using ExtraIsland.Shared;
 
 namespace ExtraIsland.Components;
@@ -43,11 +45,15 @@ public partial class LiveActivity : ComponentBase<LiveActivityConfig> {
 
     void Check() {
         Dispatcher.UIThread.InvokeAsync(() => {
-            Icon.Foreground = WindowsUtils.IsOurWindowInForeground()
-                ? Brushes.DeepSkyBlue
-                : Brushes.LightGreen;
-            string? title = WindowsUtils.GetActiveWindowTitle();
-            title ??= "";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                Icon.Foreground = WindowsUtils.IsOurWindowInForeground()
+                    ? Brushes.DeepSkyBlue
+                    : Brushes.LightGreen; 
+            } else {
+                Icon.Foreground = Brushes.LightGreen;
+            }
+            string? title = PlatformServices.WindowPlatformService.GetWindowTitle(PlatformServices.WindowPlatformService
+                                                                                      .ForegroundWindowHandle);
             title = Replacer(title,Settings.ReplacementsList);
             title = title == "" ? null : title;
             if (title == null & (!Settings.IsLyricsEnabled | _timeCounter <= 0)) {
