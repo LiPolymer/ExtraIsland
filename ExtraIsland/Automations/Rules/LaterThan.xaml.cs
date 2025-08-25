@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ExtraIsland.Shared;
 
 namespace ExtraIsland.Automations.Rules;
 
@@ -9,7 +10,7 @@ public partial class LaterThan {
     
     public static bool Rule(object? rawConfig) {
         LaterThanConfig config = (LaterThanConfig)rawConfig!;
-        TimeSpan current = DateTime.Now.TimeOfDay;
+        TimeSpan current = GlobalConstants.HostInterfaces.ExactTimeService!.GetCurrentLocalDateTime().TimeOfDay;
         return current.CompareTo(config.TargetTime.TimeOfDay) switch {
             < 0 => false,
             >= 0 => true
