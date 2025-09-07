@@ -88,14 +88,17 @@
                                        Description="倒计时设定的日期和时间">
                 <controls:SettingsExpander.Footer>
                     <StackPanel Orientation="Horizontal">
-                        <!--DatePicker SelectedDate="{Binding Settings.TargetDateTime, Mode=TwoWay}"
-                                    Margin="10 8 0 0" MaxWidth="320" /-->
-                        <!--TimePicker SelectedTime="{Binding Settings.TargetDateTime, Mode=TwoWay}"
-                                    UseSeconds="True"
-                                    Margin="4 8 0 0" MaxWidth="320" /-->
                         <CalendarDatePicker
                             SelectedDate="{Binding Settings.TargetDateTime, Mode=TwoWay}"
-                            Width="120" />
+                            Width="120"/>
+                        
+                        <!--煞笔控件毁我一生😭😭😭-->
+                        <TimePicker UseSeconds="True"
+                                    Margin="5,0,0,0"
+                                    Width="50"
+                                    Loaded="TimePicker_OnLoaded"
+                                    SelectedTimeChanged="TimePicker_OnSelectedTimeChanged"/>
+                        
                     </StackPanel>
                 </controls:SettingsExpander.Footer>
             </controls:SettingsExpander>
