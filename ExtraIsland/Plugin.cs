@@ -71,6 +71,7 @@ public class Plugin : PluginBase {
         }
         cct.WriteLine("正在载入其余配置...");
         GlobalConstants.Handlers.OnDuty = new OnDutyPersistedConfigHandler();
+        GlobalConstants.Handlers.PersistedFlagHandler = ConfigBase.Load<PersistedFlagHandler>();
         ct.WriteLine("正在注册ClassIsland要素...");
         //Services
         services.AddHostedService<ServicesFetcherService>();

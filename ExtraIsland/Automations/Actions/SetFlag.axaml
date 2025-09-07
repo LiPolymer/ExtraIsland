@@ -10,6 +10,7 @@
                               mc:Ignorable="d">
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=actions1:SetFlag}}"
                 Orientation="Horizontal">
+        <CheckBox Content="持久化" IsChecked="{Binding Settings.IsPersisted}"/>
         <TextBox Text="{Binding Settings.TargetFlag, Mode=TwoWay}" MinWidth="40" MaxWidth="100" HorizontalContentAlignment="Center"/>
         <Label Content="为"/>
         <TextBox Text="{Binding Settings.FlagContent, Mode=TwoWay}" MinWidth="40" MaxWidth="100" HorizontalContentAlignment="Center"/>

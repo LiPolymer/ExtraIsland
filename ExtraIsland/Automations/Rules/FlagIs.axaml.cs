@@ -1,5 +1,6 @@
 ﻿using ClassIsland.Core.Abstractions.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ExtraIsland.Shared;
 
 namespace ExtraIsland.Automations.Rules;
 
@@ -15,7 +16,9 @@ public partial class FlagIs: RuleSettingsControlBase<FlagIsConfig> {
     public static bool Rule(object? rawConfig) {
         FlagIsConfig config = (FlagIsConfig)rawConfig!;
         string? flagContent = null;
-        if (Flag.Flags.TryGetValue(config.TargetFlag,out string? flag)) flagContent = flag;
+        if (Flag.Flags.Concat(GlobalConstants.Handlers.PersistedFlagHandler!.FlagsTable)
+            .ToDictionary()
+            .TryGetValue(config.TargetFlag,out string? flag)) flagContent = flag;
         return flagContent == config.FlagContent;
     }
 }
