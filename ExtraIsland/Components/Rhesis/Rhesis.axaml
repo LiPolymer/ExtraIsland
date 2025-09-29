@@ -7,8 +7,8 @@
                   xmlns:local="clr-namespace:ExtraIsland.Components"
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
                   mc:Ignorable="d"
-                  Loaded="Rhesis_OnLoaded"
-                  Unloaded="Rhesis_OnUnloaded">
+                  AttachedToVisualTree="OnAttachedToVisualTree"
+                  DetachedFromVisualTree="OnDetachedFromVisualTree">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:Rhesis}}"
           ClipToBounds="True">
         <StackPanel Orientation="Horizontal">

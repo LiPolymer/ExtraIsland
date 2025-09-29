@@ -1,4 +1,5 @@
-﻿using Avalonia.Interactivity;
+﻿using Avalonia;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Threading;
 using ClassIsland.Core.Abstractions.Controls;
@@ -184,10 +185,10 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         });
     }
     
-    void OnLoaded(object? sender,RoutedEventArgs e) {
+    void OnAttachedToVisualTree(object? sender,VisualTreeAttachmentEventArgs e) {
         Dispatcher.UIThread.InvokeAsync(LoadedAction);
     }
-    void OnUnloaded(object? sender,RoutedEventArgs e) {
+    void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs e) {
         Settings.OnAccurateChanged -= AccurateModeUpdater;
         Settings.OnSecondsSmallChanged -= SmallSecondsUpdater;
         Settings.OnOClockEmpEnabled -= ShowEmphasise;

@@ -1,22 +1,21 @@
-﻿using Avalonia.Interactivity;
-using Avalonia.Threading;
+﻿using Avalonia;
+using Avalonia.Interactivity;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
 
 namespace ExtraIsland.Components;
 
-// TODO: 调试结束后移除此组件
 [ComponentInfo(
-    "D61B565D-5BC9-9999-6666-2EDB22F9756E",
-    "调试 · 歌词",
+    "23aac481-8b12-4fc9-aac4-818b129fc9a7",
+    "动态歌词",
     "\uEBCA",
     "测试歌词岛接口封装类LyricsIslandHandler()"
 )]
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public partial class DebugLyricsHandler: ComponentBase {
-    public DebugLyricsHandler() {
+public partial class DynamicLyrics: ComponentBase {
+    public DynamicLyrics() {
         if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
             _handler = new LycheeLyricsProvider();
         } else {
@@ -51,11 +50,11 @@ public partial class DebugLyricsHandler: ComponentBase {
         }
     }
     bool _daemonEnabled;
-    void Control_OnLoaded(object? sender,RoutedEventArgs e) {
+    void OnDetachedToVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
+        _daemonEnabled = false;
+    }
+    void OnAttachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs e) {
         _daemonEnabled = true;
         new Thread(CounterDaemon).Start();
-    }
-    void Control_OnUnloaded(object? sender,RoutedEventArgs e) {
-        _daemonEnabled = false;
     }
 }

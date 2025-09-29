@@ -8,8 +8,8 @@
                   x:Class="ExtraIsland.Components.FluentClock"
                   x:TypeArguments="components:FluentClockConfig"
                   ClipToBounds="True"
-                  Loaded="OnLoaded" 
-                  Unloaded="OnUnloaded">
+                  AttachedToVisualTree="OnAttachedToVisualTree" 
+                  DetachedFromVisualTree="OnDetachedFromVisualTree">
      <ci:ComponentBase.Resources>
         <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter"/>
     </ci:ComponentBase.Resources>

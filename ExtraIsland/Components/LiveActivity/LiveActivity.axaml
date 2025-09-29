@@ -8,8 +8,8 @@
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
                   mc:Ignorable="d"
                   ClipToBounds="False"
-                  Loaded="LiveActivity_OnLoaded"
-                  Unloaded="LiveActivity_OnUnloaded"
+                  AttachedToVisualTree="OnAttachedToVisualTree"
+                  DetachedFromVisualTree="OnDetachedFromVisualTree"
                   d:DesignHeight="300" d:DesignWidth="300">
     <ci:ComponentBase.Resources>
         <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter"/>

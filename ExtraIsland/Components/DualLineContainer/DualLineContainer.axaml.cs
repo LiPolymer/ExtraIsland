@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Avalonia;
 using Avalonia.Data;
 using Avalonia.Interactivity;
 using ClassIsland.Core.Abstractions.Controls;
@@ -11,15 +12,20 @@ using ExtraIsland.Shared.Converters;
 namespace ExtraIsland.Components;
 
 [ContainerComponent]
-[ComponentInfo("1FA88C26-6E17-4CF5-9BB4-771C7527FD1B", "双行容器", "😰", "将多个组件组合到两小行中显示")]
+[ComponentInfo("1FA88C26-6E17-4CF5-9BB4-771C7527FD1B", "(WIP)双行容器", "\uF021", "将多个组件组合到两小行中显示")]
 public partial class DualLineContainer: ComponentBase<DualLineContainerConfig> {
     public DualLineContainer() {
         InitializeComponent();
     }
 
-    void DualLineContainer_OnLoaded(object? sender,RoutedEventArgs routedEventArgs) {
+    void OnAttachedToVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         Settings.ContainerContentChanged += UpdateContent;
     }
+    
+    void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
+        Settings.ContainerContentChanged -= UpdateContent;
+    }
+    
     
     void UpdateContent() {
         Console.WriteLine("Updated");

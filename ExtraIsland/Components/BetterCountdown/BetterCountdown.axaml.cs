@@ -203,10 +203,10 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         }
     }
     
-    void BetterCountdown_OnLoaded(object? sender, RoutedEventArgs e) {
+    void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         Dispatcher.UIThread.InvokeAsync(OnLoad);
     }
-    void BetterCountdown_OnUnloaded(object? sender,RoutedEventArgs e) {
+    void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         OnTimeChanged -= DetectEvent;
         Settings.OnAccuracyChanged -= UpdateAccuracy;
         Settings.OnNoGapDisplayChanged -= UpdateGap;

@@ -10,8 +10,8 @@
                   mc:Ignorable="d"
                   d:DesignHeight="35"
                   ClipToBounds="True"
-                  Loaded="BetterCountdown_OnLoaded"
-                  Unloaded="BetterCountdown_OnUnloaded">
+                  AttachedToVisualTree="OnAttachedToVisualTree"
+                  DetachedFromVisualTree="OnDetachedFromVisualTree">
     <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=components:BetterCountdown}}"
           VerticalAlignment="Center"
           TextElement.FontSize="{DynamicResource MainWindowEmphasizedFontSize}"

@@ -71,13 +71,13 @@ public partial class Rhesis : ComponentBase<RhesisConfig> {
     readonly Label _titleLabel;
     readonly Label _authorLabel;
     
-    void Rhesis_OnLoaded(object sender,RoutedEventArgs e) {
+    void OnAttachedToVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         Settings.LastUpdate = DateTime.Now;
         Update();
         LessonsService.PostMainTimerTicked += UpdateEvent;
     }
 
-    void Rhesis_OnUnloaded(object sender,RoutedEventArgs e) {
+    void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         LessonsService.PostMainTimerTicked -= UpdateEvent;
     }
 

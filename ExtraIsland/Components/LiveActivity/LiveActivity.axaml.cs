@@ -165,7 +165,7 @@ public partial class LiveActivity : ComponentBase<LiveActivityConfig> {
         _activityAnimator.Update(isShow);
     }
 
-    void LiveActivity_OnLoaded(object? sender,RoutedEventArgs e) {
+    void OnAttachedToVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         //配置迁移
         if (Settings.IgnoreListString != string.Empty) {
             string[] oldList;
@@ -194,7 +194,7 @@ public partial class LiveActivity : ComponentBase<LiveActivityConfig> {
         Settings.OnMarginChanged += UpdateMargin;
         Settings.OnLyricsChanged += InitializeLyrics;
     }
-    void LiveActivity_OnUnloaded(object? sender,RoutedEventArgs e) {
+    void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         LessonsService.PostMainTimerTicked -= Check;
         Settings.OnMarginChanged -= UpdateMargin;
         Settings.OnLyricsChanged -= InitializeLyrics;

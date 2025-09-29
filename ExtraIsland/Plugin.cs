@@ -83,7 +83,7 @@ public class Plugin : PluginBase {
         //services.AddComponent<OnDuty,OnDutySettings>();
         services.AddComponent<LiveActivity,LiveActivitySettings>();
         services.AddComponent<DualLineContainer>();
-        services.AddComponent<DebugLyricsHandler>();
+        services.AddComponent<DynamicLyrics>();
         //SettingsPages
         services.AddSettingsPage<MainSettingsPage>();
         //services.AddSettingsPage<DutySettingsPage>();

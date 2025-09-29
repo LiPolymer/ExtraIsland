@@ -7,7 +7,8 @@
                   xmlns:local="clr-namespace:ExtraIsland.Components"
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
                   xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
-                  Loaded="DualLineContainer_OnLoaded"
+                  AttachedToVisualTree="OnAttachedToVisualTree"
+                  DetachedFromVisualTree="OnDetachedFromVisualTree"
                   mc:Ignorable="d">
     <ci:ComponentBase.Resources>
         <converters:DoubleMultipleConverter x:Key="DoubleMultipleConverter" />
