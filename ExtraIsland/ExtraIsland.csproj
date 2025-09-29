@@ -154,5 +154,9 @@
 	    <DependentUpon>FullLogoGrayScale.axaml</DependentUpon>
 	    <SubType>Code</SubType>
 	  </Compile>
+	  <Compile Update="Automations\Rules\TeacherIs.axaml.cs">
+	    <DependentUpon>TeacherIs.axaml</DependentUpon>
+	    <SubType>Code</SubType>
+	  </Compile>
 	</ItemGroup>
 </Project>

@@ -41,7 +41,10 @@ public class Register : IHostedService {
         
         services.AddRule<LaterThanConfig, LaterThan>
             ("extraIsland.rule.laterThan", "时间晚于", "\uE4D4");
-        
+        services.AddRule<TeacherIsConfig, TeacherIs>
+            ("extraIsland.rule.currentTeacherIs", "当前教师是", "\uECF9");
+        services.AddRule<TeacherIsConfig, TeacherIs>
+            ("extraIsland.rule.nextTeacherIs", "下节课教师是", "\uECF7");
         services.AddRule<FlagIsConfig, FlagIs>
             ("extraIsland.rule.flagIs", "读标志", "\uE844");
         // 触发器
@@ -69,6 +72,8 @@ public class Register : IHostedService {
         rulesetService.RegisterRuleHandler("extraIsland.rule.todayIs",TodayIs.Rule);
         rulesetService.RegisterRuleHandler("extraIsland.rule.laterThan",LaterThan.Rule);
         rulesetService.RegisterRuleHandler("extraIsland.rule.flagIs",FlagIs.Rule);
+        rulesetService.RegisterRuleHandler("extraIsland.rule.currentTeacherIs",TeacherIs.CurrentRule);
+        rulesetService.RegisterRuleHandler("extraIsland.rule.nextTeacherIs",TeacherIs.NextRule);
     }
     
     public Task StartAsync(CancellationToken _) {
