@@ -195,6 +195,71 @@
                                      Header="循环"
                                      Description="开启后,每当列表遍历完毕,索引将自动归零"
                                      IsOn="{Binding Settings.Data.IsCycled, Mode=TwoWay}"/>
+                    
+                    <!-- 节假日跳过功能 -->
+                    <materialDesign:Card Margin="0 0 0 6">
+                        <Expander Background="Transparent"
+                                  IsExpanded="{Binding Settings.Data.IsHolidaySkipEnabled, Mode=OneWay}"
+                                  TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                            <Expander.Header>
+                                <ci:SettingsControl IconGlyph="CalendarWeekend"
+                                                    Header="自动跳过节假日"
+                                                    Description="自动跳过国定假日和双休日的值日轮换"
+                                                    HasSwitcher="True"
+                                                    IsOn="{Binding Settings.Data.IsHolidaySkipEnabled, Mode=TwoWay}"
+                                                    Margin="-12 0" />
+                            </Expander.Header>
+                            <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+                            <StackPanel Orientation="Vertical" Style="{StaticResource SettingsPageStackPanelStyle}">
+                                <ci:SettingsControl IconGlyph="CalendarClock"
+                                                    Header="节假日跳过历史"
+                                                    Description="上次跳过的节假日信息"
+                                                    HasSwitcher="False"
+                                                    Margin="12,0,6,6" />
+                                <!-- 上次跳过的节假日信息 -->
+                                <Border Background="{DynamicResource MaterialDesignDivider}"
+                                        Margin="30,0,0,6"
+                                        CornerRadius="5"
+                                        Padding="8,4">
+                                    <TextBlock x:Name="LastSkippedHolidayLabel"
+                                               Foreground="{DynamicResource MaterialDesignBody}"
+                                               TextWrapping="Wrap"
+                                               Text="上次跳过的节假日：暂无&#x0a;索引变化：- → -" />
+                                </Border>
+                                
+                                <ci:SettingsControl IconGlyph="CalendarCheckOutline"
+                                                    Header="即将跳过的节假日"
+                                                    Description="下一个将要跳过的节假日"
+                                                    HasSwitcher="False"
+                                                    Margin="12,6,6,6" />
+                                <!-- 即将跳过的节假日信息 -->
+                                <Border Background="{DynamicResource MaterialDesignDivider}"
+                                        Margin="30,0,0,6"
+                                        CornerRadius="5"
+                                        Padding="8,4">
+                                    <TextBlock x:Name="NextHolidayLabel"
+                                               Foreground="{DynamicResource MaterialDesignBody}"
+                                               Text="即将跳过的节假日：查询中..." />
+                                </Border>
+                                
+                                <ci:SettingsControl IconGlyph="InformationOutline"
+                                                    Header="功能说明"
+                                                    Description="节假日数据来源及使用说明"
+                                                    HasSwitcher="False"
+                                                    Margin="12,6,6,6" />
+                                <!-- 功能说明 -->
+                                <Border Background="{DynamicResource MaterialDesignDivider}"
+                                        Margin="30,0,0,6"
+                                        CornerRadius="5"
+                                        Padding="8,4">
+                                    <TextBlock Foreground="{DynamicResource MaterialDesignBody}"
+                                               TextWrapping="Wrap"
+                                               Text="• 节假日数据来源：timor.tech API&#x0a;• 自动跳过国定假日、调休日和双休日&#x0a;• 支持多日未启动程序的补全机制&#x0a;• 数据缓存，减少网络请求" />
+                                </Border>
+                            </StackPanel>
+                        </Expander>
+                    </materialDesign:Card>
+                    
                     <ci:SettingsCard IconGlyph="Numbers"
                                      Header="索引"
                                      Description="手动修改当前索引">

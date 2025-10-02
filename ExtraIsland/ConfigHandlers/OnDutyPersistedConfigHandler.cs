@@ -9,6 +9,8 @@ using ExtraIsland.Shared;
 namespace ExtraIsland.ConfigHandlers;
 
 public class OnDutyPersistedConfigHandler {
+    private bool _isSaving = false; // 防止递归保存的标志
+
     public OnDutyPersistedConfigHandler() {
         Data = new OnDutyPersistedConfigData();
         if (!File.Exists(Path.Combine(GlobalConstants.PluginConfigFolder!,"Persisted/OnDuty.json"))) {
@@ -37,10 +39,19 @@ public class OnDutyPersistedConfigHandler {
     }
     
     public void Save() {
-        ConfigureFileHelper.SaveConfig<OnDutyPersistedConfigData>(
-            Path.Combine(GlobalConstants.PluginConfigFolder!,"Persisted/OnDuty.json"),
-            Data);
-        UpdateOnDuty();
+        // 防止递归保存
+        if (_isSaving) return;
+        
+        try {
+            _isSaving = true;
+            ConfigureFileHelper.SaveConfig<OnDutyPersistedConfigData>(
+                Path.Combine(GlobalConstants.PluginConfigFolder!,"Persisted/OnDuty.json"),
+                Data);
+            UpdateOnDuty();
+        }
+        finally {
+            _isSaving = false;
+        }
     }
 
     public void UpdateOnDuty() {
@@ -89,9 +100,15 @@ public class OnDutyPersistedConfigHandler {
     
     public event Action? OnDutyUpdated;
     
-    void Updater(object? sender,EventArgs eventArgs) {
+    async void Updater(object? sender,EventArgs eventArgs) {
         if (EiUtils.GetDateTimeSpan(Data.LastUpdate,DateTime.Now) < Data.DutyChangeDuration) return;
-        SwapOnDuty();
+        
+        if (Data.IsHolidaySkipEnabled) {
+            await SwapOnDutyWithHolidaySkipAsync();
+        } else {
+            SwapOnDuty();
+        }
+        
         UpdateOnDuty();
     }
 
@@ -113,6 +130,108 @@ public class OnDutyPersistedConfigHandler {
                 break;
         }
         if (Data.CurrentPeopleIndex >= Data.Peoples.Count & Data.IsCycled) {
+            Data.CurrentPeopleIndex = 0;
+        }
+    }
+
+    /// <summary>
+    /// 带节假日跳过功能的值日轮换
+    /// </summary>
+    public async Task SwapOnDutyWithHolidaySkipAsync() {
+        var lastUpdateDate = Data.LastUpdate.Date;
+        var currentDate = DateTime.Today;
+        
+        // 如果是同一天，不需要轮换
+        if (lastUpdateDate == currentDate) {
+            return;
+        }
+        
+        // 计算需要处理的日期范围
+        var datesToProcess = new List<DateTime>();
+        for (var date = lastUpdateDate.AddDays(1); date <= currentDate; date = date.AddDays(1)) {
+            datesToProcess.Add(date);
+        }
+        
+        // 处理每一天的轮换
+        int originalIndex = Data.CurrentPeopleIndex;
+        string lastSkippedHoliday = "";
+        
+        foreach (var date in datesToProcess) {
+            bool isHoliday = await HolidayService.IsHolidayAsync(date);
+            
+            if (isHoliday) {
+                // 获取节假日信息
+                var holidayInfo = await HolidayService.GetHolidayInfoAsync(date);
+                lastSkippedHoliday = holidayInfo?.Name ?? "节假日";
+            } else {
+                // 非节假日，执行轮换
+                IncrementDutyIndex();
+            }
+        }
+        
+        // 批量更新属性，减少PropertyChanged事件触发次数
+        var originalSaving = _isSaving;
+        _isSaving = true; // 临时阻止保存
+        
+        try {
+            // 更新最后跳过的节假日信息
+            if (!string.IsNullOrEmpty(lastSkippedHoliday)) {
+                Data.LastSkippedHoliday = lastSkippedHoliday;
+                Data.LastSkippedOriginalIndex = originalIndex;
+                Data.LastSkippedNewIndex = Data.CurrentPeopleIndex;
+            }
+            
+            // 更新最后更新时间
+            Data.LastUpdate = Data.IsAutoShearEnabled ? DateTime.Today : DateTime.Now;
+        }
+        finally {
+            _isSaving = originalSaving; // 恢复保存状态
+        }
+        
+        // 手动触发一次保存
+        if (!_isSaving) {
+            Save();
+        }
+        
+        // 异步获取下一个节假日
+        _ = Task.Run(async () => {
+            try {
+                var nextHoliday = await HolidayService.GetNextHolidayAsync(DateTime.Today);
+                if (nextHoliday.HasValue) {
+                    // 只更新属性，不触发保存（避免频繁保存）
+                    var wasSaving = _isSaving;
+                    _isSaving = true;
+                    try {
+                        Data.NextHolidayName = nextHoliday.Value.Name;
+                    }
+                    finally {
+                        _isSaving = wasSaving;
+                    }
+                }
+            }
+            catch {
+                // 忽略获取下一个节假日时的错误
+            }
+        });
+    }
+    
+    /// <summary>
+    /// 增加值日索引
+    /// </summary>
+    private void IncrementDutyIndex() {
+        switch (Data.DutyState) {
+            case OnDutyPersistedConfigData.DutyStateData.Double:
+                Data.CurrentPeopleIndex += 2;
+                break;
+            case OnDutyPersistedConfigData.DutyStateData.Quadrant:
+                Data.CurrentPeopleIndex += 4;
+                break;
+            default:
+                Data.CurrentPeopleIndex++;
+                break;
+        }
+        
+        if (Data.CurrentPeopleIndex >= Data.Peoples.Count && Data.IsCycled) {
             Data.CurrentPeopleIndex = 0;
         }
     }
@@ -218,6 +337,52 @@ public class OnDutyPersistedConfigData {
     public double DutyChangeDurationDays {
         get => DutyChangeDuration.TotalDays;
         set => DutyChangeDuration = TimeSpan.FromDays(value);
+    }
+
+    // 节假日跳过功能相关属性
+    bool _isHolidaySkipEnabled;
+    public bool IsHolidaySkipEnabled {
+        get => _isHolidaySkipEnabled;
+        set {
+            _isHolidaySkipEnabled = value;
+            PropertyChanged?.Invoke();
+        }
+    }
+
+    string _lastSkippedHoliday = string.Empty;
+    public string LastSkippedHoliday {
+        get => _lastSkippedHoliday;
+        set {
+            _lastSkippedHoliday = value;
+            PropertyChanged?.Invoke();
+        }
+    }
+
+    int _lastSkippedOriginalIndex;
+    public int LastSkippedOriginalIndex {
+        get => _lastSkippedOriginalIndex;
+        set {
+            _lastSkippedOriginalIndex = value;
+            PropertyChanged?.Invoke();
+        }
+    }
+
+    int _lastSkippedNewIndex;
+    public int LastSkippedNewIndex {
+        get => _lastSkippedNewIndex;
+        set {
+            _lastSkippedNewIndex = value;
+            PropertyChanged?.Invoke();
+        }
+    }
+
+    string _nextHolidayName = string.Empty;
+    public string NextHolidayName {
+        get => _nextHolidayName;
+        set {
+            _nextHolidayName = value;
+            PropertyChanged?.Invoke();
+        }
     }
 
     public List<PeopleItem> GetWhoOnDuty() {
