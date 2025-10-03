@@ -15,11 +15,15 @@ namespace ExtraIsland.SettingsPages;
 
 [SettingsPageInfo("extraisland.duty","ExtraIsland·值日",PackIconKind.UsersOutline,PackIconKind.Users)]
 public partial class DutySettingsPage {
+    private bool _isUpdatingHolidayInfo = false; // 防止循环更新的标志
+
     public DutySettingsPage() {
         Settings = GlobalConstants.Handlers.OnDuty!;
         InitializeComponent();
         UpdateOnDuty();
+        UpdateHolidayInfo();
         Settings.OnDutyUpdated += UpdateOnDuty;
+        Settings.Data.PropertyChanged += OnDataPropertyChanged;
         #if DEBUG
             DebugSwapButton.Visibility = Visibility.Visible;
         #endif
@@ -31,8 +35,17 @@ public partial class DutySettingsPage {
 
     void DutySettingsPage_OnUnloaded(object sender,RoutedEventArgs e) {
         Settings.OnDutyUpdated -= UpdateOnDuty;
+        Settings.Data.PropertyChanged -= OnDataPropertyChanged;
         Settings.Save();
     }
+    
+    void OnDataPropertyChanged() {
+        // 防止循环更新，只在节假日功能开启且当前没有正在更新时才执行
+        if (Settings.Data.IsHolidaySkipEnabled && !_isUpdatingHolidayInfo) {
+            UpdateHolidayInfo();
+        }
+    }
+    
     void DataGrid_SelectedCellsChanged(object sender,SelectedCellsChangedEventArgs e) {
         Settings.Save();
     }
@@ -57,6 +70,72 @@ public partial class DutySettingsPage {
             PeopleOnDutyLabel.Content = Settings.PeoplesOnDutyString;
             LastUpdateLabel.Content = Settings.LastUpdateString;
         });
+    }
+    
+    /// <summary>
+    /// 更新节假日相关信息显示
+    /// </summary>
+    async void UpdateHolidayInfo() {
+        if (!Settings.Data.IsHolidaySkipEnabled || _isUpdatingHolidayInfo) {
+            return;
+        }
+        
+        _isUpdatingHolidayInfo = true;
+        
+        try {
+            // 异步获取下一个节假日信息
+            _ = Task.Run(async () => {
+                try {
+                    var nextHoliday = await HolidayService.GetNextHolidayAsync(DateTime.Today);
+                    
+                    this.BeginInvoke(() => {
+                        try {
+                            if (nextHoliday.HasValue) {
+                                NextHolidayLabel.Text = $"即将跳过的节假日：{nextHoliday.Value.Name}";
+                            } else {
+                                NextHolidayLabel.Text = "即将跳过的节假日：暂无";
+                            }
+                        }
+                        catch {
+                            // UI已被释放时忽略错误
+                        }
+                    });
+                }
+                catch {
+                    // 网络请求失败时的处理
+                    this.BeginInvoke(() => {
+                        try {
+                            NextHolidayLabel.Text = "即将跳过的节假日：获取失败";
+                        }
+                        catch {
+                            // UI已被释放时忽略错误
+                        }
+                    });
+                }
+            });
+            
+            // 更新界面显示
+            this.Invoke(() => {
+                try {
+                    // 更新上次跳过的节假日信息显示
+                    if (string.IsNullOrEmpty(Settings.Data.LastSkippedHoliday)) {
+                        LastSkippedHolidayLabel.Text = "上次跳过的节假日：暂无\n索引变化：- → -";
+                    } else {
+                        LastSkippedHolidayLabel.Text = $"上次跳过的节假日：{Settings.Data.LastSkippedHoliday}\n索引变化：{Settings.Data.LastSkippedOriginalIndex} → {Settings.Data.LastSkippedNewIndex}";
+                    }
+                    
+                    // 更新下一个节假日信息显示
+                    var nextHolidayName = string.IsNullOrEmpty(Settings.Data.NextHolidayName) ? "查询中..." : Settings.Data.NextHolidayName;
+                    NextHolidayLabel.Text = $"即将跳过的节假日：{nextHolidayName}";
+                }
+                catch {
+                    // UI已被释放时忽略错误
+                }
+            });
+        }
+        finally {
+            _isUpdatingHolidayInfo = false;
+        }
     }
     
     [GeneratedRegex("[^0-9]+")]
@@ -97,7 +176,24 @@ public partial class DutySettingsPage {
         PeopleDataGrid.ItemsSource = Settings.Data.Peoples;
     }
     void DebugButton_OnClick(object sender,RoutedEventArgs e) {
-        Settings.SwapOnDuty();
+        if (Settings.Data.IsHolidaySkipEnabled) {
+            // 使用带节假日跳过的轮换方法
+            Task.Run(async () => {
+                try {
+                    await Settings.SwapOnDutyWithHolidaySkipAsync();
+                    this.BeginInvoke(() => {
+                        Settings.UpdateOnDuty();
+                        UpdateHolidayInfo();
+                    });
+                }
+                catch {
+                    // 忽略错误
+                }
+            });
+        } else {
+            // 使用传统轮换方法
+            Settings.SwapOnDuty();
+        }
     }
     void AutoSort_OnClick(object sender,RoutedEventArgs e) {
         Settings.SortCollectionByIndex();
