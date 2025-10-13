@@ -9,8 +9,8 @@ namespace ExtraIsland.Shared;
 /// 节假日服务，用于获取和判断节假日信息
 /// </summary>
 public static class HolidayService {
-    private static readonly Dictionary<int, YearHolidayData> CachedHolidays = new();
-    private static readonly SemaphoreSlim CacheLock = new(1, 1);
+    static readonly Dictionary<int, YearHolidayData> CachedHolidays = new Dictionary<int,YearHolidayData>();
+    static readonly SemaphoreSlim CacheLock = new SemaphoreSlim(1,1);
     
     /// <summary>
     /// 判断指定日期是否为节假日（包括双休日）
@@ -24,19 +24,16 @@ public static class HolidayService {
         }
         
         // 获取该年份的节假日数据
-        var yearData = await GetYearHolidayDataAsync(date.Year);
+        YearHolidayData? yearData = await GetYearHolidayDataAsync(date.Year);
         if (yearData == null) {
             return false; // 如果无法获取数据，默认不是节假日
         }
         
         // 检查是否为节假日
-        var dateKey = date.ToString("MM-dd");
-        if (yearData.Holiday?.ContainsKey(dateKey) == true) {
-            var holidayInfo = yearData.Holiday[dateKey];
-            return holidayInfo.Holiday; // true为节假日，false为调休工作日
-        }
-        
-        return false;
+        string dateKey = date.ToString("MM-dd");
+        return yearData.Holiday?.TryGetValue(dateKey,out HolidayInfo? holidayInfo) is true 
+               && holidayInfo.Holiday; // true为节假日，false为调休工作日
+
     }
     
     /// <summary>
@@ -55,20 +52,15 @@ public static class HolidayService {
             };
         }
         
-        var yearData = await GetYearHolidayDataAsync(date.Year);
+        YearHolidayData? yearData = await GetYearHolidayDataAsync(date.Year);
         if (yearData?.Holiday == null) {
             return null;
         }
         
-        var dateKey = date.ToString("MM-dd");
-        if (yearData.Holiday.ContainsKey(dateKey)) {
-            var holidayInfo = yearData.Holiday[dateKey];
-            if (holidayInfo.Holiday) {
-                return holidayInfo;
-            }
-        }
-        
-        return null;
+        string dateKey = date.ToString("MM-dd");
+        if (!yearData.Holiday.TryGetValue(dateKey,out HolidayInfo? holidayInfo)) return null;
+        return holidayInfo.Holiday ? holidayInfo : null;
+
     }
     
     /// <summary>
@@ -79,8 +71,8 @@ public static class HolidayService {
     public static async Task<(DateTime Date, string Name)?> GetNextHolidayAsync(DateTime fromDate) {
         // 检查从明天开始的未来一年内的日期
         for (int i = 1; i <= 365; i++) {
-            var checkDate = fromDate.Date.AddDays(i);
-            var holidayInfo = await GetHolidayInfoAsync(checkDate);
+            DateTime checkDate = fromDate.Date.AddDays(i);
+            HolidayInfo? holidayInfo = await GetHolidayInfoAsync(checkDate);
             
             if (holidayInfo != null) {
                 return (checkDate, holidayInfo.Name);
@@ -95,21 +87,21 @@ public static class HolidayService {
     /// </summary>
     /// <param name="year">年份</param>
     /// <returns>节假日数据</returns>
-    private static async Task<YearHolidayData?> GetYearHolidayDataAsync(int year) {
+    static async Task<YearHolidayData?> GetYearHolidayDataAsync(int year) {
         await CacheLock.WaitAsync();
         try {
             // 检查缓存
-            if (CachedHolidays.TryGetValue(year, out var cached)) {
+            if (CachedHolidays.TryGetValue(year, out YearHolidayData? cached)) {
                 return cached;
             }
             
             // 从API获取数据
-            using var httpClient = new HttpClient();
+            using HttpClient httpClient = new HttpClient();
             httpClient.Timeout = TimeSpan.FromSeconds(10);
             
             try {
-                var response = await httpClient.GetStringAsync($"https://timor.tech/api/holiday/year/{year}");
-                var data = JsonSerializer.Deserialize<YearHolidayData>(response);
+                string response = await httpClient.GetStringAsync($"https://timor.tech/api/holiday/year/{year}");
+                YearHolidayData? data = JsonSerializer.Deserialize<YearHolidayData>(response);
                 
                 if (data != null) {
                     CachedHolidays[year] = data;
@@ -138,7 +130,7 @@ public static class HolidayService {
     /// </summary>
     /// <param name="date">日期</param>
     /// <returns>是否为周末</returns>
-    private static bool IsWeekend(DateTime date) {
+    static bool IsWeekend(DateTime date) {
         return date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
     }
     
@@ -147,7 +139,7 @@ public static class HolidayService {
     /// </summary>
     /// <param name="date">日期</param>
     /// <returns>周末名称</returns>
-    private static string GetWeekendName(DateTime date) {
+    static string GetWeekendName(DateTime date) {
         return date.DayOfWeek switch {
             DayOfWeek.Saturday => "周六",
             DayOfWeek.Sunday => "周日",
