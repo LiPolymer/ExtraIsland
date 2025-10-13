@@ -41,7 +41,7 @@ public static class GlobalConstants {
     public static class HostInterfaces {
         public static ILessonsService? LessonsService;
         public static IExactTimeService? ExactTimeService;
-        public static ILogger<ExtraIsland.Plugin>? PluginLogger;
+        public static ILogger<Plugin>? PluginLogger;
     }
 
     public static class Assets {

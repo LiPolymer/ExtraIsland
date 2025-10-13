@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Threading;
@@ -169,9 +170,12 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
 
             TSecs.X = isSmall ? 2 : 0; */
             bool isSmall = Settings.IsSecondsSmall;
-            LSecs.Bind(FontSizeProperty,
-                       new DynamicResourceExtension(isSmall ? "MainWindowSecondaryFontSize" : "MainWindowEmphasizedFontSize")
-                           .ProvideValue(null!));
+            /*LSecs.Bind(FontSizeProperty,
+                       new DynamicResourceExtension(isSmall 
+                                                        ? "MainWindowSecondaryFontSize" 
+                                                        : "MainWindowEmphasizedFontSize")
+                           .ProvideValue(null!));*/
+            //Console.WriteLine("Hola!");
         });
     }
 

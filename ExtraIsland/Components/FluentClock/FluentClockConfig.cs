@@ -34,6 +34,7 @@ public class FluentClockConfig : ObservableObject {
         set {
             if (_isSecondsSmall == value) return;
             _isSecondsSmall = value;
+            OnPropertyChanged();
             OnSecondsSmallChanged?.Invoke();
         }
     }
