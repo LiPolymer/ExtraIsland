@@ -19,6 +19,15 @@ public partial class SetFlag: ActionSettingsControlBase<SetFlagConfig> {
             WriteDict(Flag.Flags,config.TargetFlag,config.FlagContent);   
         }
     }
+    public static void Revert(object? rawConfig, string _) {
+        SetFlagConfig config = (SetFlagConfig)rawConfig!;
+        if (config.IsPersisted) {
+            GlobalConstants.Handlers.PersistedFlagHandler!.FlagsTable.Remove(config.TargetFlag);
+            GlobalConstants.Handlers.PersistedFlagHandler.Save();
+        } else {
+            Flag.Flags.Remove(config.TargetFlag); 
+        }
+    }
 
     static void WriteDict(Dictionary<string,string> dict,string key,string value) {
         if (dict.TryGetValue(key, out string _)) { 

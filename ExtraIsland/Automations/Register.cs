@@ -58,7 +58,9 @@ public class Register : IHostedService {
     /// <param name="rulesetService">规则集服务</param>
     public Register(IActionService actionService, IRulesetService rulesetService) {
         //行动
+        //todo: 迁移到新的行动/规则集注册接口
         actionService.RegisterActionHandler("extraIsland.action.setFlag",SetFlag.Action);
+        actionService.RegisterRevertHandler("extraIsland.action.setFlag",SetFlag.Action);
         
         if (EiUtils.IsPluginInstalled("Plugin.IslandCaller")) {
             actionService.RegisterActionHandler("extraIsland.action.islandCaller",(_,_) => {
