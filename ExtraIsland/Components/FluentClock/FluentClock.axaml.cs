@@ -89,24 +89,24 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
                 int m = handlingTime.Minute;
                 int s = handlingTime.Second;
                 string hoursStr = h.ToString("D2");
-                string minsStr  = m.ToString("D2");
-                string secsStr  = s.ToString("D2");
+                string minsStr = m.ToString("D2");
+                string secsStr = s.ToString("D2");
                 if (hours != hoursStr) {
                     if (Settings.IsOClockEmp && s == 0) {
                         _emphasizeAnimator.Update();
                     }
                     hours = hoursStr;
-                    _hourAnimator.Update(hours, true, Settings.IsSwapAnimationEnabled);
+                    _hourAnimator.Update(hours,true,Settings.IsSwapAnimationEnabled);
                 }
                 if (minutes != minsStr) {
                     minutes = minsStr;
-                    _minuAnimator.Update(minutes, true, Settings.IsSwapAnimationEnabled);
+                    _minuAnimator.Update(minutes,true,Settings.IsSwapAnimationEnabled);
                 }
                 if (seconds != secsStr) {
                     seconds = secsStr;
                     if (Settings.IsAccurate) {
                         SMins.Opacity = 1;
-                        _secoAnimator.Update(seconds, true, !(Settings.IsFocusedMode || !Settings.IsSwapAnimationEnabled));
+                        _secoAnimator.Update(seconds,true,!(Settings.IsFocusedMode || !Settings.IsSwapAnimationEnabled));
                     }
                 }
                 if (handlingTime == Now) break;
@@ -145,7 +145,7 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
             }
             _pendingWidthSync = false;
             SyncBackgroundWidth();
-        }, DispatcherPriority.Background);
+        },DispatcherPriority.Background);
     }
 
     void ShowEmphasise() {
@@ -206,7 +206,7 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         }
     }
 
-    void SeparatorBlinkTick(object? sender, EventArgs e) {
+    void SeparatorBlinkTick(object? sender,EventArgs e) {
         _separatorBlinkInvisible = !_separatorBlinkInvisible;
         _separatorAnimator.Update(_separatorBlinkInvisible);
     }
@@ -254,8 +254,8 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
 
             TSecs.X = isSmall ? 2 : 0; */
             /*LSecs.Bind(FontSizeProperty,
-                       new DynamicResourceExtension(isSmall 
-                                                        ? "MainWindowSecondaryFontSize" 
+                       new DynamicResourceExtension(isSmall
+                                                        ? "MainWindowSecondaryFontSize"
                                                         : "MainWindowEmphasizedFontSize")
                            .ProvideValue(null!));*/
             //Console.WriteLine("Hola!");
