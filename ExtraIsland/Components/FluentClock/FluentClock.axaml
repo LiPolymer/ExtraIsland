@@ -1,4 +1,4 @@
-﻿<ci:ComponentBase xmlns="https://github.com/avaloniaui"
+<ci:ComponentBase xmlns="https://github.com/avaloniaui"
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -15,7 +15,7 @@
         <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter"/>
     </ci:ComponentBase.Resources>
     <Grid Margin="0" ClipToBounds="True">
-        <Grid x:Name="EmpBack" Opacity="0">
+        <Grid x:Name="EmpBack" Opacity="0" HorizontalAlignment="Center" Width="{Binding #RootPanel.Bounds.Width}">
             <Border Background="{DynamicResource Rainy}"
                     ClipToBounds="True"
                     BorderThickness="1"
@@ -46,7 +46,8 @@
             DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=components:FluentClock}}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Margin="0,3,0,0"
+            Margin="1,3,0,0"
+            UseLayoutRounding="True"
             x:Name="RootPanel"
             Classes.SmallSecondsEnabled = "{Binding Settings.IsSecondsSmall, Mode=OneWay}"
             Orientation="Horizontal">
@@ -75,13 +76,16 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="{DynamicResource MainWindowEmphasizedFontSize}"
-                Padding="0,0,2,0"
+                Padding="2,0,2,0"
+                TextElement.FontFeatures="tnum"
                 x:Name="LHours">
                 <Label.RenderTransform>
                     <TranslateTransform />
                 </Label.RenderTransform>
             </Label>
             <Label
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="{DynamicResource MainWindowLargeFontSize}"
                 Padding="0,0,0,4"
@@ -90,15 +94,19 @@
             <Label
                 Content="--"
                 HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
                 VerticalAlignment="Center"
                 Padding="2,0,2,0"
                 FontSize="{DynamicResource MainWindowEmphasizedFontSize}"
+                TextElement.FontFeatures="tnum"
                 x:Name="LMins">
                 <Label.RenderTransform>
                     <TranslateTransform />
                 </Label.RenderTransform>
             </Label>
             <Label
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
                 VerticalAlignment="Center"
                 Content=":"
                 Padding="0,0,0,4"
@@ -108,6 +116,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Padding="2,0,0,0"
+                TextElement.FontFeatures="tnum"
                 x:Name="LSecs">
                 <Label.RenderTransform>
                     <TranslateTransform/>

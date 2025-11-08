@@ -74,36 +74,31 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
             if (updLock) return;
             updLock = true;
             MainUpdater();
+            Dispatcher.UIThread.Post(SyncBackgroundWidth);
         };
         return;
-        
+
         void MainUpdater() {
             DateTime handlingTime = Now;
             if (hours != Now.Hour.ToString()) {
-                if (Settings.IsOClockEmp & Now.Second == 0) {
+                if (Settings.IsOClockEmp && Now.Second == 0) {
                     _emphasizeAnimator.Update();
                 }
                 hours = Now.Hour.ToString();
-                string h = hours;
-                _hourAnimator.Update(h,true,Settings.IsSwapAnimationEnabled);
+                string h = Now.Hour.ToString("D2");
+                _hourAnimator.Update(h, true, Settings.IsSwapAnimationEnabled);
             }
             if (minutes != Now.Minute.ToString()) {
                 minutes = Now.Minute.ToString();
-                string m = minutes;
-                if (m.Length == 1) {
-                    m = "0" + m;
-                }
-                _minuAnimator.Update(m,true,Settings.IsSwapAnimationEnabled);
+                string m = Now.Minute.ToString("D2");
+                _minuAnimator.Update(m, true, Settings.IsSwapAnimationEnabled);
             }
             if (seconds != Now.Second.ToString()) {
                 seconds = Now.Second.ToString();
                 if (Settings.IsAccurate) {
                     SMins.Opacity = 1;
-                    string s = seconds;
-                    if (s.Length == 1) {
-                        s = "0" + s;
-                    }
-                    _secoAnimator.Update(s,true,!(Settings.IsFocusedMode | !Settings.IsSwapAnimationEnabled));
+                    string s = Now.Second.ToString("D2");
+                    _secoAnimator.Update(s, true, !(Settings.IsFocusedMode || !Settings.IsSwapAnimationEnabled));
                 } else {
                     bool seq = sparkSeq;
                     _separatorAnimator.Update(seq);
@@ -120,6 +115,9 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
 
         void SilentUpdater() {
             hours = Now.Hour.ToString();
+            if (hours.Length == 1) {
+                hours = "0" + hours;
+            }
             minutes = Now.Minute.ToString();
             if (minutes.Length == 1) {
                 minutes = "0" + minutes;
@@ -131,6 +129,18 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
             _hourAnimator.SilentUpdate(hours);
             _minuAnimator.SilentUpdate(minutes);
             _secoAnimator.SilentUpdate(seconds);
+        }
+    }
+
+    /// <summary>
+    /// 同步强调背景的宽度为当前RootPanel宽度
+    /// </summary>
+    void SyncBackgroundWidth() {
+        try {
+            EmpBack.Width = Math.Round(RootPanel.Bounds.Width);
+        }
+        catch {
+            // ignored
         }
     }
 
@@ -176,6 +186,7 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
                                                         : "MainWindowEmphasizedFontSize")
                            .ProvideValue(null!));*/
             //Console.WriteLine("Hola!");
+            SyncBackgroundWidth();
         });
     }
 
@@ -186,6 +197,7 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
             SSecs.IsVisible = Settings.IsAccurate;
             Placeholder1.Content = Settings.IsAccurate ? "00:00:00" : "00:00";
             Placeholder2.Content = Settings.IsAccurate ? "00:00:00" : "00:00";
+            SyncBackgroundWidth();
         });
     }
     
