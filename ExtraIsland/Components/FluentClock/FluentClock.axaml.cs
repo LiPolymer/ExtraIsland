@@ -18,6 +18,8 @@ namespace ExtraIsland.Components;
                   "拥有动画支持"
               )]
 public partial class FluentClock : ComponentBase<FluentClockConfig> {
+    DispatcherTimer? _separatorBlinkTimer;
+    bool _separatorBlinkInvisible;
     public FluentClock(ILessonsService lessonsService,IExactTimeService exactTimeService) {
         ExactTimeService = exactTimeService;
         LessonsService = lessonsService;
@@ -63,8 +65,7 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         UpdateTime();
         SilentUpdater();
         UpdateGaps();
-        if (Settings.IsSecondsSmall)
-        {
+        if (Settings.IsSecondsSmall) {
             SmallSecondsUpdater();
         }
         //Register Events
@@ -87,25 +88,18 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
                 if (Settings.IsOClockEmp && Now.Second == 0) {
                     _emphasizeAnimator.Update();
                 }
-                hours = Now.Hour.ToString();
-                string h = Now.Hour.ToString("D2");
-                _hourAnimator.Update(h, true, Settings.IsSwapAnimationEnabled);
+                hours = Now.Hour.ToString("D2");
+                _hourAnimator.Update(hours, true, Settings.IsSwapAnimationEnabled);
             }
             if (minutes != Now.Minute.ToString()) {
-                minutes = Now.Minute.ToString();
-                string m = Now.Minute.ToString("D2");
-                _minuAnimator.Update(m, true, Settings.IsSwapAnimationEnabled);
+                minutes = Now.Minute.ToString("D2");
+                _minuAnimator.Update(minutes, true, Settings.IsSwapAnimationEnabled);
             }
             if (seconds != Now.Second.ToString()) {
-                seconds = Now.Second.ToString();
+                seconds = Now.Second.ToString("D2");
                 if (Settings.IsAccurate) {
                     SMins.Opacity = 1;
-                    string s = Now.Second.ToString("D2");
-                    _secoAnimator.Update(s, true, !(Settings.IsFocusedMode || !Settings.IsSwapAnimationEnabled));
-                } else {
-                    bool seq = sparkSeq;
-                    _separatorAnimator.Update(seq);
-                    sparkSeq = !sparkSeq;
+                    _secoAnimator.Update(seconds, true, !(Settings.IsFocusedMode || !Settings.IsSwapAnimationEnabled));
                 }
             }
             // Unlocker
@@ -117,18 +111,9 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         }
 
         void SilentUpdater() {
-            hours = Now.Hour.ToString();
-            if (hours.Length == 1) {
-                hours = "0" + hours;
-            }
-            minutes = Now.Minute.ToString();
-            if (minutes.Length == 1) {
-                minutes = "0" + minutes;
-            }
-            seconds = Now.Second.ToString();
-            if (seconds.Length == 1) {
-                seconds = "0" + seconds;
-            }
+            hours = Now.Hour.ToString("D2");
+            minutes = Now.Minute.ToString("D2");
+            seconds = Now.Second.ToString("D2");
             _hourAnimator.SilentUpdate(hours);
             _minuAnimator.SilentUpdate(minutes);
             _secoAnimator.SilentUpdate(seconds);
@@ -201,6 +186,7 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
             Placeholder1.Content = Settings.IsAccurate ? "00:00:00" : "00:00";
             Placeholder2.Content = Settings.IsAccurate ? "00:00:00" : "00:00";
             SyncBackgroundWidth();
+            EnsureSeparatorBlinkingState();
         });
     }
 
@@ -213,6 +199,46 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         Settings.OnOClockEmpEnabled -= ShowEmphasise;
         Settings.OnLayoutGapChanged -= UpdateGaps;
         LessonsService.PostMainTimerTicked -= UpdateTime;
+        StopSeparatorBlinking();
+    }
+
+    void EnsureSeparatorBlinkingState() {
+        try {
+            if (!Settings.IsAccurate) {
+                if (_separatorBlinkTimer == null) {
+                    _separatorBlinkInvisible = false; // 初始为可见
+                    _separatorBlinkTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+                    _separatorBlinkTimer.Tick += SeparatorBlinkTick;
+                    _separatorBlinkTimer.Start();
+                }
+            } else {
+                _separatorAnimator.Update(false);
+                StopSeparatorBlinking();
+            }
+        } catch {
+            // ignored
+        }
+    }
+
+    void StopSeparatorBlinking() {
+        try {
+            if (_separatorBlinkTimer != null) {
+                _separatorBlinkTimer.Stop();
+                _separatorBlinkTimer.Tick -= SeparatorBlinkTick;
+                _separatorBlinkTimer = null;
+            }
+        } catch {
+            // ignored
+        }
+    }
+
+    void SeparatorBlinkTick(object? sender, EventArgs e) {
+        try {
+            _separatorBlinkInvisible = !_separatorBlinkInvisible;
+            _separatorAnimator.Update(_separatorBlinkInvisible);
+        } catch {
+            // ignored
+        }
     }
 
     void UpdateGaps() {
