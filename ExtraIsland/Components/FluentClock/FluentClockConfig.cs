@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ExtraIsland.Components;
 
@@ -53,6 +53,20 @@ public class FluentClockConfig : ObservableObject {
             }
         }
     }
-    
+
     public event Action? OnOClockEmpEnabled;
+
+    // Layout: horizontal gap between hour/colon/minute/colon/second (in px)
+    double _horizontalGap = 2;
+    public double HorizontalGap {
+        get => _horizontalGap;
+        set {
+            double newVal = Math.Round(value);
+            if (Math.Abs(_horizontalGap - newVal) < 0.0001) return;
+            _horizontalGap = newVal;
+            OnPropertyChanged();
+            OnLayoutGapChanged?.Invoke();
+        }
+    }
+    public event Action? OnLayoutGapChanged;
 }

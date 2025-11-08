@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.MarkupExtensions;
@@ -62,13 +62,16 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         AccurateModeUpdater();
         UpdateTime();
         SilentUpdater();
-        if (Settings.IsSecondsSmall) {
+        UpdateGaps();
+        if (Settings.IsSecondsSmall)
+        {
             SmallSecondsUpdater();
         }
         //Register Events
         Settings.OnSecondsSmallChanged += SmallSecondsUpdater;
         Settings.OnAccurateChanged += AccurateModeUpdater;
         Settings.OnOClockEmpEnabled += ShowEmphasise;
+        Settings.OnLayoutGapChanged += UpdateGaps;
         LessonsService.PostMainTimerTicked += UpdateTime;
         OnTimeChanged += () => {
             if (updLock) return;
@@ -200,7 +203,7 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
             SyncBackgroundWidth();
         });
     }
-    
+
     void OnAttachedToVisualTree(object? sender,VisualTreeAttachmentEventArgs e) {
         Dispatcher.UIThread.InvokeAsync(LoadedAction);
     }
@@ -208,6 +211,24 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         Settings.OnAccurateChanged -= AccurateModeUpdater;
         Settings.OnSecondsSmallChanged -= SmallSecondsUpdater;
         Settings.OnOClockEmpEnabled -= ShowEmphasise;
+        Settings.OnLayoutGapChanged -= UpdateGaps;
         LessonsService.PostMainTimerTicked -= UpdateTime;
+    }
+
+    void UpdateGaps() {
+        Dispatcher.UIThread.InvokeAsync(() => {
+            double gap = Math.Round(Settings.HorizontalGap);
+            try
+            {
+                LHours.Padding = new Thickness(0,0,gap,0);
+                LMins.Padding = new Thickness(gap,0,gap,0);
+                LSecs.Padding = new Thickness(gap,0,0,0);
+                SyncBackgroundWidth();
+            }
+            catch
+            {
+                // ignored
+            }
+        });
     }
 }
