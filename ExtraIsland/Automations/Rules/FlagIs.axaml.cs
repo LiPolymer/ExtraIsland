@@ -1,4 +1,4 @@
-﻿using ClassIsland.Core.Abstractions.Controls;
+using ClassIsland.Core.Abstractions.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ExtraIsland.Shared;
 
@@ -15,11 +15,14 @@ public partial class FlagIs: RuleSettingsControlBase<FlagIsConfig> {
     
     public static bool Rule(object? rawConfig) {
         FlagIsConfig config = (FlagIsConfig)rawConfig!;
-        string? flagContent = null;
-        if (Flag.Flags.Concat(GlobalConstants.Handlers.PersistedFlagHandler!.FlagsTable)
-            .ToDictionary()
-            .TryGetValue(config.TargetFlag,out string? flag)) flagContent = flag;
-        return flagContent == config.FlagContent;
+        Dictionary<string,string> merged = GlobalConstants.Handlers.PersistedFlagHandler?.FlagsTable != null
+            ? new Dictionary<string, string>(GlobalConstants.Handlers.PersistedFlagHandler.FlagsTable)
+            : [];
+        foreach (KeyValuePair<string,string> kv in Flag.Flags)
+            merged[kv.Key] = kv.Value; // 内存标志覆盖持久化标志
+
+        return merged.TryGetValue(config.TargetFlag,out string? flagContent)
+               && flagContent == config.FlagContent;
     }
 }
 

@@ -30,11 +30,7 @@ public partial class SetFlag: ActionSettingsControlBase<SetFlagConfig> {
     }
 
     static void WriteDict(Dictionary<string,string> dict,string key,string value) {
-        if (dict.TryGetValue(key, out string _)) { 
-            dict[key] = value;
-        } else {
-            dict.Add(key,value);
-        }
+        dict[key] = value;
     }
 }
 
