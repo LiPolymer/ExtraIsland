@@ -1,4 +1,4 @@
-﻿<ci:ComponentBase xmlns="https://github.com/avaloniaui"
+<ci:ComponentBase xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -53,6 +53,21 @@
                                        Description="启用后,秒数将使用较小字体展示">
                 <controls:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsSecondsSmall, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE0CE;}"
+                                       Header="调整布局间隙"
+                                       Description="调整元素之间水平空隙">
+                <controls:SettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Slider Minimum="0" Maximum="24" 
+                                TickFrequency="1" IsSnapToTickEnabled="True"
+                                SmallChange="1" LargeChange="2"
+                                Value="{Binding Settings.HorizontalGap, Mode=TwoWay}" 
+                                Width="200" />
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="{Binding Settings.HorizontalGap, StringFormat='{}{0:F0}'}"/>
+                    </StackPanel>
                 </controls:SettingsExpander.Footer>
             </controls:SettingsExpander>
             <Label HorizontalAlignment="Center" 
