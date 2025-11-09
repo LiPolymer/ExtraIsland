@@ -60,7 +60,7 @@ public class Register : IHostedService {
         //行动
         //todo: 迁移到新的行动/规则集注册接口
         actionService.RegisterActionHandler("extraIsland.action.setFlag",SetFlag.Action);
-        actionService.RegisterRevertHandler("extraIsland.action.setFlag",SetFlag.Action);
+        actionService.RegisterRevertHandler("extraIsland.action.setFlag",SetFlag.Revert);
         
         if (EiUtils.IsPluginInstalled("Plugin.IslandCaller")) {
             actionService.RegisterActionHandler("extraIsland.action.islandCaller",(_,_) => {
