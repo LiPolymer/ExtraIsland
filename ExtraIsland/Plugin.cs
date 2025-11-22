@@ -82,7 +82,6 @@ public class Plugin : PluginBase {
         services.AddComponent<Rhesis,RhesisSettings>();
         //services.AddComponent<OnDuty,OnDutySettings>();
         services.AddComponent<LiveActivity,LiveActivitySettings>();
-        services.AddComponent<DualLineContainer>();
         services.AddComponent<DynamicLyrics>();
         //SettingsPages
         services.AddSettingsPage<MainSettingsPage>();
@@ -102,6 +101,7 @@ public class Plugin : PluginBase {
         }
         if (GlobalConstants.Handlers.MainConfig.Data.IsExperimentalModeActivated) {
             ct.WriteLine("&9实验模式已启用! &7若出现Bug,&c请勿报告&7!",Terminal.MessageType.Warn);
+            services.AddComponent<DualLineContainer>();
             //services.AddComponent<DebugLyricsHandler>();
             //services.AddComponent<DebugSubLyricsHandler>();
         }
