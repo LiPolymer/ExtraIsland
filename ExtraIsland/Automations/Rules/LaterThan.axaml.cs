@@ -1,4 +1,6 @@
-﻿using ClassIsland.Core.Abstractions.Controls;
+﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
+using ClassIsland.Core.Abstractions.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ExtraIsland.Shared;
 
@@ -16,6 +18,16 @@ public partial class LaterThan : RuleSettingsControlBase<LaterThanConfig> {
             < 0 => false,
             >= 0 => true
         };
+    }
+    
+    void TimePicker_OnLoaded(object? sender,RoutedEventArgs e) {
+        TimePicker tp = (TimePicker)sender!;
+        tp.SelectedTime = Settings.TargetTime.TimeOfDay;
+    }
+    
+    void TimePicker_OnSelectedTimeChanged(object? sender,TimePickerSelectedValueChangedEventArgs e) {
+        TimePicker tp = (TimePicker)sender!;
+        Settings.TargetTime = DateTime.Today.Date.AddMilliseconds(tp.SelectedTime!.Value.TotalMilliseconds);
     }
 }
 

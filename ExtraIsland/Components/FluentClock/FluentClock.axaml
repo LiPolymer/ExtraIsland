@@ -4,7 +4,6 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
                   xmlns:components="clr-namespace:ExtraIsland.Components"
-                  xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
                   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                   x:Class="ExtraIsland.Components.FluentClock"
                   x:TypeArguments="components:FluentClockConfig"

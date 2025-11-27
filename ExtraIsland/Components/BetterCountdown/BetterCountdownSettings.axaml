@@ -90,12 +90,11 @@
                     <StackPanel Orientation="Horizontal">
                         <CalendarDatePicker
                             SelectedDate="{Binding Settings.TargetDateTime, Mode=TwoWay}"
-                            Width="120"/>
+                            Width="130"/>
                         
                         <!--煞笔控件毁我一生😭😭😭-->
                         <TimePicker UseSeconds="True"
                                     Margin="5,0,0,0"
-                                    Width="50"
                                     Loaded="TimePicker_OnLoaded"
                                     SelectedTimeChanged="TimePicker_OnSelectedTimeChanged"/>
                         

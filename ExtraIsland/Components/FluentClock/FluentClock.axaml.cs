@@ -234,31 +234,6 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
             if (isAccurate) {
                 SMins.Opacity = 1;
             }
-            //todo: 恢复秒数小字号
-            /*
-            bool isSmall = Settings.IsSecondsSmall;
-
-            LSecs.SetResourceReference(FontSizeProperty,
-                isSmall ? "MainWindowSecondaryFontSize" : "MainWindowEmphasizedFontSize");
-
-            LSecs.Padding = isSmall ?
-                new Thickness(0,3,0,0)
-                : new Thickness(0);
-
-            SSecs.Padding = isSmall ?
-                new Thickness(0,1,0,0)
-                : new Thickness(0,0,0,3);
-
-            SSecs.SetResourceReference(FontSizeProperty,
-                isSmall ? "MainWindowSecondaryFontSize" : "MainWindowLargeFontSize");
-
-            TSecs.X = isSmall ? 2 : 0; */
-            /*LSecs.Bind(FontSizeProperty,
-                       new DynamicResourceExtension(isSmall
-                                                        ? "MainWindowSecondaryFontSize"
-                                                        : "MainWindowEmphasizedFontSize")
-                           .ProvideValue(null!));*/
-            //Console.WriteLine("Hola!");
             RequestSyncBackgroundWidth();
             EnsureSeparatorBlinkingState();
         });

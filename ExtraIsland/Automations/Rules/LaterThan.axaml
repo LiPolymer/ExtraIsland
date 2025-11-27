@@ -13,11 +13,11 @@
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LaterThan}}" 
                 Orientation="Horizontal">
         <!--todo:替换时间选择控件-->
-        <!--materialDesign:TimePicker Margin="4,0,0,0"
-                                    Is24Hours="True"
-                                   WithSeconds="True"
-                                   SelectedTime="{Binding Settings.TargetTime, Mode=TwoWay}"
-                                   Width="76" /-->
+        <TimePicker UseSeconds="True"
+                    Margin="5,3,0,0"
+                    Loaded="TimePicker_OnLoaded"
+                    VerticalAlignment="Center"
+                    SelectedTimeChanged="TimePicker_OnSelectedTimeChanged"/>
         <controls:FullLogoGrayScale Margin="4,0,0,0" 
                                     Height="20" 
                                     Opacity="0.5"/>
