@@ -1,4 +1,6 @@
+using Avalonia.Threading;
 using ClassIsland.Core.Abstractions.Automation;
+using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Automations.Rules;
 using ExtraIsland.Shared;
@@ -19,9 +21,12 @@ public class SetFlagAction : ActionBase<SetFlagConfig> {
         } else {
             WriteDict(Flag.Flags, settings.TargetFlag, settings.FlagContent);
         }
+        Dispatcher.UIThread.Invoke(() => {
+            GlobalConstants.HostInterfaces.RulesetService?.NotifyStatusChanged();
+        });
         return Task.CompletedTask;
     }
-
+    
     protected override Task OnRevert() {
         base.OnRevert();
         SetFlagConfig settings = Settings;
@@ -31,6 +36,9 @@ public class SetFlagAction : ActionBase<SetFlagConfig> {
         } else {
             Flag.Flags.Remove(settings.TargetFlag);
         }
+        Dispatcher.UIThread.Invoke(() => {
+            GlobalConstants.HostInterfaces.RulesetService?.NotifyStatusChanged();
+        });
         return Task.CompletedTask;
     }
 

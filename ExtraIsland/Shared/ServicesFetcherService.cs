@@ -6,11 +6,12 @@ using static ExtraIsland.Shared.GlobalConstants;
 namespace ExtraIsland.Shared;
 
 public class ServicesFetcherService : IHostedService {
-    public ServicesFetcherService(ILessonsService lessonsService, IExactTimeService exactTimeService, ILogger<Plugin> logger, ILogger<ServicesFetcherService> selfLogger) {
+    public ServicesFetcherService(ILessonsService lessonsService, IExactTimeService exactTimeService, ILogger<Plugin> logger, IRulesetService rulesetService, ILogger<ServicesFetcherService> selfLogger) {
         selfLogger.Log(LogLevel.Information, "正在获取服务...");
         HostInterfaces.LessonsService = lessonsService;
         HostInterfaces.ExactTimeService = exactTimeService;
         HostInterfaces.PluginLogger = logger;
+        HostInterfaces.RulesetService = rulesetService;
         HostInterfaces.PluginLogger.Log(LogLevel.Information, "ExtraIsland 已载入!");
         Triggers.Loaded();
     }

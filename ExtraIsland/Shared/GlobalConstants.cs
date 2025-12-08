@@ -41,6 +41,7 @@ public static class GlobalConstants {
     public static class HostInterfaces {
         public static ILessonsService? LessonsService;
         public static IExactTimeService? ExactTimeService;
+        public static IRulesetService? RulesetService;
         public static ILogger<Plugin>? PluginLogger;
     }
 
