@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
+using Avalonia;
 using Avalonia.Data.Converters;
 using ExtraIsland.Components;
 
@@ -134,9 +135,19 @@ public class SeparateAttributesDisplayVisibilityConverter : IValueConverter {
             _ => false
         };
     }
-
+    
     public object ConvertBack(object? value,Type targetType,object? parameter,
         CultureInfo culture) {
+        throw new NotSupportedException();
+    }
+}
+
+public class HalfLengthToMarginThicknessConverter : IValueConverter {
+    public object? Convert(object? value,Type targetType,object? parameter,CultureInfo culture) {
+        double width = (double)value!;
+        return new Thickness(-width/8,0);
+    }
+    public object? ConvertBack(object? value,Type targetType,object? parameter,CultureInfo culture) {
         throw new NotSupportedException();
     }
 }
