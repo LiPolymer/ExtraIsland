@@ -1,17 +1,11 @@
-> [!IMPORTANT]
-> 正式发布的版本适用于ClassIsland v1
->
-> ClassIsland v2适用的版本已经基本可用
->
-> 代码位于 `v1` 分支,可从[`Gitlab Pipelines`](https://gitlab.com/LiPolymer/ExtraIsland/-/pipelines)获取[自动构建](#尝鲜版本)使用
-
 # 快速开始
 
 欢迎使用 ExtraIsland！要开始使用,首先需要 __安装__ 本插件
 
 ## 自动安装
-ExtraIsland已经上架ClassIsland插件市场!
+ExtraIsland已经上架ClassIsland插件市场! (1和2都上了 OvO)
 ![pluginMarket](pluginMarket.png)
+![pluginMarket2](pluginMarket2.png)
 __推荐通过插件市场进行安装!__
 ## 手动安装
 由于一些特殊原因,或是需要使用尝鲜版功能,可能需要进行手动安装:
@@ -27,7 +21,11 @@ __推荐通过插件市场进行安装!__
 > [!CAUTION]
 > （；´д｀）ゞ 稍等一下!
 > 
-> 当前,此渠道获取的版本均仅适用于ClassIsland v2
+> 记得检查构建Job所属代码分支! 
+> 
+> `v1` 分支适用于 ClassIsland v2
+> 
+> `master` 分支适用于 ClassIsland v1
 > 
 > 尝鲜版本包含最新修改,但是可能也包含最新Bug!
 > 
@@ -42,6 +40,6 @@ __推荐通过插件市场进行安装!__
 ### 安装
 - 打开 ClassIsland 设置面板
 - 切换到 `插件` 页面
-- 点击中部三点菜单 ![dotdotdot](dotdotdotMenu.png)
+- 点击中部三点菜单 ![dotdotdot](dotdotdot2.png)
 - 选择 `从本地安装...`
 - 选择刚才获取到的`*.cipx`文件,确定
