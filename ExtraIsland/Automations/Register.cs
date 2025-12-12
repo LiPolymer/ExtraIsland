@@ -25,7 +25,7 @@ public class Register : IHostedService {
         // 行动
         services.AddAction<SetFlagAction, SetFlag>();
         if (EiUtils.IsPluginInstalled("Plugin.IslandCaller")) {
-            services.AddAction<IslandCallerAction>();
+            services.AddAction<IslandCallerAction, Actions.EmptySettings>();
         }
         // 规则
         services.AddRule<TodayIsConfig, TodayIs>
@@ -38,6 +38,8 @@ public class Register : IHostedService {
             ("extraIsland.rule.nextTeacherIs", "下节课教师是", "\uECF7");
         services.AddRule<FlagIsConfig, FlagIs>
             ("extraIsland.rule.flagIs", "读标志", "\uE844");
+        services.AddRule<RulesDummyConfig, Rules.EmptySettings>
+            ("extraIsland.rule.isDoubleLesson", "下节课连堂", "\uE2AC");
         // 触发器
         services.AddTrigger<TimePassed,TimePassedSettings>();
     }
@@ -53,6 +55,7 @@ public class Register : IHostedService {
         rulesetService.RegisterRuleHandler("extraIsland.rule.flagIs",FlagIs.Rule);
         rulesetService.RegisterRuleHandler("extraIsland.rule.currentTeacherIs",TeacherIs.CurrentRule);
         rulesetService.RegisterRuleHandler("extraIsland.rule.nextTeacherIs",TeacherIs.NextRule);
+        rulesetService.RegisterRuleHandler("extraIsland.rule.isDoubleLesson",IsDoubleLesson.Rule);
     }
 
     public Task StartAsync(CancellationToken _) {
