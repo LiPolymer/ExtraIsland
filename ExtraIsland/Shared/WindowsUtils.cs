@@ -1,9 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows;
-using Microsoft.Extensions.Logging;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable InconsistentNaming

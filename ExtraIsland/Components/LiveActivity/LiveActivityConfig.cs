@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Text.Json.Serialization;
-using ClassIsland.Shared;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ExtraIsland.Components;

@@ -1,13 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using Avalonia;
-using Avalonia.Data;
-using Avalonia.Interactivity;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
 using ClassIsland.Core.Models.Components;
-using ExtraIsland.Shared.Converters;
 
 namespace ExtraIsland.Components;
 

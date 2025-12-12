@@ -1,7 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Avalonia;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
 using ClassIsland.Core.Abstractions.Controls;

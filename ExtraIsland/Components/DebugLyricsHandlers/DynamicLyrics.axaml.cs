@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using Avalonia.Interactivity;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;

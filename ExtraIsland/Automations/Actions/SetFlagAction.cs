@@ -1,6 +1,5 @@
 using Avalonia.Threading;
 using ClassIsland.Core.Abstractions.Automation;
-using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Automations.Rules;
 using ExtraIsland.Shared;

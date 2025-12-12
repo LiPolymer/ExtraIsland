@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using System.Windows.Input;
-using ClassIsland.Core.Abstractions.Controls;
+﻿using ClassIsland.Core.Abstractions.Controls;
 
 namespace ExtraIsland.LifeMode.Components;
 

@@ -1,7 +1,4 @@
-﻿using Avalonia.Threading;
-using ClassIsland.Core;
-using ClassIsland.Core.Abstractions.Services;
-using ClassIsland.Core.Commands;
+﻿using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Extensions.Registry;
 using ExtraIsland.Automations.Actions;
 using ExtraIsland.Automations.Rules;
