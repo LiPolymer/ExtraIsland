@@ -57,8 +57,7 @@ public partial class ProfileInformation : ComponentBase<ProfileInformationConfig
         int oriWeek = orientation.DayOfWeek == DayOfWeek.Sunday ? 6 : Convert.ToInt32(orientation.DayOfWeek) - 1;
         
         //regulate
-        string firstDay = orientation.AddDays(-oriWeek).ToString("yyyy-MM-dd");
-        DateTime startMonday = Convert.ToDateTime(firstDay);
+        DateTime startMonday = orientation.AddDays(-oriWeek);
         int lastDelta = current.Value.DayOfWeek != DayOfWeek.Sunday ? 7 - Convert.ToInt32(current.Value.DayOfWeek) : 0;
         DateTime lastEnd = current.Value.AddDays(lastDelta);
         
