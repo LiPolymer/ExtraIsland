@@ -1,7 +1,4 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.LogicalTree;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using ClassIsland.Core;
 using ClassIsland.Core.Abstractions.Controls;
@@ -27,7 +24,7 @@ public partial class ProfileInformation : ComponentBase<ProfileInformationConfig
 
     readonly ILessonsService _lessonsService;
     IProfileService _profileService;
-    IExactTimeService _exactTimeService;
+    readonly IExactTimeService _exactTimeService;
     
     void OnAttachedToVisualTree(object? sender,VisualTreeAttachmentEventArgs e) {
         _lessonsService.PostMainTimerTicked += LessonsServiceOnPostMainTimerTicked;
