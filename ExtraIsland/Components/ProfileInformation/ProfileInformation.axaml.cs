@@ -13,6 +13,7 @@ namespace ExtraIsland.Components;
                   "\uE4B2",
                   "展示当前档案信息"
               )]
+// ReSharper disable once ClassNeverInstantiated.Global
 public partial class ProfileInformation : ComponentBase<ProfileInformationConfig> {
     public ProfileInformation(ILessonsService lessonsService, IProfileService profileService, IExactTimeService exactTimeService) {
         _lessonsService = lessonsService;

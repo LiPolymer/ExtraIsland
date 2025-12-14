@@ -9,7 +9,7 @@ namespace ExtraIsland.Components;
     "23aac481-8b12-4fc9-aac4-818b129fc9a7",
     "动态歌词",
     "\uEBCA",
-    "测试歌词岛接口封装类LyricsIslandHandler()"
+    "展示歌词, 支持LyricsIsland协议或LycheeLib"
 )]
 
 // ReSharper disable once ClassNeverInstantiated.Global
