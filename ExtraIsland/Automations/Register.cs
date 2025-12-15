@@ -48,6 +48,9 @@ public class Register : IHostedService {
         
         services.AddRule<FlagIsConfig, FlagIs>
             ("extraIsland.rule.flagIs", "读标志", PackIconKind.FlagCheckered);
+        
+        services.AddRule<IsDoubleLesson>("extraIsland.rule.isDoubleLesson", "下节课连堂", PackIconKind.Merge);
+        
         // 触发器
         services.AddTrigger<TimePassed,TimePassedSettings>();
     }
@@ -76,6 +79,7 @@ public class Register : IHostedService {
         rulesetService.RegisterRuleHandler("extraIsland.rule.todayIs",TodayIs.Rule);
         rulesetService.RegisterRuleHandler("extraIsland.rule.laterThan",LaterThan.Rule);
         rulesetService.RegisterRuleHandler("extraIsland.rule.flagIs",FlagIs.Rule);
+        rulesetService.RegisterRuleHandler("extraIsland.rule.isDoubleLesson",IsDoubleLesson.Rule);
     }
     
     public Task StartAsync(CancellationToken _) {
