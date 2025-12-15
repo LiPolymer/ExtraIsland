@@ -13,7 +13,7 @@ namespace ExtraIsland.Components;
 )]
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public partial class DynamicLyrics: ComponentBase {
+public partial class DynamicLyrics: ComponentBase<DynamicLyricsConfig> {
     public DynamicLyrics() {
         if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
             _handler = new LycheeLyricsProvider();
@@ -33,7 +33,11 @@ public partial class DynamicLyrics: ComponentBase {
     
     void UpdateLyrics() {
         _timeCounter = 10;
-        _nowDisplaying = _handler.Lyrics;
+        _nowDisplaying = Settings.DisplayType switch {
+            LyricsDisplayType.MainLine => _handler.Lyrics,
+            LyricsDisplayType.SubLine => _handler.SubLyrics,
+            _ => throw new ArgumentOutOfRangeException()
+        };
         _animator.Update(_nowDisplaying,true,true,true);
     }
 

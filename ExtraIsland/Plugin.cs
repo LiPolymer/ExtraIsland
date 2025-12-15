@@ -82,7 +82,7 @@ public class Plugin : PluginBase {
         services.AddComponent<Rhesis,RhesisSettings>();
         //services.AddComponent<OnDuty,OnDutySettings>();
         services.AddComponent<LiveActivity,LiveActivitySettings>();
-        services.AddComponent<DynamicLyrics>();
+        services.AddComponent<DynamicLyrics,DynamicLyricsSettings>();
         services.AddComponent<ProfileInformation,ProfileInformationSettings>();
         //SettingsPages
         services.AddSettingsPage<MainSettingsPage>();
