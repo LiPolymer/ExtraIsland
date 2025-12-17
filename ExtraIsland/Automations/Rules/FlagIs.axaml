@@ -5,9 +5,7 @@
                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                             xmlns:local="clr-namespace:ExtraIsland.Automations.Rules"
                             xmlns:ci="http://classisland.tech/schemas/xaml/core"
-                            xmlns:actions="clr-namespace:ExtraIsland.Automations.Actions"
-                            xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
-                            xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:controls="clr-namespace:ExtraIsland.Controls"
+                            xmlns:controls="clr-namespace:ExtraIsland.Controls"
                             mc:Ignorable="d"
                             d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:FlagIs}}"

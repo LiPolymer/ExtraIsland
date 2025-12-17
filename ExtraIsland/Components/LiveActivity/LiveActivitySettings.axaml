@@ -6,7 +6,6 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:local="clr-namespace:ExtraIsland.Components"
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
-                  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                   xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                   mc:Ignorable="d"
                   d:DesignHeight="300" d:DesignWidth="300">

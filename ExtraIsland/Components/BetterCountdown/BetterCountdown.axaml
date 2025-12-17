@@ -5,7 +5,6 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
-                  xmlns:local="clr-namespace:ExtraIsland"
                   xmlns:components="clr-namespace:ExtraIsland.Components"
                   mc:Ignorable="d"
                   d:DesignHeight="35"
