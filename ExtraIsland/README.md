@@ -1,5 +1,5 @@
 # ExtraIsland
-⌈R1.0⌋
+⌈R1.10⌋
 
 > 现已正式上架 ClassIsland v2!
 
