@@ -15,9 +15,9 @@
     <ScrollViewer
         DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=components:DynamicLyricsSettings}}">
         <StackPanel Classes="settings-container animated-intro">
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4B4;}"
-                                       Header="信息类型"
-                                       Description="选择要显示的信息类型">
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEBCA;}"
+                                       Header="歌词类型"
+                                       Description="选择要显示的歌词类型">
                 <controls:SettingsExpander.Footer>
                     <ComboBox
                         MinWidth="20"
