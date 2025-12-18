@@ -11,9 +11,10 @@
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=actions1:SetFlag}}"
                 Orientation="Horizontal">
         <TextBox Text="{Binding Settings.TargetFlag, Mode=TwoWay}" MinWidth="40" MaxWidth="100" HorizontalContentAlignment="Center"/>
-        <Label Content="为"/>
+        <Label Content="为" VerticalAlignment="Center"/>
         <TextBox Text="{Binding Settings.FlagContent, Mode=TwoWay}" MinWidth="40" MaxWidth="100" HorizontalContentAlignment="Center"/>
-        <CheckBox Content="持久化" IsChecked="{Binding Settings.IsPersisted}"/>
+        <CheckBox Margin="5,0,0,0" Content="持久化" IsChecked="{Binding Settings.IsPersisted}"/>
+        <CheckBox Content="更新规则" IsChecked="{Binding Settings.WillNotifyUpdate}"/>
         <controls:FullLogoGrayScale Margin="4,0,0,0" 
                                     Height="20" 
                                     Opacity="0.5"/>

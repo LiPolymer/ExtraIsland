@@ -1,4 +1,6 @@
-﻿using ClassIsland.Core.Abstractions.Controls;
+﻿using Avalonia.Threading;
+using ClassIsland.Core.Abstractions.Automation;
+using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ExtraIsland.Automations.Rules;
@@ -10,11 +12,6 @@ public partial class SetFlag: ActionSettingsControlBase<SetFlagConfig> {
     public SetFlag() {
         InitializeComponent();
     }
-    
-    public static void Action(object? rawConfig, string _) {
-        SetFlagConfig config = (SetFlagConfig)rawConfig!;
-        if (config.IsPersisted) {
-            WriteDict(GlobalConstants.Handlers.PersistedFlagHandler!.FlagsTable,config.TargetFlag,config.FlagContent);
 }
 
 // ReSharper disable once ClassNeverInstantiated.Global
@@ -23,6 +20,7 @@ public class SetFlagConfig : ObservableRecipient {
     public string FlagContent { get; set; } = "";
 
     public bool IsPersisted { get; set; }
+    public bool WillNotifyUpdate { get; set; } = true;
 }
 
 /// <summary>
@@ -54,7 +52,7 @@ public class SetFlagAction : ActionBase<SetFlagConfig> {
         } else {
             Flag.Flags.Remove(settings.TargetFlag);
         }
-        Dispatcher.UIThread.Invoke(() => {
+        if (Settings.WillNotifyUpdate) Dispatcher.UIThread.Invoke(() => {
             GlobalConstants.HostInterfaces.RulesetService?.NotifyStatusChanged();
         });
         return Task.CompletedTask;
