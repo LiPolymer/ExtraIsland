@@ -21,6 +21,7 @@ public class Register : IHostedService {
     public static void Claim(IServiceCollection services) {
         // 行动
         services.AddAction<SetFlagAction, SetFlag>();
+        services.AddAction<UpdateRuleAction,Actions.EmptySettings>();
         if (EiUtils.IsPluginInstalled("Plugin.IslandCaller")) {
             services.AddAction<IslandCallerAction, Actions.EmptySettings>();
         }
