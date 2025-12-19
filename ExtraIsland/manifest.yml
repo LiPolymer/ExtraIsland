@@ -12,3 +12,5 @@ assetsRoot: master/ExtraIsland
 dependencies:
   - id: ink.lipoly.ext.lychee
     isRequired: false
+  - id: lrs2187.sai
+    isRequired: false

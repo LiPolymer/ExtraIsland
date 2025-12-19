@@ -5,7 +5,7 @@ using ExtraIsland.Shared;
 
 namespace ExtraIsland.Automations.Actions;
 
-[ActionInfo("extraIsland.action.updateRule", "更新规则集", "\uECB5")]
+[ActionInfo("extraIsland.action.updateRule", "更新规则集", "\uE06D")]
 public class UpdateRuleAction : ActionBase {
     protected override Task OnInvoke() {
         base.OnInvoke();
