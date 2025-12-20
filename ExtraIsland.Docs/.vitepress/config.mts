@@ -23,6 +23,12 @@ export default defineConfig({
         items: [
           { text: '快速开始', link: '/instruction/gettingStarted' }
         ]
+      }, 
+      {
+          text: '信息',
+          items: [
+              { text: '讨论社区', link: '/information/community' }
+          ]
       }
     ],
 

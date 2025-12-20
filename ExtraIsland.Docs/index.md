@@ -11,6 +11,9 @@ hero:
       text: 立即开始
       link: /instruction/gettingStarted
     - theme: alt
+      text: 加入社群
+      link: /information/community
+    - theme: alt
       text: 了解功能
       link: https://gitlab.com/LiPolymer/ExtraIsland/-/blob/master/README.md
   image:
