@@ -27,11 +27,11 @@
                 <Label VerticalAlignment="Center" FontSize="30">全局 · 主设置</Label>
             </StackPanel>
             <Border ClipToBounds="True" CornerRadius="4">
-            <controls1:SettingsExpanderItem>
+                <controls1:SettingsExpanderItem>
                 <Grid HorizontalAlignment="Stretch" Margin="12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="180"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <controls:FullLogo
@@ -55,6 +55,15 @@
                                 Orientation="Horizontal" 
                                 HorizontalAlignment="Right" 
                                 VerticalAlignment="Top">
+                        <Button Padding="8,5,8,5"
+                                BorderBrush="Transparent"
+                                Background="Transparent"
+                                Command="{x:Static ci:UriNavigationCommands.UriNavigationCommand}"
+                                CommandParameter="https://docs.lipoly.ink/ExtraIsland/information/community.html">
+                            <ci:LucideIcon Glyph="&#xE579;"
+                                           Foreground="{DynamicResource MaterialDesignBody}"
+                                           FontSize="18"/>
+                        </Button>
                         <Button Padding="8,5,8,5"
                                 BorderBrush="Transparent"
                                 Background="Transparent"
@@ -95,6 +104,26 @@
                 </Grid>
             </controls1:SettingsExpanderItem>
             </Border>
+            <controls1:InfoBar x:Name="AnnouncementBar" 
+                               IsOpen="False" 
+                               IsVisible="True" 
+                               Severity="Success" 
+                               Message="{Binding StaticAnnouncement}"
+                               Closed="AnnouncementBar_OnClosed">
+                <Button Padding="8,5,8,5"
+                        Margin="0,-15,0,5"
+                        BorderBrush="Transparent"
+                        Background="#306bcc5f"
+                        Command="{x:Static ci:UriNavigationCommands.UriNavigationCommand}"
+                        CommandParameter="https://qun.qq.com/universal-share/share?ac=1&amp;authKey=hRI4D1CLz%2BKU7BrRA%2BN3G8vkqea9Y/V7LxX82SZ3cnlQlwxa1fc2YKm1iEv/AYvQ&amp;busi_data=eyJncm91cENvZGUiOiIxMDc0MjQ0MDkyIiwidG9rZW4iOiJlZURabDRJVEN5cEpqZENHWkNvVU5XeGRXTHdGZ0oxQVh6TFduNW5qVk1FWUlha2ZDR0hweXVVbjhrYkNWRjFTIiwidWluIjoiMzAxNDQwMjE1NCJ9&amp;data=MelDmuoQf6xIi49kiccqS_Tp3X3zGeEd1xLm5GGuSZ4EJmyJxsxcrNN6kLuZS-m3u8nHs5lxMnbQLlQahTpnAw&amp;svctype=4&amp;tempid=h5_group_info">
+                    <StackPanel Orientation="Horizontal">
+                        <ci:LucideIcon Glyph="&#xE574;"
+                                       Foreground="{DynamicResource MaterialDesignBody}"
+                                       FontSize="18"/>
+                        <Label Margin="0,0,0,3" Content="加入群组"/>
+                    </StackPanel>
+                </Button>
+            </controls1:InfoBar>
             <Border x:Name="MessageZone"
                     IsVisible="False"
                     Background="#15ff0000" 

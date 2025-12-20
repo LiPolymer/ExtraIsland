@@ -4,6 +4,8 @@ using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
+using FluentAvalonia.UI.Controls;
+
 // ReSharper disable once RedundantUsingDirective
 
 namespace ExtraIsland.SettingPages;
@@ -15,6 +17,8 @@ public partial class MainSettingsPage : SettingsPageBase {
         Settings = GlobalConstants.Handlers.MainConfig!.Data;
         InitializeComponent();
 
+        AnnouncementBar.IsOpen = StaticAnnouncement != Settings.LastAcceptedAnnouncement;
+        
         if (Settings.IsLifeModeActivated) {
             LifeModeCard.Description = "太有生活了哥们!";
         }
@@ -61,7 +65,12 @@ public partial class MainSettingsPage : SettingsPageBase {
     void SettingsOnPropertyChanged() {
         RequestRestart();
     }
+    public string StaticAnnouncement { get => "插件社区Q群 ClassIsPlugins 现已建立! 点击下方按钮, 即刻加入!"; }
 
+    void AnnouncementBar_OnClosed(InfoBar sender,InfoBarClosedEventArgs args) {
+        Settings.LastAcceptedAnnouncement = StaticAnnouncement;
+    }
+    
     /*
     void DockSwitcher_Click(object sender,RoutedEventArgs e) {
         #if !DEBUG
@@ -201,7 +210,7 @@ public partial class MainSettingsPage : SettingsPageBase {
             RequestRestart();
         }
     }
-    
+
     void ExpSwitcher_Click(object? sender,Avalonia.Interactivity.RoutedEventArgs routedEventArgs) {
         if (Settings.IsExperimentalModeActivated) {
             Settings.IsExperimentalModeActivated = false;
@@ -232,7 +241,7 @@ public partial class MainSettingsPage : SettingsPageBase {
                         new Label {
                             FontSize = 20,
                             Content = """
-                                      
+
                                       当前这些功能还处于早期开发阶段
                                       存在不少已知Bug        （；´д｀）ゞ
                                       考虑到部分功能有用户仍在使用

@@ -59,7 +59,7 @@ public class MainConfigHandler {
     }
 }
 
-public class MainConfigData : ObservableObject {
+public partial class MainConfigData : ObservableObject {
     public event Action? RestartPropertyChanged;
     
     bool _isLifeModeActivated;
@@ -94,6 +94,9 @@ public class MainConfigData : ObservableObject {
             RestartPropertyChanged?.Invoke();
         }
     }
+
+    [ObservableProperty]
+    string _lastAcceptedAnnouncement = "";
     
     public DockConfig Dock { get; set; } = new DockConfig(); 
     public class DockConfig : ObservableObject {
