@@ -95,7 +95,7 @@ public partial class Rhesis : ComponentBase<RhesisConfig> {
                                                        },
                                                        Settings.SainticProp switch {
                                                            "" => "https://open.saintic.com/api/sentence/",
-                                                           _ => $"https://open.saintic.com/api/sentence/{Settings.HitokotoProp}.json"
+                                                           _ => $"https://open.saintic.com/api/sentence/{Settings.SainticProp}.json"
                                                        },
                                                        Settings.LengthLimitation);
             Showing = data.Content;
