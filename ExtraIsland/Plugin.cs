@@ -88,6 +88,8 @@ public class Plugin : PluginBase {
         services.AddSettingsPage<MainSettingsPage>();
         //services.AddSettingsPage<DutySettingsPage>();
         services.AddSettingsPage<TinyFeaturesSettingsPage>();
+        //NotificationProvider
+        services.AddNotificationProvider<TimeUpNotification>();
         //Actions
         Register.Claim(services);
         //Authorizer

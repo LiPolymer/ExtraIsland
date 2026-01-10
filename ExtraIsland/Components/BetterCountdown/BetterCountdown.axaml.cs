@@ -16,6 +16,7 @@ namespace ExtraIsland.Components;
 )]
 public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
     public BetterCountdown(ILessonsService lessonsService, IExactTimeService exactTimeService) {
+
         ExactTimeService = exactTimeService;
         LessonsService = lessonsService;
         InitializeComponent();
@@ -24,10 +25,11 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         _mnAnimator = new Animators.GenericContentSwapAnimator(LMins);
         _scAnimator = new Animators.GenericContentSwapAnimator(LSecs);
     }
-    
+    public event EventHandler? TimeUp;
     IExactTimeService ExactTimeService { get; }
     ILessonsService LessonsService { get; }
 
+    private TimeUpNotification TimeUpNotification;
     readonly Animators.GenericContentSwapAnimator _dyAnimator;
     readonly Animators.GenericContentSwapAnimator _hrAnimator;
     readonly Animators.GenericContentSwapAnimator _mnAnimator;
@@ -42,6 +44,9 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         Settings.OnAccuracyChanged += UpdateAccuracy;
         Settings.OnNoGapDisplayChanged += UpdateGap;
         LessonsService.PostMainTimerTicked += UpdateTime;
+        TimeUpNotification = new TimeUpNotification();
+        TimeUpNotification.Subscribe(this);
+        
     }
 
     bool _isAccurateChanged;
@@ -112,7 +117,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
             if (!isPassed) {
                 LDays.IsVisible = true;
                 SDays.IsVisible = true;
-                _dyAnimator.Update(_days, Settings.IsAnimationEnabled);                
+                _dyAnimator.Update(_days,Settings.IsAnimationEnabled);
             }
         }
         if ((_hours != span.Hours.ToString() | _isAccurateChanged) & (int)Settings.Accuracy >= 1) {
@@ -129,7 +134,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
             if (!isPassed & (int)Settings.Accuracy >= 1) {
                 LHours.IsVisible = true;
                 SHours.IsVisible = true;
-                _hrAnimator.Update(_hours, Settings.IsAnimationEnabled);
+                _hrAnimator.Update(_hours,Settings.IsAnimationEnabled);
             }
         }
         if ((_minutes != span.Minutes.ToString() | _isAccurateChanged) & (int)Settings.Accuracy >= 2) {
@@ -152,7 +157,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
                 if (m.Length == 1) {
                     m = "0" + m;
                 }
-                _mnAnimator.Update(m, Settings.IsAnimationEnabled);   
+                _mnAnimator.Update(m,Settings.IsAnimationEnabled);
             }
         }
         // ReSharper disable once InvertIf
@@ -162,8 +167,12 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
             if (s.Length == 1) {
                 s = "0" + s;
             }
-            _scAnimator.Update(s, Settings.IsAnimationEnabled, !Settings.IsFocusedModeEnabled);
+            _scAnimator.Update(s,Settings.IsAnimationEnabled,!Settings.IsFocusedModeEnabled);
             _isAccurateChanged = false;
+        }
+        if (_days == "0" && _hours == "0" && _minutes == "0" && _seconds == "0" && Settings.IsNotify) {
+            TimeUp.Invoke(this, EventArgs.Empty);
+            TimeUpNotification.Unsubscribe(this);
         }
         _updateLock = false;
     }

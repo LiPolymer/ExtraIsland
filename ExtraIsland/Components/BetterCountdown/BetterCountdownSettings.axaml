@@ -159,6 +159,13 @@
                                   IsChecked="{Binding Settings.IsFocusedModeEnabled, Mode=TwoWay}"/>
                 </controls:SettingsExpander.Footer>
             </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4D4;}"
+                                       Header="启用提醒"
+                                       Description="启用后,倒计时到后将进行提醒">
+                <controls:SettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsNotify, Mode=TwoWay}"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
             <Label HorizontalAlignment="Center"
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland

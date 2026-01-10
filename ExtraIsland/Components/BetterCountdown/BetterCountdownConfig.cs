@@ -68,6 +68,7 @@ public class BetterCountdownConfig : ObservableObject {
     public event Action? OnAccuracyChanged;
     
     public bool IsFocusedModeEnabled { get; set; } = false;
+    public bool IsNotify {get; set;} = false;
 }
 
 public class CountdownSeparatorConfigs : ObservableObject {
