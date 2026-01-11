@@ -161,7 +161,7 @@
             </controls:SettingsExpander>
             <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4D4;}"
                                        Header="启用提醒"
-                                       Description="启用后,倒计时到后将进行提醒">
+                                       Description="启用后,倒计时到后将进行提醒(请注意：到时后计时器将无法继续使用)">
                 <controls:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsNotify, Mode=TwoWay}"/>
                 </controls:SettingsExpander.Footer>

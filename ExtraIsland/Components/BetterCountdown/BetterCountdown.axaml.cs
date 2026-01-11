@@ -170,9 +170,11 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
             _scAnimator.Update(s,Settings.IsAnimationEnabled,!Settings.IsFocusedModeEnabled);
             _isAccurateChanged = false;
         }
-        if (_days == "0" && _hours == "0" && _minutes == "0" && _seconds == "0" && Settings.IsNotify) {
-            TimeUp.Invoke(this, EventArgs.Empty);
-            TimeUpNotification.Unsubscribe(this);
+        if (_days == "0" && _hours == "0" && _minutes == "0" && _seconds == "0" ) {
+            if (Settings.IsNotify) {
+                TimeUp.Invoke(this, EventArgs.Empty);
+            }
+            
         }
         _updateLock = false;
     }
