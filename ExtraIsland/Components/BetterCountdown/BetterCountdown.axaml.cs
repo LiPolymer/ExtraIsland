@@ -4,6 +4,7 @@ using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
+using ExtraIsland.Notification;
 using Thickness = Avalonia.Thickness;
 
 namespace ExtraIsland.Components;
@@ -25,28 +26,28 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         _mnAnimator = new Animators.GenericContentSwapAnimator(LMins);
         _scAnimator = new Animators.GenericContentSwapAnimator(LSecs);
     }
-    public event EventHandler? TimeUp;
     IExactTimeService ExactTimeService { get; }
     ILessonsService LessonsService { get; }
-
-    private TimeUpNotification TimeUpNotification;
+    
     readonly Animators.GenericContentSwapAnimator _dyAnimator;
     readonly Animators.GenericContentSwapAnimator _hrAnimator;
     readonly Animators.GenericContentSwapAnimator _mnAnimator;
     readonly Animators.GenericContentSwapAnimator _scAnimator;
     
+    TimeUpNotification _TimeUpNotification;
+    public event EventHandler? TimeUp;
     void OnLoad() {
         UpdateTime();
         UpdateAccuracy();
         UpdateGap();
         SilentUpdater();
         OnTimeChanged += DetectEvent;
+        OnTimeChanged += DetectTimeUp;
         Settings.OnAccuracyChanged += UpdateAccuracy;
         Settings.OnNoGapDisplayChanged += UpdateGap;
+        Settings.OnTargetDateTimeChanged += UnlockUpdate;
         LessonsService.PostMainTimerTicked += UpdateTime;
-        TimeUpNotification = new TimeUpNotification();
-        TimeUpNotification.Subscribe(this);
-        
+        _TimeUpNotification = new TimeUpNotification(this);
     }
 
     bool _isAccurateChanged;
@@ -97,6 +98,9 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
     string _minutes = string.Empty;
     string _seconds = string.Empty;
     bool _updateLock;
+    void UnlockUpdate(object sender, EventArgs args) {
+        _updateLock = false;
+    }
     void DetectEvent() {
         if (_updateLock) return;
         _updateLock = true;
@@ -170,12 +174,6 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
             _scAnimator.Update(s,Settings.IsAnimationEnabled,!Settings.IsFocusedModeEnabled);
             _isAccurateChanged = false;
         }
-        if (_days == "0" && _hours == "0" && _minutes == "0" && _seconds == "0" ) {
-            if (Settings.IsNotify) {
-                TimeUp.Invoke(this, EventArgs.Empty);
-            }
-            
-        }
         _updateLock = false;
     }
 
@@ -211,13 +209,27 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         }
     }
     
+
+    void DetectTimeUp() {
+        if (_days == "0" && _hours == "0" && _minutes == "0" && _seconds == "0" ) {
+            if (Settings.IsNotify) {
+                TimeUp?.Invoke(this, EventArgs.Empty);
+            }
+            if (Settings.IsStop) {
+                _updateLock = true;
+            }
+        }
+    }
     void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         Dispatcher.UIThread.InvokeAsync(OnLoad);
     }
     void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         OnTimeChanged -= DetectEvent;
+        OnTimeChanged -= DetectTimeUp;
+        Settings.OnTargetDateTimeChanged -= UnlockUpdate;
         Settings.OnAccuracyChanged -= UpdateAccuracy;
         Settings.OnNoGapDisplayChanged -= UpdateGap;
         LessonsService.PostMainTimerTicked -= UpdateTime;
+        _TimeUpNotification.Unsubscribe();
     }
 }

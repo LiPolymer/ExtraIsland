@@ -13,6 +13,7 @@ using ExtraIsland.SettingPages;
 //using ExtraIsland.LifeMode.Components;
 //using ExtraIsland.SettingsPages;
 using ExtraIsland.Shared;
+using ExtraIsland.Notification;
 //using ExtraIsland.TinyFeatures;
 using LycheeLib.Interface;
 using Microsoft.Extensions.DependencyInjection;

@@ -3,7 +3,7 @@ using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Models.Notification;
 using ExtraIsland.Components;
 
-namespace ExtraIsland.Shared;
+namespace ExtraIsland.Notification;
 
 [NotificationProviderInfo(
     "f377c816-42b1-4d1a-aa69-a67ddd6beb6d",
@@ -11,21 +11,27 @@ namespace ExtraIsland.Shared;
     "ExtraIsland中更好的倒计时到后进行的提醒"
     )]
 public class TimeUpNotification : NotificationProviderBase {
-    private BetterCountdown BetterCountdown { get; set; }
+    BetterCountdown BetterCountdown { get; }
     
-    public void Subscribe(BetterCountdown betterCountdown) {
-        
+    public TimeUpNotification(BetterCountdown betterCountdown) {
         BetterCountdown = betterCountdown;
         BetterCountdown.TimeUp += Notify;
-
+        BetterCountdown.Settings.OnTargetDateTimeChanged += Resubscribe;
     }
-    private void Notify(object sender,EventArgs args) {
+    
+    void Notify(object sender, EventArgs args) {
         ShowNotification(new NotificationRequest() {
             MaskContent = NotificationContent.CreateTwoIconsMask("倒计时结束")
         });
         BetterCountdown.TimeUp -= Notify;
-        
-
     }
-
+    public void Resubscribe(object sender, EventArgs args) {
+        BetterCountdown.TimeUp -= Notify;
+        BetterCountdown.TimeUp += Notify;
+        
+    }
+    public void Unsubscribe() {
+        BetterCountdown.TimeUp -= Notify;
+        BetterCountdown.Settings.OnTargetDateTimeChanged -= Resubscribe;
+    }
 }
