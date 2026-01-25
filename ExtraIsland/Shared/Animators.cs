@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
@@ -9,8 +9,8 @@ using Avalonia.Threading;
 namespace ExtraIsland.Shared;
 
 public static class Animators {
+
     public class GenericContentSwapAnimator {
-        // ReSharper disable once ConvertToPrimaryConstructor
         public GenericContentSwapAnimator(ContentControl targetLabel, double motionMultiple = 0.5) {
             _targetLabel = targetLabel;
             _swapOutAnimation = new Animation {
@@ -30,7 +30,7 @@ public static class Animators {
                         }
                     }
                 },
-                Duration = TimeSpan.FromMilliseconds(125),
+                Duration = TimeSpan.FromMilliseconds(200),
                 FillMode = FillMode.Forward,
                 Easing = new QuadraticEaseIn()
             };
@@ -51,7 +51,7 @@ public static class Animators {
                         }
                     }
                 },
-                Duration = TimeSpan.FromMilliseconds(125),
+                Duration = TimeSpan.FromMilliseconds(200),
                 FillMode = FillMode.Forward,
                 Easing = new QuadraticEaseOut()
             };
@@ -100,12 +100,12 @@ public static class Animators {
         readonly Animation _fadeOutAnimation;
         readonly Animation _fadeInAnimation;
         string _targetContent = string.Empty;
-        
+
         public string TargetContent {
             get => _targetContent;
             set => Update(value);
         }
-        
+
         bool _renderLock;
         public void Update(string content, bool isAnimated = true, bool isSwapAnimEnabled = true, bool isForced = false) {
             if (_renderLock) return;
@@ -117,7 +117,16 @@ public static class Animators {
         public void Update(object content, bool isAnimated = true, bool isSwapAnimEnabled = true) {
             if (_renderLock) return;
             _renderLock = true;
-            Dispatcher.UIThread.InvokeAsync(async () => {
+            // Use InvokeAsync only if needed to avoid overhead if already on UI thread
+            if (Dispatcher.UIThread.CheckAccess()) {
+                RunUpdate(content, isAnimated, isSwapAnimEnabled);
+            } else {
+                Dispatcher.UIThread.InvokeAsync(() => RunUpdate(content, isAnimated, isSwapAnimEnabled));
+            }
+        }
+
+        private async void RunUpdate(object content, bool isAnimated, bool isSwapAnimEnabled) {
+            try {
                 if (!isAnimated) {
                     _targetLabel.Content = content;
                 } else if (isSwapAnimEnabled) {
@@ -129,19 +138,27 @@ public static class Animators {
                     _targetLabel.Content = content;
                     await _fadeInAnimation.RunAsync(_targetLabel);
                 }
+            } catch {
+                // Ignore animation errors
+                _targetLabel.Content = content;
+            } finally {
                 _renderLock = false;
-            });
+            }
         }
 
         public void SilentUpdate(string content) {
             _targetContent = content;
             SilentUpdate((object)content);
         }
-        
+
         public void SilentUpdate(object content) {
-            Dispatcher.UIThread.InvokeAsync(() => {
+             if (Dispatcher.UIThread.CheckAccess()) {
                 _targetLabel.Content = content;
-            });
+            } else {
+                Dispatcher.UIThread.InvokeAsync(() => {
+                    _targetLabel.Content = content;
+                });
+            }
         }
     }
 
