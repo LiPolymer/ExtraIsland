@@ -157,13 +157,15 @@
                 <controls:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsAnimationEnabled, Mode=TwoWay}"/>
                 </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE095;}"
-                                       Header="启用翻页动画"
-                                       Description="启用后,切换动画样式将被替换为翻页(额外信息不受影响)">
-                <controls:SettingsExpander.Footer>
-                    <ToggleSwitch IsChecked="{Binding Settings.IsAnimationEnabled, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
+                <controls:SettingsExpander.Items>
+                    <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE095;}"
+                                                   Content="启用翻页动画"
+                                                   Description="启用后,切换动画样式将被替换为翻页(额外信息不受影响)">
+                        <controls:SettingsExpanderItem.Footer>
+                            <ToggleSwitch IsChecked="{Binding Settings.IsSwapAnimationEnabled, Mode=TwoWay}"/>
+                        </controls:SettingsExpanderItem.Footer>
+                    </controls:SettingsExpanderItem>
+                </controls:SettingsExpander.Items>
             </controls:SettingsExpander>
             <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE3DA;}"
                                        Header="排除列表"
