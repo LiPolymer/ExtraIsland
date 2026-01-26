@@ -23,9 +23,12 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         ExactTimeService = exactTimeService;
         LessonsService = lessonsService;
         InitializeComponent();
-        _hourAnimator = new Animators.GenericContentSwapAnimator(LHours);
-        _minuAnimator = new Animators.GenericContentSwapAnimator(LMins);
-        _secoAnimator = new Animators.GenericContentSwapAnimator(LSecs);
+        _hourTensAnimator = new Animators.GenericContentSwapAnimator(LHourTens);
+        _hourUnitsAnimator = new Animators.GenericContentSwapAnimator(LHourUnits);
+        _minTensAnimator = new Animators.GenericContentSwapAnimator(LMinTens);
+        _minUnitsAnimator = new Animators.GenericContentSwapAnimator(LMinUnits);
+        _secTensAnimator = new Animators.GenericContentSwapAnimator(LSecTens);
+        _secUnitsAnimator = new Animators.GenericContentSwapAnimator(LSecUnits);
         _separatorAnimator = new Animators.SeparatorVisualAnimator(SMins);
         _emphasizeAnimator = new Animators.EmphasizerVisualAnimator(EmpBack);
     }
@@ -44,20 +47,22 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
     }
     event Action? OnTimeChanged;
 
-    readonly Animators.GenericContentSwapAnimator _hourAnimator;
-    readonly Animators.GenericContentSwapAnimator _minuAnimator;
-    readonly Animators.GenericContentSwapAnimator _secoAnimator;
+    readonly Animators.GenericContentSwapAnimator _hourTensAnimator;
+    readonly Animators.GenericContentSwapAnimator _hourUnitsAnimator;
+    readonly Animators.GenericContentSwapAnimator _minTensAnimator;
+    readonly Animators.GenericContentSwapAnimator _minUnitsAnimator;
+    readonly Animators.GenericContentSwapAnimator _secTensAnimator;
+    readonly Animators.GenericContentSwapAnimator _secUnitsAnimator;
     readonly Animators.SeparatorVisualAnimator _separatorAnimator;
     readonly Animators.EmphasizerVisualAnimator _emphasizeAnimator;
 
     void LoadedAction() {
         //Prepare local variable
 
-        string hours;
-        string minutes;
-        string seconds;
+        string hours = "--";
+        string minutes = "--";
+        string seconds = "--";
 
-        bool sparkSeq = true;
         bool updLock = false;
         //Initialization
         UpdateSecondsAppearance();
@@ -87,22 +92,35 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
                 string hoursStr = h.ToString("D2");
                 string minsStr = m.ToString("D2");
                 string secsStr = s.ToString("D2");
+
+                bool swapEnabled = Settings.IsSwapAnimationEnabled;
+
                 if (hours != hoursStr) {
                     if (Settings.IsOClockEmp && s == 0) {
                         _emphasizeAnimator.Update();
                     }
                     hours = hoursStr;
-                    _hourAnimator.Update(hours,true,Settings.IsSwapAnimationEnabled);
+                    _hourTensAnimator.Update(hours[0].ToString(), true, swapEnabled);
+                    _hourUnitsAnimator.Update(hours[1].ToString(), true, swapEnabled);
                 }
-                if (minutes != minsStr) {
+                
+                bool minutesChanged = minutes != minsStr;
+                if (minutesChanged) {
                     minutes = minsStr;
-                    _minuAnimator.Update(minutes,true,Settings.IsSwapAnimationEnabled);
+                    _minTensAnimator.Update(minutes[0].ToString(), true, swapEnabled);
+                    _minUnitsAnimator.Update(minutes[1].ToString(), true, swapEnabled);
                 }
+                
                 if (seconds != secsStr) {
                     seconds = secsStr;
                     if (Settings.IsAccurate) {
                         SMins.Opacity = 1;
-                        _secoAnimator.Update(seconds,true,!(Settings.IsFocusedMode || !Settings.IsSwapAnimationEnabled));
+                        // Focus Mode Sync: Force animation if minutes just flipped
+                        bool forceSync = Settings.IsFocusedMode && minutesChanged;
+                        bool shouldSwap = swapEnabled && (!Settings.IsFocusedMode || forceSync);
+                        
+                        _secTensAnimator.Update(seconds[0].ToString(), true, shouldSwap);
+                        _secUnitsAnimator.Update(seconds[1].ToString(), true, shouldSwap);
                     }
                 }
                 if (handlingTime == Now) break;
@@ -115,9 +133,12 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
             hours = Now.Hour.ToString("D2");
             minutes = Now.Minute.ToString("D2");
             seconds = Now.Second.ToString("D2");
-            _hourAnimator.SilentUpdate(hours);
-            _minuAnimator.SilentUpdate(minutes);
-            _secoAnimator.SilentUpdate(seconds);
+            _hourTensAnimator.SilentUpdate(hours[0].ToString());
+            _hourUnitsAnimator.SilentUpdate(hours[1].ToString());
+            _minTensAnimator.SilentUpdate(minutes[0].ToString());
+            _minUnitsAnimator.SilentUpdate(minutes[1].ToString());
+            _secTensAnimator.SilentUpdate(seconds[0].ToString());
+            _secUnitsAnimator.SilentUpdate(seconds[1].ToString());
         }
     }
 
@@ -211,9 +232,9 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         Dispatcher.UIThread.InvokeAsync(() => {
             if (_cts?.IsCancellationRequested ?? false) return;
             double gap = Math.Round(Settings.HorizontalGap);
-            LHours.Padding = new Thickness(0,0,gap,0);
-            LMins.Padding = new Thickness(gap,0,gap,0);
-            LSecs.Padding = new Thickness(gap,0,0,0);
+            HoursPanel.Margin = new Thickness(0,0,gap,0);
+            MinsPanel.Margin = new Thickness(gap,0,gap,0);
+            SecsPanel.Margin = new Thickness(gap,0,0,0);
             RequestSyncBackgroundWidth();
         });
     }
@@ -223,7 +244,7 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
             if (_cts?.IsCancellationRequested ?? false) return;
             bool isAccurate = Settings.IsAccurate;
             bool isSmall = Settings.IsSecondsSmall;
-            LSecs.IsVisible = isAccurate;
+            SecsPanel.IsVisible = isAccurate;
             SSecs.IsVisible = isAccurate;
             Placeholder1.Content = isAccurate ? "00:00:00" : "00:00";
             Placeholder2.Content = isAccurate ? "00:00:00" : "00:00";

@@ -52,12 +52,10 @@
             Orientation="Horizontal">
             <StackPanel.Styles>
                 <Style Selector="StackPanel#RootPanel">
-                    <Style Selector="^ Label#LSecs">
-                        <Setter Property="FontSize" Value="{DynamicResource MainWindowEmphasizedFontSize}"/>
+                    <Style Selector="^ StackPanel#SecsPanel">
                         <Setter Property="Margin" Value="0"/>
                     </Style>
-                    <Style Selector="^.SmallSecondsEnabled Label#LSecs">
-                        <Setter Property="FontSize" Value="{DynamicResource MainWindowSecondaryFontSize}"/>
+                    <Style Selector="^.SmallSecondsEnabled StackPanel#SecsPanel">
                         <Setter Property="Margin" Value="0,3,0,0"/>
                     </Style>
                     <Style Selector="^ Label#SSecs">
@@ -68,20 +66,26 @@
                         <Setter Property="FontSize" Value="{DynamicResource MainWindowSecondaryFontSize}"/>
                         <Setter Property="Margin" Value="0,3,0,0"/>
                     </Style>
+                    <Style Selector="^ StackPanel#SecsPanel > Label">
+                         <Setter Property="FontSize" Value="{DynamicResource MainWindowEmphasizedFontSize}"/>
+                    </Style>
+                    <Style Selector="^.SmallSecondsEnabled StackPanel#SecsPanel > Label">
+                         <Setter Property="FontSize" Value="{DynamicResource MainWindowSecondaryFontSize}"/>
+                    </Style>
                 </Style>
             </StackPanel.Styles>
-            <Label
-                Content="--"
+            <StackPanel
+                Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                FontSize="{DynamicResource MainWindowEmphasizedFontSize}"
-                Padding="2,0,2,0"
-                TextElement.FontFeatures="tnum"
-                x:Name="LHours">
-                <Label.RenderTransform>
-                    <TranslateTransform />
-                </Label.RenderTransform>
-            </Label>
+                x:Name="HoursPanel">
+                <Label Content="-" Padding="0" TextElement.FontFeatures="tnum" x:Name="LHourTens" FontSize="{DynamicResource MainWindowEmphasizedFontSize}">
+                    <Label.RenderTransform><TranslateTransform /></Label.RenderTransform>
+                </Label>
+                <Label Content="-" Padding="0" TextElement.FontFeatures="tnum" x:Name="LHourUnits" FontSize="{DynamicResource MainWindowEmphasizedFontSize}">
+                    <Label.RenderTransform><TranslateTransform /></Label.RenderTransform>
+                </Label>
+            </StackPanel>
             <Label
                 HorizontalAlignment="Center"
                 HorizontalContentAlignment="Center"
@@ -90,19 +94,18 @@
                 Padding="0,0,0,4"
                 Content=":"
                 x:Name="SMins" />
-            <Label
-                Content="--"
+            <StackPanel
+                Orientation="Horizontal"
                 HorizontalAlignment="Center"
-                HorizontalContentAlignment="Center"
                 VerticalAlignment="Center"
-                Padding="2,0,2,0"
-                FontSize="{DynamicResource MainWindowEmphasizedFontSize}"
-                TextElement.FontFeatures="tnum"
-                x:Name="LMins">
-                <Label.RenderTransform>
-                    <TranslateTransform />
-                </Label.RenderTransform>
-            </Label>
+                x:Name="MinsPanel">
+                <Label Content="-" Padding="0" TextElement.FontFeatures="tnum" x:Name="LMinTens" FontSize="{DynamicResource MainWindowEmphasizedFontSize}">
+                    <Label.RenderTransform><TranslateTransform /></Label.RenderTransform>
+                </Label>
+                <Label Content="-" Padding="0" TextElement.FontFeatures="tnum" x:Name="LMinUnits" FontSize="{DynamicResource MainWindowEmphasizedFontSize}">
+                    <Label.RenderTransform><TranslateTransform /></Label.RenderTransform>
+                </Label>
+            </StackPanel>
             <Label
                 HorizontalAlignment="Center"
                 HorizontalContentAlignment="Center"
@@ -110,17 +113,18 @@
                 Content=":"
                 Padding="0,0,0,4"
                 x:Name="SSecs" />
-            <Label
-                Content="--"
+            <StackPanel
+                Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Padding="2,0,0,0"
-                TextElement.FontFeatures="tnum"
-                x:Name="LSecs">
-                <Label.RenderTransform>
-                    <TranslateTransform/>
-                </Label.RenderTransform>
-            </Label>
+                x:Name="SecsPanel">
+                <Label Content="-" Padding="0" TextElement.FontFeatures="tnum" x:Name="LSecTens">
+                    <Label.RenderTransform><TranslateTransform /></Label.RenderTransform>
+                </Label>
+                <Label Content="-" Padding="0" TextElement.FontFeatures="tnum" x:Name="LSecUnits">
+                    <Label.RenderTransform><TranslateTransform /></Label.RenderTransform>
+                </Label>
+            </StackPanel>
         </StackPanel>
     </Grid>   
 </ci:ComponentBase>
