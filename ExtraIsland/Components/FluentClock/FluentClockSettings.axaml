@@ -25,14 +25,16 @@
                 <controls:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsSwapAnimationEnabled, Mode=TwoWay}"/>
                 </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEB94;}"
-                                       Header="专注模式"
-                                       Description="启用后,秒数动画将被替换为微微闪烁,避免频繁的移动分散注意力">
-                <controls:SettingsExpander.Footer>
-                    <ToggleSwitch IsEnabled="{Binding Settings.IsSwapAnimationEnabled, Mode=OneWay}"
-                                  IsChecked="{Binding Settings.IsFocusedMode, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
+                <controls:SettingsExpander.Items>
+                    <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xEB94;}"
+                                                   Content="专注模式"
+                                                   Description="启用后,秒数动画将被替换为微微闪烁,避免频繁的移动分散注意力">
+                        <controls:SettingsExpanderItem.Footer>
+                            <ToggleSwitch IsEnabled="{Binding Settings.IsSwapAnimationEnabled, Mode=OneWay}"
+                                          IsChecked="{Binding Settings.IsFocusedMode, Mode=TwoWay}"/>
+                        </controls:SettingsExpanderItem.Footer>
+                    </controls:SettingsExpanderItem>
+                </controls:SettingsExpander.Items>
             </controls:SettingsExpander>
             <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4D4;}"
                                        Header="使用系统时间"
