@@ -166,13 +166,6 @@
                     <ToggleSwitch IsChecked="{Binding Settings.IsNotify, Mode=TwoWay}"/>
                 </controls:SettingsExpander.Footer>
             </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4D4;}"
-                                       Header="停止计时"
-                                       Description="启用后,倒计时到后将停止计时">
-                <controls:SettingsExpander.Footer>
-                    <ToggleSwitch IsChecked="{Binding Settings.IsStop, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
             <Label HorizontalAlignment="Center"
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland

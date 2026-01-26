@@ -79,7 +79,6 @@ public class BetterCountdownConfig : ObservableObject {
     
     public bool IsFocusedModeEnabled { get; set; } = false;
     public bool IsNotify {get; set;} = false;
-    public bool IsStop {get; set;} = false;
 }
 
 public class CountdownSeparatorConfigs : ObservableObject {
