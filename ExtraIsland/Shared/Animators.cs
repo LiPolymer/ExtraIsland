@@ -30,7 +30,7 @@ public static class Animators {
                         }
                     }
                 },
-                Duration = TimeSpan.FromMilliseconds(200),
+                Duration = TimeSpan.FromMilliseconds(150),
                 FillMode = FillMode.Forward,
                 Easing = new QuadraticEaseIn()
             };
@@ -51,7 +51,7 @@ public static class Animators {
                         }
                     }
                 },
-                Duration = TimeSpan.FromMilliseconds(200),
+                Duration = TimeSpan.FromMilliseconds(150),
                 FillMode = FillMode.Forward,
                 Easing = new QuadraticEaseOut()
             };
