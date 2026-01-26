@@ -13,6 +13,7 @@ using ExtraIsland.SettingPages;
 //using ExtraIsland.LifeMode.Components;
 //using ExtraIsland.SettingsPages;
 using ExtraIsland.Shared;
+using ExtraIsland.Notification;
 //using ExtraIsland.TinyFeatures;
 using LycheeLib.Interface;
 using Microsoft.Extensions.DependencyInjection;
@@ -88,6 +89,8 @@ public class Plugin : PluginBase {
         services.AddSettingsPage<MainSettingsPage>();
         //services.AddSettingsPage<DutySettingsPage>();
         services.AddSettingsPage<TinyFeaturesSettingsPage>();
+        //NotificationProvider
+        services.AddNotificationProvider<TimeUpNotification>();
         //Actions
         Register.Claim(services);
         //Authorizer

@@ -7,10 +7,20 @@ namespace ExtraIsland.Components;
 public class BetterCountdownConfig : ObservableObject {
     public BetterCountdownConfig() {
         Separators.PropertyChanged += (_,_) => OnPropertyChanged();
+        TargetDateTime = DateTime.Now.AddMinutes(1);
     }
     
-    public DateTime TargetDateTime { get; set; } = DateTime.Now;
-    
+    public event EventHandler? OnTargetDateTimeChanged;
+    private DateTime _targetDateTime;
+    public DateTime TargetDateTime {
+        get => _targetDateTime;
+        set {
+            if (_targetDateTime == value) return;
+            _targetDateTime = value;
+            OnTargetDateTimeChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
     string _prefix = "现在";
     public string Prefix {
         get => _prefix;
@@ -68,6 +78,7 @@ public class BetterCountdownConfig : ObservableObject {
     public event Action? OnAccuracyChanged;
     
     public bool IsFocusedModeEnabled { get; set; } = false;
+    public bool IsNotify {get; set;} = false;
 }
 
 public class CountdownSeparatorConfigs : ObservableObject {
