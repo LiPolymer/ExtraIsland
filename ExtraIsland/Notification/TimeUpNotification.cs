@@ -31,8 +31,9 @@ public class TimeUpNotification : NotificationProviderBase {
     }
     
     void Notify(object sender, EventArgs args) {
+        var a = (BetterCountdown)sender;
         ShowNotification(new NotificationRequest() {
-            MaskContent = NotificationContent.CreateTwoIconsMask("倒计时结束")
+            MaskContent = NotificationContent.CreateTwoIconsMask($"{a.Settings.Name}的时间到！")
         });
         TimeUp.OnTimeUp -= Notify;
     }

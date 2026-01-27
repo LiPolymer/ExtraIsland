@@ -9,7 +9,14 @@ public class BetterCountdownConfig : ObservableObject {
         Separators.PropertyChanged += (_,_) => OnPropertyChanged();
         TargetDateTime = DateTime.Now.AddMinutes(1);
     }
-    
+    string _name = "取个名吧~";
+    public string Name {
+        get => _name; 
+        set {
+            if (value == _name) return;
+            _name = value;
+        }
+    }
     public event EventHandler? OnTargetDateTimeChanged;
     private DateTime _targetDateTime;
     public DateTime TargetDateTime {
