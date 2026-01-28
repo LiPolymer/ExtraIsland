@@ -4,7 +4,6 @@ using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
-using ExtraIsland.Notification;
 using Thickness = Avalonia.Thickness;
 
 namespace ExtraIsland.Components;
