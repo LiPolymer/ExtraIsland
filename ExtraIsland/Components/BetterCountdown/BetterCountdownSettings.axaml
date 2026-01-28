@@ -171,8 +171,8 @@
                     
                     <controls:SettingsExpander.Items>
                         <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE8AC;}"
-                                                       Content="事件名"
-                                                       Description="该倒计时的名称，在提醒中起效">
+                                                       Content="提醒内容"
+                                                       Description="=提醒的内容,建议格式为倒计时名称+后续文字 ">
                             <controls:SettingsExpanderItem.Footer>
                                 <Grid Grid.Row="1" HorizontalAlignment="Center">
                                     <Grid.ColumnDefinitions>
