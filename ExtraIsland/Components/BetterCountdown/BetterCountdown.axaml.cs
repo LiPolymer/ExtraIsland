@@ -10,7 +10,7 @@ namespace ExtraIsland.Components;
 
 [ComponentInfo(
     "759FFA33-309F-6494-3903-E0693036197E",
-    "更好的倒计日",
+    "更好的倒计时",
     "\uE352",
     "提供更高级的功能与动画支持"
 )]

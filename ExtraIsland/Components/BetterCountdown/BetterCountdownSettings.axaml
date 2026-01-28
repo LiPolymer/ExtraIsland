@@ -167,16 +167,28 @@
                 <controls:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsNotify, Mode=TwoWay}"/>
                 </controls:SettingsExpander.Footer>
-                <controls:SettingsExpander.Items>
-                    <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE8AC;}"
-                                                   Content="事件名"
-                                                   Description="该倒计时的名称，在提醒中起效">
-                        <controls:SettingsExpanderItem.Footer>
-                            <TextBox Text="{Binding Settings.Name, Mode=TwoWay}" ></TextBox>
-                        </controls:SettingsExpanderItem.Footer>
-                    </controls:SettingsExpanderItem>
-                </controls:SettingsExpander.Items>
+
+                    
+                    <controls:SettingsExpander.Items>
+                        <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE8AC;}"
+                                                       Content="事件名"
+                                                       Description="该倒计时的名称，在提醒中起效">
+                            <controls:SettingsExpanderItem.Footer>
+                                <Grid Grid.Row="1" HorizontalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Grid.Column="0" Text="{Binding Settings.Name, Mode=TwoWay}" ></TextBox>
+                                    <Label Grid.Column="1" >+</Label>
+                                    <TextBox Grid.Column="2" Text="{Binding Settings.Message, Mode=TwoWay}" ></TextBox>
+                                </Grid>
+                            </controls:SettingsExpanderItem.Footer>
+                        </controls:SettingsExpanderItem>
+                    </controls:SettingsExpander.Items>
             </controls:SettingsExpander>
+
             <Label HorizontalAlignment="Center"
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland

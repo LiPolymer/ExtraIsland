@@ -9,14 +9,7 @@ public class BetterCountdownConfig : ObservableObject {
         Separators.PropertyChanged += (_,_) => OnPropertyChanged();
         TargetDateTime = DateTime.Now.AddMinutes(1);
     }
-    string _name = "取个名吧~";
-    public string Name {
-        get => _name; 
-        set {
-            if (value == _name) return;
-            _name = value;
-        }
-    }
+    
     public event EventHandler? OnTargetDateTimeChanged;
     private DateTime _targetDateTime;
     public DateTime TargetDateTime {
@@ -86,6 +79,22 @@ public class BetterCountdownConfig : ObservableObject {
     
     public bool IsFocusedModeEnabled { get; set; } = false;
     public bool IsNotify {get; set;} = false;
+    string _name = "取个名吧~";
+    public string Name {
+        get => _name; 
+        set {
+            if (value == _name) return;
+            _name = value;
+        }
+    }
+    string _message = "的时间到了";
+    public string  Message {
+        get => _message;
+        set {
+            if (value == _message) return;
+            _message = value;
+        }
+    }
 }
 
 public class CountdownSeparatorConfigs : ObservableObject {

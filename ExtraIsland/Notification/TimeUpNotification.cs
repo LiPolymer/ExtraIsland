@@ -27,9 +27,9 @@ public class TimeUpNotification : NotificationProviderBase {
     }
     IEventService EventService { get; }
     void Notify(object sender, EventArgs args) {
-        var a = (BetterCountdown)sender;
-        ShowNotification(new NotificationRequest() {
-            MaskContent = NotificationContent.CreateTwoIconsMask($"{a.Settings.Name}的时间到！")
+        var betterCountdown = (BetterCountdown)sender;
+        Channel(TimeUpChannelId).ShowNotification(new NotificationRequest() {
+            MaskContent = NotificationContent.CreateTwoIconsMask($"{betterCountdown.Settings.Name}{betterCountdown.Settings.Message}")
         });
         EventService.OnTimeUp -= Notify;
     }
