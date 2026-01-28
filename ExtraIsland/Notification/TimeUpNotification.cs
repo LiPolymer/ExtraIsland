@@ -24,6 +24,7 @@ public class TimeUpNotification : NotificationProviderBase {
         EventService.OnTimeUp += Notify;
         EventService.OnTargetTimeChanged += Resubscribe;
         EventService.OnDetachedFromVisualTreeEventE += Unsubscribe;
+        EventService.OnAttachedToVisualTreeE += Resubscribe;
     }
     IEventService EventService { get; }
     void Notify(object sender, EventArgs args) {
@@ -36,7 +37,8 @@ public class TimeUpNotification : NotificationProviderBase {
     public void Resubscribe(object sender, EventArgs args) {
         EventService.OnTimeUp -= Notify;
         EventService.OnTimeUp += Notify;
-        
+        EventService.OnTargetTimeChanged -= Resubscribe;
+        EventService.OnTargetTimeChanged += Resubscribe;
     }
     public void Unsubscribe(object sender, EventArgs args) {
         EventService.OnTimeUp -= Notify;

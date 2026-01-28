@@ -229,6 +229,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         }
     }
     void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
+        EventService.RaiseOnAttachedToVisualTreeE();
         Dispatcher.UIThread.InvokeAsync(OnLoad);
     }
     void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
