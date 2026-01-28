@@ -16,17 +16,10 @@ namespace ExtraIsland.Components;
     "提供更高级的功能与动画支持"
 )]
 public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
-    public BetterCountdown(
-        ILessonsService lessonsService,
-        IExactTimeService exactTimeService,
-        ITimeUp timeUp,
-        IDetectDetachedFromVisualTree detectDetachedFromVisualTree,
-        ITargetTimeChanged targetTimeChanged) {
-        TargetTimeChanged = targetTimeChanged;
-        DetectDetachedFromVisualTree = detectDetachedFromVisualTree;
+    public BetterCountdown(ILessonsService lessonsService, IExactTimeService exactTimeService, IEventService eventService) {
         ExactTimeService = exactTimeService;
         LessonsService = lessonsService;
-        TimeUpService = timeUp;
+        EventService = eventService;
         InitializeComponent();
         _dyAnimator = new Animators.GenericContentSwapAnimator(LDays);
         _hrAnimator = new Animators.GenericContentSwapAnimator(LHours);
@@ -35,9 +28,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
     }
     IExactTimeService ExactTimeService { get; }
     ILessonsService LessonsService { get; }
-    ITimeUp TimeUpService { get; }
-    IDetectDetachedFromVisualTree DetectDetachedFromVisualTree { get; }
-    ITargetTimeChanged TargetTimeChanged { get; }
+    IEventService EventService { get; }
     readonly Animators.GenericContentSwapAnimator _dyAnimator;
     readonly Animators.GenericContentSwapAnimator _hrAnimator;
     readonly Animators.GenericContentSwapAnimator _mnAnimator;
@@ -50,7 +41,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         SilentUpdater();
         OnTimeChanged += DetectEvent;
         OnTimeChanged += DetectTimeUp;
-        Settings.OnTargetDateTimeChanged += TargetTimeChanged.RaiseOnTargetTimeChanged;
+        Settings.OnTargetDateTimeChanged += EventService.RaiseOnTargetTimeChanged;
         Settings.OnAccuracyChanged += UpdateAccuracy;
         Settings.OnNoGapDisplayChanged += UpdateGap;
         LessonsService.PostMainTimerTicked += UpdateTime;
@@ -214,7 +205,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
     
     void Notify() {
         if (Settings.IsNotify) {
-            TimeUpService.RaiseOnTimeUp(this, EventArgs.Empty);
+            EventService.RaiseOnTimeUp(this, EventArgs.Empty);
         }
     }
     void DetectTimeUp() {
@@ -247,6 +238,6 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         Settings.OnAccuracyChanged -= UpdateAccuracy;
         Settings.OnNoGapDisplayChanged -= UpdateGap;
         LessonsService.PostMainTimerTicked -= UpdateTime;
-        DetectDetachedFromVisualTree.RaiseOnDetachedFromVisualTreeEventE(); 
+        EventService.RaiseOnDetachedFromVisualTreeEventE(); 
     }
 }

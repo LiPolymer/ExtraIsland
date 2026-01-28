@@ -77,9 +77,7 @@ public class Plugin : PluginBase {
         //Services
         services.AddHostedService<ServicesFetcherService>();
         services.AddHostedService<Register>();
-        services.AddSingleton<ITimeUp,TimeUp>();
-        services.AddSingleton<ITargetTimeChanged, TargetTimeChanged>();
-        services.AddSingleton<IDetectDetachedFromVisualTree,DetectDetachedFromVisualTreeEvent>();
+        services.AddSingleton<IEventService, EventService>();
         //Components
         services.AddComponent<BetterCountdown,BetterCountdownSettings>();
         services.AddComponent<FluentClock,FluentClockSettings>();

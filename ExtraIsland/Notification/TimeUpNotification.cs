@@ -17,33 +17,29 @@ namespace ExtraIsland.Notification;
     "\u1000",
     "倒计时结束后的提醒")]
 public class TimeUpNotification : NotificationProviderBase {
-    ITargetTimeChanged TargetTimeChanged { get; }
-    ITimeUp TimeUp { get; }
-    IDetectDetachedFromVisualTree DetectDetachedFromVisualTree { get; }
+
     public const string TimeUpChannelId = "40f73a64-a0d8-480b-8026-f0a71a14d6fb";
-    public TimeUpNotification(ITimeUp timeUp, ITargetTimeChanged targetTimeChanged, IDetectDetachedFromVisualTree  detectDetachedFromVisualTree) {
-        TimeUp = timeUp;
-        TargetTimeChanged = targetTimeChanged;
-        DetectDetachedFromVisualTree = detectDetachedFromVisualTree;
-        TimeUp.OnTimeUp += Notify;
-        TargetTimeChanged.OnTargetTimeChanged += Resubscribe;
-        DetectDetachedFromVisualTree.OnDetachedFromVisualTreeEventE += Resubscribe;
+    public TimeUpNotification(IEventService eventService) {
+        EventService = eventService;
+        EventService.OnTimeUp += Notify;
+        EventService.OnTargetTimeChanged += Resubscribe;
+        EventService.OnDetachedFromVisualTreeEventE += Resubscribe;
     }
-    
+    IEventService EventService { get; }
     void Notify(object sender, EventArgs args) {
         var a = (BetterCountdown)sender;
         ShowNotification(new NotificationRequest() {
             MaskContent = NotificationContent.CreateTwoIconsMask($"{a.Settings.Name}的时间到！")
         });
-        TimeUp.OnTimeUp -= Notify;
+        EventService.OnTimeUp -= Notify;
     }
     public void Resubscribe(object sender, EventArgs args) {
-        TimeUp.OnTimeUp -= Notify;
-        TimeUp.OnTimeUp += Notify;
+        EventService.OnTimeUp -= Notify;
+        EventService.OnTimeUp += Notify;
         
     }
     public void Unsubscribe() {
-        TimeUp.OnTimeUp -= Notify;
-        TargetTimeChanged.OnTargetTimeChanged -= Resubscribe;
+        EventService.OnTimeUp -= Notify;
+        EventService.OnTargetTimeChanged -= Resubscribe;
     }
 }
