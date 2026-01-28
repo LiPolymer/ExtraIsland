@@ -167,9 +167,7 @@
                 <controls:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsNotify, Mode=TwoWay}"/>
                 </controls:SettingsExpander.Footer>
-
-                    
-                    <controls:SettingsExpander.Items>
+                <controls:SettingsExpander.Items>
                         <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE8AC;}"
                                                        Content="提醒内容"
                                                        Description="提醒的内容,建议格式为倒计时名称+后续文字 ">
@@ -188,7 +186,6 @@
                         </controls:SettingsExpanderItem>
                     </controls:SettingsExpander.Items>
             </controls:SettingsExpander>
-
             <Label HorizontalAlignment="Center"
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland

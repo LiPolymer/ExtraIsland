@@ -79,7 +79,7 @@ public class BetterCountdownConfig : ObservableObject {
     
     public bool IsFocusedModeEnabled { get; set; } = false;
     public bool IsNotify {get; set;} = false;
-    string _name = "取个名吧~";
+    string _name = "倒计时";
     public string Name {
         get => _name; 
         set {
