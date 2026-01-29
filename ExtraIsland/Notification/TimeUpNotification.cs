@@ -18,7 +18,7 @@ namespace ExtraIsland.Notification;
     "倒计时结束后的提醒")]
 public class TimeUpNotification : NotificationProviderBase {
 
-    public const string TimeUpChannelId = "40f73a64-a0d8-480b-8026-f0a71a14d6fb";
+    const string TimeUpChannelId = "40f73a64-a0d8-480b-8026-f0a71a14d6fb";
     public TimeUpNotification(IEventService eventService) {
         EventService = eventService;
         EventService.OnTimeUp += Notify;
@@ -27,20 +27,21 @@ public class TimeUpNotification : NotificationProviderBase {
         EventService.OnAttachedToVisualTreeE += Resubscribe;
     }
     IEventService EventService { get; }
-    void Notify(object sender, EventArgs args) {
-        var betterCountdown = (BetterCountdown)sender;
+    void Notify(object? sender, EventArgs args) {
+        if ((BetterCountdown?)sender == null) return;
+        BetterCountdown betterCountdown = (BetterCountdown)sender;
         Channel(TimeUpChannelId).ShowNotification(new NotificationRequest() {
             MaskContent = NotificationContent.CreateTwoIconsMask($"{betterCountdown.Settings.Name}{betterCountdown.Settings.Message}")
         });
         EventService.OnTimeUp -= Notify;
     }
-    public void Resubscribe(object sender, EventArgs args) {
+    void Resubscribe(object? sender, EventArgs args) {
         EventService.OnTimeUp -= Notify;
         EventService.OnTimeUp += Notify;
         EventService.OnTargetTimeChanged -= Resubscribe;
         EventService.OnTargetTimeChanged += Resubscribe;
     }
-    public void Unsubscribe(object sender, EventArgs args) {
+    void Unsubscribe(object? sender, EventArgs args) {
         EventService.OnTimeUp -= Notify;
         EventService.OnTargetTimeChanged -= Resubscribe;
     }
