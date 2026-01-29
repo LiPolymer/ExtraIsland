@@ -4,21 +4,21 @@ using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
 using ExtraIsland.Shared;
-using ExtraIsland.Notification;
 using Thickness = Avalonia.Thickness;
 
 namespace ExtraIsland.Components;
 
 [ComponentInfo(
     "759FFA33-309F-6494-3903-E0693036197E",
-    "更好的倒计日",
+    "更好的倒计时",
     "\uE352",
     "提供更高级的功能与动画支持"
 )]
 public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
-    public BetterCountdown(ILessonsService lessonsService, IExactTimeService exactTimeService) {
+    public BetterCountdown(ILessonsService lessonsService, IExactTimeService exactTimeService, IEventService eventService) {
         ExactTimeService = exactTimeService;
         LessonsService = lessonsService;
+        EventService = eventService;
         InitializeComponent();
         _dyAnimator = new Animators.GenericContentSwapAnimator(LDays);
         _hrAnimator = new Animators.GenericContentSwapAnimator(LHours);
@@ -27,14 +27,12 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
     }
     IExactTimeService ExactTimeService { get; }
     ILessonsService LessonsService { get; }
-    
+    IEventService EventService { get; }
     readonly Animators.GenericContentSwapAnimator _dyAnimator;
     readonly Animators.GenericContentSwapAnimator _hrAnimator;
     readonly Animators.GenericContentSwapAnimator _mnAnimator;
     readonly Animators.GenericContentSwapAnimator _scAnimator;
     
-    TimeUpNotification? _timeUpNotification;
-    public event EventHandler? TimeUp;
     void OnLoad() {
         UpdateTime();
         UpdateAccuracy();
@@ -42,11 +40,10 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         SilentUpdater();
         OnTimeChanged += DetectEvent;
         OnTimeChanged += DetectTimeUp;
+        Settings.OnTargetDateTimeChanged += EventService.RaiseOnTargetTimeChanged;
         Settings.OnAccuracyChanged += UpdateAccuracy;
         Settings.OnNoGapDisplayChanged += UpdateGap;
-        Settings.OnTargetDateTimeChanged += UnlockUpdate;
         LessonsService.PostMainTimerTicked += UpdateTime;
-        _timeUpNotification = new TimeUpNotification(this);
     }
 
     bool _isAccurateChanged;
@@ -97,9 +94,6 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
     string _minutes = string.Empty;
     string _seconds = string.Empty;
     bool _updateLock;
-    void UnlockUpdate(object? sender, EventArgs args) {
-        _updateLock = false;
-    }
     void DetectEvent() {
         if (_updateLock) return;
         _updateLock = true;
@@ -210,8 +204,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
     
     void Notify() {
         if (Settings.IsNotify) {
-            TimeUp?.Invoke(this, EventArgs.Empty);
-            
+            EventService.RaiseOnTimeUp(this, EventArgs.Empty);
         }
     }
     void DetectTimeUp() {
@@ -236,15 +229,15 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         }
     }
     void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
+        EventService.RaiseOnAttachedToVisualTreeE();
         Dispatcher.UIThread.InvokeAsync(OnLoad);
     }
     void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         OnTimeChanged -= DetectEvent;
         OnTimeChanged -= DetectTimeUp;
-        Settings.OnTargetDateTimeChanged -= UnlockUpdate;
         Settings.OnAccuracyChanged -= UpdateAccuracy;
         Settings.OnNoGapDisplayChanged -= UpdateGap;
         LessonsService.PostMainTimerTicked -= UpdateTime;
-        _timeUpNotification?.Unsubscribe();
+        EventService.RaiseOnDetachedFromVisualTreeEventE(); 
     }
 }
