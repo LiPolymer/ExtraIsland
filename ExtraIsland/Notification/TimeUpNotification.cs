@@ -19,16 +19,15 @@ public class TimeUpNotification : NotificationProviderBase {
         BetterCountdown.Settings.OnTargetDateTimeChanged += Resubscribe;
     }
     
-    void Notify(object sender, EventArgs args) {
+    void Notify(object? sender, EventArgs args) {
         ShowNotification(new NotificationRequest() {
             MaskContent = NotificationContent.CreateTwoIconsMask("倒计时结束")
         });
         BetterCountdown.TimeUp -= Notify;
     }
-    public void Resubscribe(object sender, EventArgs args) {
+    void Resubscribe(object? sender, EventArgs args) {
         BetterCountdown.TimeUp -= Notify;
         BetterCountdown.TimeUp += Notify;
-        
     }
     public void Unsubscribe() {
         BetterCountdown.TimeUp -= Notify;
