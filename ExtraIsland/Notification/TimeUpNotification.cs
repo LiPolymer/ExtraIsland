@@ -1,7 +1,6 @@
 ﻿using ClassIsland.Core.Abstractions.Services.NotificationProviders;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Models.Notification;
-using ExCSS;
 using ExtraIsland.Components;
 
 namespace ExtraIsland.Notification;
@@ -19,30 +18,22 @@ namespace ExtraIsland.Notification;
 public class TimeUpNotification : NotificationProviderBase {
 
     const string TimeUpChannelId = "40f73a64-a0d8-480b-8026-f0a71a14d6fb";
-    public TimeUpNotification(IEventService eventService) {
-        EventService = eventService;
-        EventService.OnTimeUp += Notify;
-        EventService.OnTargetTimeChanged += Resubscribe;
-        EventService.OnDetachedFromVisualTreeEventE += Unsubscribe;
-        EventService.OnAttachedToVisualTreeE += Resubscribe;
+
+    delegate void TwoIconsMaskNotify(string content, string leftIcon, string rightIcon);
+    
+    static event TwoIconsMaskNotify? OnNotify;
+
+    public static void Notify(string content, string leftIcon = "", string rightIcon = "") {
+        OnNotify?.Invoke(content, leftIcon, rightIcon);
     }
-    IEventService EventService { get; }
-    void Notify(object? sender, EventArgs args) {
-        if ((BetterCountdown?)sender == null) return;
-        BetterCountdown betterCountdown = (BetterCountdown)sender;
+    
+    public TimeUpNotification() {
+        OnNotify += DoNotify;
+    }
+    
+    void DoNotify(string content, string leftIcon, string rightIcon) {
         Channel(TimeUpChannelId).ShowNotification(new NotificationRequest() {
-            MaskContent = NotificationContent.CreateTwoIconsMask($"{betterCountdown.Settings.Name}{betterCountdown.Settings.Message}")
+            MaskContent = NotificationContent.CreateTwoIconsMask(content, leftIcon, rightIcon)
         });
-        EventService.OnTimeUp -= Notify;
-    }
-    void Resubscribe(object? sender, EventArgs args) {
-        EventService.OnTimeUp -= Notify;
-        EventService.OnTimeUp += Notify;
-        EventService.OnTargetTimeChanged -= Resubscribe;
-        EventService.OnTargetTimeChanged += Resubscribe;
-    }
-    void Unsubscribe(object? sender, EventArgs args) {
-        EventService.OnTimeUp -= Notify;
-        EventService.OnTargetTimeChanged -= Resubscribe;
     }
 }

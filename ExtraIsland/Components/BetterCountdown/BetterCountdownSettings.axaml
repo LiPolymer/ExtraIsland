@@ -169,19 +169,10 @@
                 </controls:SettingsExpander.Footer>
                 <controls:SettingsExpander.Items>
                         <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE8AC;}"
-                                                       Content="提醒内容"
-                                                       Description="提醒的内容,建议格式为倒计时名称+后续文字 ">
+                                                       Content="编辑提醒"
+                                                       Description="修改提醒的文字, 可以用 {0} {1} 分别指代前缀和后缀">
                             <controls:SettingsExpanderItem.Footer>
-                                <Grid Grid.Row="1" HorizontalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox Grid.Column="0" Text="{Binding Settings.Name, Mode=TwoWay}" ></TextBox>
-                                    <Label Grid.Column="1" >+</Label>
-                                    <TextBox Grid.Column="2" Text="{Binding Settings.Message, Mode=TwoWay}" ></TextBox>
-                                </Grid>
+                                <TextBox Text="{Binding Settings.Message, Mode=TwoWay}" />
                             </controls:SettingsExpanderItem.Footer>
                         </controls:SettingsExpanderItem>
                     </controls:SettingsExpander.Items>

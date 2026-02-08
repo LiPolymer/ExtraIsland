@@ -3,6 +3,7 @@ using Avalonia.Threading;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
+using ExtraIsland.Notification;
 using ExtraIsland.Shared;
 using Thickness = Avalonia.Thickness;
 
@@ -15,10 +16,9 @@ namespace ExtraIsland.Components;
     "提供更高级的功能与动画支持"
 )]
 public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
-    public BetterCountdown(ILessonsService lessonsService, IExactTimeService exactTimeService, IEventService eventService) {
+    public BetterCountdown(ILessonsService lessonsService, IExactTimeService exactTimeService) {
         ExactTimeService = exactTimeService;
         LessonsService = lessonsService;
-        EventService = eventService;
         InitializeComponent();
         _dyAnimator = new Animators.GenericContentSwapAnimator(LDays);
         _hrAnimator = new Animators.GenericContentSwapAnimator(LHours);
@@ -27,7 +27,6 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
     }
     IExactTimeService ExactTimeService { get; }
     ILessonsService LessonsService { get; }
-    IEventService EventService { get; }
     readonly Animators.GenericContentSwapAnimator _dyAnimator;
     readonly Animators.GenericContentSwapAnimator _hrAnimator;
     readonly Animators.GenericContentSwapAnimator _mnAnimator;
@@ -40,7 +39,6 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         SilentUpdater();
         OnTimeChanged += DetectEvent;
         OnTimeChanged += DetectTimeUp;
-        Settings.OnTargetDateTimeChanged += EventService.RaiseOnTargetTimeChanged;
         Settings.OnAccuracyChanged += UpdateAccuracy;
         Settings.OnNoGapDisplayChanged += UpdateGap;
         LessonsService.PostMainTimerTicked += UpdateTime;
@@ -201,35 +199,32 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
             _scAnimator.SilentUpdate(s);
         }
     }
-    
-    void Notify() {
-        if (Settings.IsNotify) {
-            EventService.RaiseOnTimeUp(this, EventArgs.Empty);
-        }
-    }
-    void DetectTimeUp() {
-        if (Settings.IsNotify) {
-            if (Settings.IsCorrectorEnabled) {
-                if ((int)Settings.Accuracy == 1 & _days == "0" & _hours == "1" & _minutes == "0" & _seconds == "-1") {
-                    Notify();
-                    
-                }
-                if ((int)Settings.Accuracy == 2 & _days == "0" & _hours == "0" & _minutes == "1" & _seconds == "-1") {
-                    Notify();
-                }
-                if ((int)Settings.Accuracy == 3 & _days == "0" & _hours == "0" & _minutes == "0" & _seconds == "0") {
-                    Notify();
-                }
-            } else {
-                if (_days == "0" & _hours == "0" & _minutes == "0" & _seconds == "0") {
-                    Notify();
-                }
-            }
 
+    void Notify() {
+        TimeUpNotification.Notify(string.Format(Settings.Message, Settings.Prefix, Settings.Suffix),
+                                  Settings.LeftIcon, Settings.RightIcon);
+        Settings.IsNotified = true;
+    }
+    
+    void DetectTimeUp() {
+        if (!Settings.IsNotify || Settings.IsNotified) return;
+        if (Settings.IsCorrectorEnabled) {
+            if ((int)Settings.Accuracy == 1 & _days == "0" & _hours == "1" & _minutes == "0" & _seconds == "-1") {
+                Notify();
+            }
+            if ((int)Settings.Accuracy == 2 & _days == "0" & _hours == "0" & _minutes == "1" & _seconds == "-1") {
+                Notify();
+            }
+            if ((int)Settings.Accuracy == 3 & _days == "0" & _hours == "0" & _minutes == "0" & _seconds == "0") {
+                Notify();
+            }
+        } else {
+            if (_days == "0" & _hours == "0" & _minutes == "0" & _seconds == "0") {
+                Notify();
+            }
         }
     }
     void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
-        EventService.RaiseOnAttachedToVisualTreeE();
         Dispatcher.UIThread.InvokeAsync(OnLoad);
     }
     void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
@@ -238,6 +233,5 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         Settings.OnAccuracyChanged -= UpdateAccuracy;
         Settings.OnNoGapDisplayChanged -= UpdateGap;
         LessonsService.PostMainTimerTicked -= UpdateTime;
-        EventService.RaiseOnDetachedFromVisualTreeEventE(); 
     }
 }

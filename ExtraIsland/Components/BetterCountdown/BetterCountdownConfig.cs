@@ -9,17 +9,18 @@ public class BetterCountdownConfig : ObservableObject {
         Separators.PropertyChanged += (_,_) => OnPropertyChanged();
         TargetDateTime = DateTime.Now.AddMinutes(1);
     }
-    
-    public event EventHandler? OnTargetDateTimeChanged;
-    private DateTime _targetDateTime;
+
+    DateTime _targetDateTime;
     public DateTime TargetDateTime {
         get => _targetDateTime;
         set {
             if (_targetDateTime == value) return;
             _targetDateTime = value;
-            OnTargetDateTimeChanged?.Invoke(this, EventArgs.Empty);
+            IsNotified = false;
         }
     }
+    
+    public bool IsNotified { get; set; }
 
     string _prefix = "现在";
     public string Prefix {
@@ -77,24 +78,14 @@ public class BetterCountdownConfig : ObservableObject {
     }
     public event Action? OnAccuracyChanged;
     
-    public bool IsFocusedModeEnabled { get; set; } = false;
-    public bool IsNotify {get; set;} = false;
-    string _name = "倒计时";
-    public string Name {
-        get => _name; 
-        set {
-            if (value == _name) return;
-            _name = value;
-        }
-    }
-    string _message = "的时间到了";
-    public string  Message {
-        get => _message;
-        set {
-            if (value == _message) return;
-            _message = value;
-        }
-    }
+    public bool IsFocusedModeEnabled { get; set; }
+    public bool IsNotify {get; set;}
+
+    public string Message { get; set; } = "{0} 已结束";
+
+    public string LeftIcon { get; set; } = "\uE352";
+    
+    public string RightIcon { get; set; } = "";
 }
 
 public class CountdownSeparatorConfigs : ObservableObject {
