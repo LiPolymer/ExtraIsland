@@ -11,7 +11,7 @@ using FluentAvalonia.UI.Controls;
 namespace ExtraIsland.SettingPages;
 
 [HidePageTitle]
-[SettingsPageInfo("extraisland.master","ExtraIsland·主设置","\uE51A","\uE519")]
+[SettingsPageInfo("extraisland.master","ExtraIsland","\uE51A","\uE519")]
 public partial class MainSettingsPage : SettingsPageBase {
     public MainSettingsPage() {
         Settings = GlobalConstants.Handlers.MainConfig!.Data;
