@@ -89,7 +89,7 @@ public class Plugin : PluginBase {
         //SettingsPages
         services.AddSettingsPage<MainSettingsPage>();
         //services.AddSettingsPage<DutySettingsPage>();
-        services.AddSettingsPage<TinyFeaturesSettingsPage>();
+        //services.AddSettingsPage<TinyFeaturesSettingsPage>();
         //NotificationProvider
         services.AddNotificationProvider<TimeUpNotification>();
         //Actions
