@@ -1,0 +1,41 @@
+﻿<ci:ComponentBase x:Class="ExtraIsland.Components.OnDuty"
+                  x:TypeArguments="local:OnDutyConfig"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:ExtraIsland.Components"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  mc:Ignorable="d"
+                  Loaded="OnDuty_OnLoaded"
+                  Unloaded="OnDuty_OnUnloaded">
+    <StackPanel DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:OnDuty}}"
+                Orientation="Horizontal" VerticalAlignment="Center">
+        <Label VerticalAlignment="Center"
+               VerticalContentAlignment="Center"
+               IsVisible="{Binding !Settings.IsCompactModeEnabled}"
+               FontSize="{DynamicResource MainWindowLargeFontSize}"
+               x:Name="NameLabel"/>
+        
+        <Grid IsVisible="{Binding Settings.IsCompactModeEnabled}" 
+              VerticalAlignment="Center" RowDefinitions="Auto, Auto">
+            <Label Grid.Row="0"
+                   Content="值日"
+                   Margin="0,4,0,0"
+                   Padding="0"
+                   VerticalContentAlignment="Center"
+                   HorizontalAlignment="Left"
+                   FontSize="{DynamicResource MainWindowSecondaryFontSize}"
+                   x:Name="DualLabelUp"/>
+            <Label Grid.Row="1"
+                   Content="▯▯▯"
+                   Margin="0,0,0,4"
+                   Padding="0"
+                   VerticalContentAlignment="Center"
+                   HorizontalAlignment="Left"
+                   FontSize="{DynamicResource MainWindowSecondaryFontSize}"
+                   x:Name="DualLabelDown"/>
+        </Grid>
+    </StackPanel>
+
+</ci:ComponentBase>
