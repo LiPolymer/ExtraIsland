@@ -81,13 +81,13 @@ public class Plugin : PluginBase {
         services.AddComponent<BetterCountdown,BetterCountdownSettings>();
         services.AddComponent<FluentClock,FluentClockSettings>();
         services.AddComponent<Rhesis,RhesisSettings>();
-        //services.AddComponent<OnDuty,OnDutySettings>();
+        services.AddComponent<OnDuty,OnDutySettings>();
         services.AddComponent<LiveActivity,LiveActivitySettings>();
         services.AddComponent<DynamicLyrics,DynamicLyricsSettings>();
         services.AddComponent<ProfileInformation,ProfileInformationSettings>();
         //SettingsPages
         services.AddSettingsPage<MainSettingsPage>();
-        //services.AddSettingsPage<DutySettingsPage>();
+        services.AddSettingsPage<DutySettingsPage>();
         //services.AddSettingsPage<TinyFeaturesSettingsPage>();
         //NotificationProvider
         services.AddNotificationProvider<TimeUpNotification>();
