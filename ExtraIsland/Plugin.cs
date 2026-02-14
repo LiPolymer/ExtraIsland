@@ -1,7 +1,10 @@
+using System.Reflection;
 using ClassIsland.Core;
 using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
+using ClassIsland.Core.Enums.SettingsWindow;
 using ClassIsland.Core.Extensions.Registry;
+using ClassIsland.Core.Services.Registry;
 using ClassIsland.Shared;
 using ExtraIsland.Automations;
 //using ExtraIsland.AuthorizeProvider;
@@ -43,6 +46,7 @@ public class Plugin : PluginBase {
                           + "\r\n Copyright (C) 2024-2025 LiPolymer \r\n Licensed under GNU AGPLv3. \r\n" 
                           + "正在初始化...-------------------------------------------------------------------");
         Console.ForegroundColor = defaultColor;
+        
         ChainedTerminal cct = ct.Chain("&3ConfigHandler");
         cct.WriteLine("正在载入主设置...");
         //Initialize GlobalConstants/ConfigHandlers
@@ -70,13 +74,16 @@ public class Plugin : PluginBase {
                 //};
                 #endif
         }
+        
         cct.WriteLine("正在载入其余配置...");
         GlobalConstants.Handlers.OnDuty = new OnDutyPersistedConfigHandler();
         GlobalConstants.Handlers.PersistedFlagHandler = ConfigBase.Load<PersistedFlagHandler>();
+        
         ct.WriteLine("正在注册ClassIsland要素...");
         //Services
         services.AddHostedService<ServicesFetcherService>();
         services.AddHostedService<Register>();
+        
         //Components
         services.AddComponent<BetterCountdown,BetterCountdownSettings>();
         services.AddComponent<FluentClock,FluentClockSettings>();
@@ -85,34 +92,67 @@ public class Plugin : PluginBase {
         services.AddComponent<LiveActivity,LiveActivitySettings>();
         services.AddComponent<DynamicLyrics,DynamicLyricsSettings>();
         services.AddComponent<ProfileInformation,ProfileInformationSettings>();
+        
         //SettingsPages
         services.AddSettingsPage<MainSettingsPage>();
         services.AddSettingsPage<DutySettingsPage>();
         //services.AddSettingsPage<TinyFeaturesSettingsPage>();
+        
+        // 动态反射，实现在低 PluginSdk 上使用高版本功能
+        List<SettingsPageInfo> registeredSettingsPageInfos = SettingsWindowRegistryService.Registered
+            .Where(info => info.Id.StartsWith("extraisland") && info.Category == SettingsPageCategory.External)
+            .ToList();
+        
+        if (InjectService.TryGetAddSettingsPageGroupMethod(out MethodInfo? addSettingsPageGroupMethod))
+        {
+            addSettingsPageGroupMethod.Invoke(typeof(SettingsWindowRegistryExtensions), [services, "extraisland.settings", "\uEA33", "ExtraIsland"]);
+            
+            PropertyInfo groupIdProperty = InjectService.GetSettingsPageInfoGroupIdProperty();
+            foreach (SettingsPageInfo info in registeredSettingsPageInfos)
+            {
+                groupIdProperty.SetValue(info, "extraisland.settings");
+            }
+        }
+        else
+        {
+            FieldInfo nameField = InjectService.GetSettingsPageInfoNameField();
+            foreach (SettingsPageInfo info in registeredSettingsPageInfos)
+            {
+                nameField.SetValue(info, "ExtraIsland·" + (string)nameField.GetValue(info)!);
+            }
+        }
+        
         //NotificationProvider
         services.AddNotificationProvider<TimeUpNotification>();
+        
         //Actions
         Register.Claim(services);
+        
         //Authorizer
         //services.AddAuthorizeProvider<UsbDriveAuthorizer>();
+        
         //LifeMode
         if (GlobalConstants.Handlers.MainConfig.Data.IsLifeModeActivated) {
             ct.WriteLine("&a生活模式已启用!");
             services.AddComponent<Sleepy,SleepySettings>();
         }
+        
         if (GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) {
             //services.AddComponent<ActionButton,ActionButtonSettings>();
         }
+        
         if (GlobalConstants.Handlers.MainConfig.Data.IsExperimentalModeActivated) {
             ct.WriteLine("&9实验模式已启用! &7若出现Bug,&c请勿报告&7!",Terminal.MessageType.Warn);
             services.AddComponent<DualLineContainer>();
             //services.AddComponent<DebugLyricsHandler>();
             //services.AddComponent<DebugSubLyricsHandler>();
         }
+        
         #if DEBUG
         ct.WriteLine("&d这是一个调试构建! 若出现Bug,请勿报告!",Terminal.MessageType.Debug);
         //services.AddSettingsPage<DebugSettingsPage>();
         #endif
+        
         ct.WriteLine("完成!");
         ct.WriteLine("注册事件...");
         
@@ -129,6 +169,7 @@ public class Plugin : PluginBase {
             //if (!GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) return;
             //GlobalConstants.Handlers.MainWindow!.InitBar(accentState: GlobalConstants.Handlers.MainConfig.Data.Dock.AccentState);
         };
+        
         AppBase.Current.AppStopping += (_,_) => {
             if (GlobalConstants.Handlers.LyricsIsland == null) return;
             GlobalConstants.Handlers.LyricsIsland = null;
@@ -139,6 +180,7 @@ public class Plugin : PluginBase {
                 Environment.Exit(0);
             }).Start();
         };
+        
         ct.WriteLine("完成!");
         ct.WriteLine("&a等待服务主机启动...");
     }
