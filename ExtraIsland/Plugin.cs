@@ -123,7 +123,7 @@ public class Plugin : PluginBase {
         }
         
         //NotificationProvider
-        services.AddNotificationProvider<TimeUpNotification>();
+        services.AddNotificationProvider<BetterCountdownNotification, BetterCountdownNotificationSettingsControl>();
         
         //Actions
         Register.Claim(services);

@@ -201,7 +201,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
     }
 
     void Notify() {
-        TimeUpNotification.Notify(string.Format(Settings.Message, Settings.Prefix, Settings.Suffix),
+        BetterCountdownNotification.Notify(Settings.Name, Settings.Message,
                                   Settings.LeftIcon, Settings.RightIcon);
         Settings.IsNotified = true;
     }

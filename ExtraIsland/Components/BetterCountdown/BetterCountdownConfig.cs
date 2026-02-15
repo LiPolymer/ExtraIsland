@@ -81,7 +81,8 @@ public class BetterCountdownConfig : ObservableObject {
     public bool IsFocusedModeEnabled { get; set; }
     public bool IsNotify {get; set;}
 
-    public string Message { get; set; } = "{0} 已结束";
+    public string Name {get; set;} = "倒计时名称";
+    public string Message { get; set; } = "";
 
     public string LeftIcon { get; set; } = "\uE352";
     

@@ -1,7 +1,6 @@
 ﻿using ClassIsland.Core.Abstractions.Services.NotificationProviders;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Models.Notification;
-using ExtraIsland.Components;
 
 namespace ExtraIsland.Notification;
 
@@ -13,27 +12,27 @@ namespace ExtraIsland.Notification;
 [NotificationChannelInfo(
     TimeUpChannelId,
     "倒计时结束",
-    "\u1000",
+    "\uE84C",
     "倒计时结束后的提醒")]
-public class TimeUpNotification : NotificationProviderBase {
+public class BetterCountdownNotification : NotificationProviderBase<BetterCountdownNotificationSettings> {
 
     const string TimeUpChannelId = "40f73a64-a0d8-480b-8026-f0a71a14d6fb";
 
-    delegate void TwoIconsMaskNotify(string content, string leftIcon, string rightIcon);
+    delegate void TwoIconsMaskNotify(string name, string message, string leftIcon, string rightIcon);
     
     static event TwoIconsMaskNotify? OnNotify;
 
-    public static void Notify(string content, string leftIcon = "", string rightIcon = "") {
-        OnNotify?.Invoke(content, leftIcon, rightIcon);
+    public static void Notify(string name, string message, string leftIcon = "", string rightIcon = "") {
+        OnNotify?.Invoke(name, message, leftIcon, rightIcon);
     }
     
-    public TimeUpNotification() {
+    public BetterCountdownNotification() {
         OnNotify += DoNotify;
     }
     
-    void DoNotify(string content, string leftIcon, string rightIcon) {
+    void DoNotify(string name, string content, string leftIcon, string rightIcon) {
         Channel(TimeUpChannelId).ShowNotification(new NotificationRequest() {
-            MaskContent = NotificationContent.CreateTwoIconsMask(content, leftIcon, rightIcon)
+            MaskContent = NotificationContent.CreateTwoIconsMask(content==""?name+Settings.Message:name+content, leftIcon, rightIcon)
         });
     }
 }

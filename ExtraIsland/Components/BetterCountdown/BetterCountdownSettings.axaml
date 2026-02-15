@@ -163,14 +163,23 @@
             </controls:SettingsExpander>
             <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4D4;}"
                                        Header="启用提醒"
-                                       Description="启用后,倒计时到后将进行提醒">
+                                       Description="启用后,倒计时到后将进行提醒，显示格式为{事件名称}{提醒消息}">
                 <controls:SettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsNotify, Mode=TwoWay}"/>
                 </controls:SettingsExpander.Footer>
                 <controls:SettingsExpander.Items>
+                    <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE8AC;}"
+                                                   Content="事件名称"
+                                                   Description="提醒事件名称">
+                        <controls:SettingsExpanderItem.Footer>
+                            <TextBox Text="{Binding Settings.Name, Mode=TwoWay}" />
+                        </controls:SettingsExpanderItem.Footer>
+                    </controls:SettingsExpanderItem>
+                </controls:SettingsExpander.Items>
+                <controls:SettingsExpander.Items>
                         <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE8AC;}"
-                                                       Content="编辑提醒"
-                                                       Description="修改提醒的文字, 可以用 {0} {1} 分别指代前缀和后缀">
+                                                       Content="提醒消息"
+                                                       Description="修改提醒消息的文案, 留空以继承‘提醒渠道’中的设置">
                             <controls:SettingsExpanderItem.Footer>
                                 <TextBox Text="{Binding Settings.Message, Mode=TwoWay}" />
                             </controls:SettingsExpanderItem.Footer>
