@@ -7,8 +7,8 @@ namespace ExtraIsland.Notification;
 
 [NotificationProviderInfo(
     "f377c816-42b1-4d1a-aa69-a67ddd6beb6d",
-    "更好的倒计时",
-    "ExtraIsland-更好的倒计时的提醒"
+    "更好的倒计时提醒",
+    "更好的倒计时到点提醒"
     )]
 [NotificationChannelInfo(
     TimeUpChannelId,

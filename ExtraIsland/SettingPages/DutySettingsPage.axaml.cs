@@ -125,12 +125,12 @@ public partial class DutySettingsPage : SettingsPageBase {
                 try {
                     // 更新上次跳过的节假日信息显示
                     LastSkippedHolidayLabel.Text = string.IsNullOrEmpty(Settings.Data.LastSkippedHoliday)
-                        ? "上次跳过的节假日：暂无\n索引变化：- → -"
-                        : $"上次跳过的节假日：{Settings.Data.LastSkippedHoliday}\n索引变化：{Settings.Data.LastSkippedOriginalIndex} → {Settings.Data.LastSkippedNewIndex}";
+                        ? "暂无\n- → -"
+                        : $"{Settings.Data.LastSkippedHoliday}\n{Settings.Data.LastSkippedOriginalIndex} → {Settings.Data.LastSkippedNewIndex}";
                     
                     // 更新下一个节假日信息显示
                     string nextHolidayName = string.IsNullOrEmpty(Settings.Data.NextHolidayName) ? "查询中..." : Settings.Data.NextHolidayName;
-                    NextHolidayLabel.Text = $"即将跳过的节假日：{nextHolidayName}";
+                    NextHolidayLabel.Text = $"{nextHolidayName}";
                 }
                 catch {
                     // UI已被释放时忽略错误
