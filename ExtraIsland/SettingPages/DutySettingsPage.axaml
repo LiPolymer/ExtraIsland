@@ -163,6 +163,7 @@
             </controls1:SettingsExpander>
 
             <controls1:SettingsExpander IconSource="{ci:FluentIconSource &#xE304;}"
+                                        IsVisible="{Binding MainSettings.Data.IsExperimentalModeActivated}"
                                         Header="自动跳过节假日" Description="自动跳过国定假日和双休日的值日轮换"
                                         IsExpanded="{Binding Settings.Data.IsHolidaySkipEnabled, Mode=OneWay}">
                 <controls1:SettingsExpander.Footer>
@@ -218,11 +219,15 @@
                                         Header="轮换方式" Description="选择值日生轮换方法">
                 <controls1:SettingsExpander.Footer>
                     <StackPanel Orientation="Horizontal">
+                        <Label VerticalAlignment="Center" 
+                               VerticalContentAlignment="Center"
+                               IsVisible="{Binding Settings.Data.DutyState, Converter={StaticResource DutyStateToNBoxVisibilityBoolConverter}}">N=</Label>
                         <controls1:NumberBox
                             IsVisible="{Binding Settings.Data.DutyState, Converter={StaticResource DutyStateToNBoxVisibilityBoolConverter}}"
                             Value="{Binding Settings.Data.NumberOfPeoples}"
                             SpinButtonPlacementMode="Compact"
                             Minimum="0"
+                            Margin="0,0,5,0"
                             SmallChange="1" />
                         <ComboBox SelectedItem="{Binding Settings.Data.DutyState}"
                                   ItemsSource="{Binding DutyStates}">

@@ -81,7 +81,7 @@ public partial class MainConfigData : ObservableObject {
             if (value == _isExperimentalModeActivated) return;
             _isExperimentalModeActivated = value;
             OnPropertyChanged();
-            //RestartPropertyChanged?.Invoke();
+            RestartPropertyChanged?.Invoke();
         }
     }
     

@@ -20,6 +20,7 @@ namespace ExtraIsland.SettingPages;
 public partial class DutySettingsPage : SettingsPageBase {
     bool _isUpdatingHolidayInfo = false; // 防止循环更新的标志
     public OnDutyPersistedConfigHandler Settings { get; }
+    public MainConfigHandler MainSettings { get; }
     
     public List<OnDutyPersistedConfigData.DutyStateData> DutyStates { get; } = [
         OnDutyPersistedConfigData.DutyStateData.Grouped,
@@ -28,6 +29,7 @@ public partial class DutySettingsPage : SettingsPageBase {
 
     public DutySettingsPage() {
         Settings = GlobalConstants.Handlers.OnDuty!;
+        MainSettings = GlobalConstants.Handlers.MainConfig!;
         InitializeComponent();
         
         UpdateOnDuty();

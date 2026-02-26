@@ -176,7 +176,10 @@
                                         Description="启用尚未开发完成,已经知道有Bug的功能(启用后请勿提交Bug)"
                                         Header="实验性功能">
                 <controls1:SettingsExpander.Footer>
+                <StackPanel Orientation="Horizontal">
+                    <controls:ExperimentalBadge IsVisible="{Binding Settings.IsExperimentalModeActivated}"/>
                     <ToggleSwitch IsChecked="{Binding Settings.IsExperimentalModeActivated, Mode=TwoWay}"/>
+                </StackPanel>
                 </controls1:SettingsExpander.Footer>
             </controls1:SettingsExpander>
         </StackPanel>
