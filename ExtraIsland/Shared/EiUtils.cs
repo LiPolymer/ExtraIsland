@@ -37,7 +37,7 @@ public static class EiUtils {
     }
 
     public static bool IsPluginInstalled(string pkgName) {
-        return IPluginService.LoadedPlugins.Any(info => info.Manifest.Id == pkgName);
+        return IPluginService.LoadedPlugins.Any(info => info.Manifest.Id == pkgName && info.IsEnabled);
     }
     
     public static bool IsLyricsIslandInstalled() {
