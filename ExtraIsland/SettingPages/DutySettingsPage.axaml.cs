@@ -15,7 +15,7 @@ using ExtraIsland.Shared;
 namespace ExtraIsland.SettingPages;
 
 [HidePageTitle]
-[SettingsPageInfo("extraisland.duty","值日","\uECDB","\uECDA")]
+[SettingsPageInfo("extraisland.duty","值日表","\uECDB","\uECDA")]
 public partial class DutySettingsPage : SettingsPageBase {
     bool _isUpdatingHolidayInfo = false; // 防止循环更新的标志
     public OnDutyPersistedConfigHandler Settings { get; }

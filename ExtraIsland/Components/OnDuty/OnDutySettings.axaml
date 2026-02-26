@@ -11,21 +11,11 @@
                    d:DesignHeight="300" d:DesignWidth="300">
     <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:OnDutySettings}}">
         <StackPanel Classes="settings-container animated-intro">
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE9E4;}">
-                <controls:SettingsExpander.Header>
-                    <TextBlock TextWrapping="Wrap"
-                               VerticalAlignment="Center"
-                               Margin="4 0 0 0" >
-                        <Run>本页面仅包含</Run><Bold>组件设置</Bold>
-                        <Run>要调整值日设置,请转到</Run>
-                        <ci:NavHyperlink CommandParameter="classisland://app/settings/extraisland.duty">
-                            ⌈ExtraIsland·值日表⌋
-                        </ci:NavHyperlink>
-                        <Run>选项卡</Run>
-                    </TextBlock>
-                </controls:SettingsExpander.Header>
-            </controls:SettingsExpander>
-            
+            <controls:InfoBar Severity="Informational"
+                              IsClosable="False"
+                              Message="本页面仅包含组件设置,要调整值日设置,请转到 ⌈ExtraIsland > 值日表⌋"
+                              IsOpen="True">
+            </controls:InfoBar>
             <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE04B;}"
                                        Header="紧凑模式" Description="启用双行显示">
                 <controls:SettingsExpander.Footer>

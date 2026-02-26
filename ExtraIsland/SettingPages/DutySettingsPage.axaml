@@ -27,12 +27,12 @@
                     Glyph="&#xECDA;"
                     Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                     VerticalAlignment="Center" />
-                <Label VerticalAlignment="Center" FontSize="30">全局 · 值日设置</Label>
+                <Label VerticalAlignment="Center" FontSize="30">全局 · 值日表</Label>
             </StackPanel>
             
-            <controls1:InfoBar Severity="Informational" IconSource="{ci:FluentIconSource &#xF430;}" IsOpen="True" IsClosable="False">
+            <controls1:InfoBar Severity="Warning" IconSource="{ci:FluentIconSource &#xF430;}" IsOpen="True" IsClosable="False">
                 <controls1:InfoBar.Title>
-                    本功能只提供简单的值日表功能, 将不会增加任何奇怪或复杂的轮换方案, 如需更高级的值日表, 请移步 DutyIsland
+                    本功能将只提供简单的值日表功能, 将不会增加任何奇怪或复杂的轮换方案, 如需更高级的值日表, 请移步 DutyIsland
                 </controls1:InfoBar.Title>
             </controls1:InfoBar>
             
