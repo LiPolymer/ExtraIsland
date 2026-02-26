@@ -37,6 +37,7 @@ public class OnDutyPersistedConfigHandler {
             GlobalConstants.HostInterfaces.LessonsService!.PostMainTimerTicked += Updater;
         };
         Data.PropertyChanged += Save;
+        if (!GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) Data.IsHolidaySkipEnabled = false;
     }
     void Save(object? sender,PropertyChangedEventArgs e) {
         Save();
