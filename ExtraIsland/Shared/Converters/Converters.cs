@@ -4,6 +4,7 @@ using System.Reflection;
 using Avalonia;
 using Avalonia.Data.Converters;
 using ExtraIsland.Components;
+using ExtraIsland.ConfigHandlers;
 
 namespace ExtraIsland.Shared.Converters;
 
@@ -78,7 +79,6 @@ public class DayOfWeekEnumStringConverter : IValueConverter {
     object IValueConverter.Convert(object? value,Type targetType,object? parameter,CultureInfo culture) {
         DayOfWeek day = (DayOfWeek)value!;
         string description = day switch {
-
             DayOfWeek.Sunday => "日",
             DayOfWeek.Monday => "一",
             DayOfWeek.Tuesday => "二",
@@ -146,6 +146,16 @@ public class HalfLengthToMarginThicknessConverter : IValueConverter {
     public object? Convert(object? value,Type targetType,object? parameter,CultureInfo culture) {
         double width = (double)value!;
         return new Thickness(-width/8,0);
+    }
+    public object? ConvertBack(object? value,Type targetType,object? parameter,CultureInfo culture) {
+        throw new NotSupportedException();
+    }
+}
+
+public class DutyStateToNBoxVisibilityBoolConverter : IValueConverter {
+    public object? Convert(object? value,Type targetType,object? parameter,CultureInfo culture) {
+        OnDutyPersistedConfigData.DutyStateData state = (OnDutyPersistedConfigData.DutyStateData)value!;
+        return state == OnDutyPersistedConfigData.DutyStateData.Grouped;
     }
     public object? ConvertBack(object? value,Type targetType,object? parameter,CultureInfo culture) {
         throw new NotSupportedException();

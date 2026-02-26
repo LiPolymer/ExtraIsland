@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -21,10 +22,8 @@ public partial class DutySettingsPage : SettingsPageBase {
     public OnDutyPersistedConfigHandler Settings { get; }
     
     public List<OnDutyPersistedConfigData.DutyStateData> DutyStates { get; } = [
-        OnDutyPersistedConfigData.DutyStateData.Single,
-        OnDutyPersistedConfigData.DutyStateData.Double,
-        OnDutyPersistedConfigData.DutyStateData.InOut,
-        OnDutyPersistedConfigData.DutyStateData.Quadrant
+        OnDutyPersistedConfigData.DutyStateData.Grouped,
+        OnDutyPersistedConfigData.DutyStateData.InOut
     ];
 
     public DutySettingsPage() {
@@ -34,7 +33,7 @@ public partial class DutySettingsPage : SettingsPageBase {
         UpdateOnDuty();
         UpdateHolidayInfo();
         Settings.OnDutyUpdated += UpdateOnDuty;
-        Settings.Data.PropertyChanged += OnDataPropertyChanged;
+        Settings.Data.PropertyChanged += OnDataOnPropertyChanged;
         
 #if DEBUG
         DebugSwapButton.IsVisible = true;
@@ -43,11 +42,11 @@ public partial class DutySettingsPage : SettingsPageBase {
     
     void DutySettingsPage_OnUnloaded(object sender, RoutedEventArgs e) {
         Settings.OnDutyUpdated -= UpdateOnDuty;
-        Settings.Data.PropertyChanged -= OnDataPropertyChanged;
+        Settings.Data.PropertyChanged -= OnDataOnPropertyChanged;
         Settings.Save();
     }
     
-    void OnDataPropertyChanged() {
+    void OnDataOnPropertyChanged(object? sender,PropertyChangedEventArgs propertyChangedEventArgs) {
         // 防止循环更新，只在节假日功能开启且当前没有正在更新时才执行
         if (Settings.Data.IsHolidaySkipEnabled && !_isUpdatingHolidayInfo) {
             UpdateHolidayInfo();

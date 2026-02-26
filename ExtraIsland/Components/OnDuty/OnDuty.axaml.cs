@@ -22,19 +22,24 @@ public partial class OnDuty : ComponentBase<OnDutyConfig> {
             if (!Settings.IsCompactModeEnabled) {
                 NameLabel.Content = PersistedSettings.PeoplesOnDutyString;
             } else {
-                // ReSharper disable once ConvertIfStatementToSwitchStatement
-                if (PersistedSettings.Data.DutyState == OnDutyPersistedConfigData.DutyStateData.Single) {
-                    DualLabelUp.Content = "值日";
-                    DualLabelDown.Content = PersistedSettings.PeoplesOnDutyString;
-                } else if (PersistedSettings.Data.DutyState == OnDutyPersistedConfigData.DutyStateData.Double) {
-                    DualLabelUp.Content = PersistedSettings.PeoplesOnDuty[0].Name;
-                    DualLabelDown.Content = PersistedSettings.PeoplesOnDuty[1].Name;
-                } else if (PersistedSettings.Data.DutyState == OnDutyPersistedConfigData.DutyStateData.InOut) {
+                if (PersistedSettings.Data.DutyState == OnDutyPersistedConfigData.DutyStateData.InOut) {
                     DualLabelUp.Content = "内 " + PersistedSettings.PeoplesOnDuty[0].Name;
                     DualLabelDown.Content = "外 " + PersistedSettings.PeoplesOnDuty[1].Name;
                 } else {
-                    DualLabelUp.Content = PersistedSettings.PeoplesOnDuty[0].Name + " " + PersistedSettings.PeoplesOnDuty[1].Name;
-                    DualLabelDown.Content = PersistedSettings.PeoplesOnDuty[2].Name + " " + PersistedSettings.PeoplesOnDuty[3].Name;
+                    List<string> upc = [];
+                    List<string> dnc = [];
+                    int i = 0;
+                    if (EiUtils.IsOdd(PersistedSettings.PeoplesOnDuty.Count)) {
+                        i++;
+                        upc.Add("值日");
+                    }
+                    foreach (OnDutyPersistedConfigData.PeopleItem pit in PersistedSettings.PeoplesOnDuty) {
+                        i++;
+                        if (EiUtils.IsOdd(i)) upc.Add(pit.Name);
+                        else dnc.Add(pit.Name);
+                    }
+                    DualLabelUp.Content = string.Join(" ", upc);
+                    DualLabelDown.Content = string.Join(" ", dnc);
                 }
             }
         });
