@@ -194,7 +194,7 @@ public class JinrishiciData {
 
     public static JinrishiciData Fetch(int lengthLimitation = 0)
     {
-        var requestUrl = "https://v1.jinrishici.com/all.json";
+        string requestUrl = "https://v1.jinrishici.com/all.json";
         try {
             return new HttpClient()
                 .GetFromJsonAsync<JinrishiciData>(requestUrl)

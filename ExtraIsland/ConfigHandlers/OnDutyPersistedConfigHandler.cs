@@ -138,8 +138,8 @@ public class OnDutyPersistedConfigHandler {
     /// 带节假日跳过功能的值日轮换
     /// </summary>
     public async Task SwapOnDutyWithHolidaySkipAsync() {
-        var lastUpdateDate = Data.LastUpdate.Date;
-        var currentDate = DateTime.Today;
+        DateTime lastUpdateDate = Data.LastUpdate.Date;
+        DateTime currentDate = DateTime.Today;
         
         // 如果是同一天，不需要轮换
         if (lastUpdateDate == currentDate) {
@@ -147,8 +147,8 @@ public class OnDutyPersistedConfigHandler {
         }
         
         // 计算需要处理的日期范围
-        var datesToProcess = new List<DateTime>();
-        for (var date = lastUpdateDate.AddDays(1); date <= currentDate; date = date.AddDays(1)) {
+        List<DateTime> datesToProcess = new List<DateTime>();
+        for (DateTime date = lastUpdateDate.AddDays(1); date <= currentDate; date = date.AddDays(1)) {
             datesToProcess.Add(date);
         }
         
@@ -156,12 +156,12 @@ public class OnDutyPersistedConfigHandler {
         int originalIndex = Data.CurrentPeopleIndex;
         string lastSkippedHoliday = "";
         
-        foreach (var date in datesToProcess) {
+        foreach (DateTime date in datesToProcess) {
             bool isHoliday = await HolidayService.IsHolidayAsync(date);
             
             if (isHoliday) {
                 // 获取节假日信息
-                var holidayInfo = await HolidayService.GetHolidayInfoAsync(date);
+                HolidayInfo? holidayInfo = await HolidayService.GetHolidayInfoAsync(date);
                 lastSkippedHoliday = holidayInfo?.Name ?? "节假日";
             } else {
                 // 非节假日，执行轮换
@@ -170,7 +170,7 @@ public class OnDutyPersistedConfigHandler {
         }
         
         // 批量更新属性，减少PropertyChanged事件触发次数
-        var originalSaving = _isSaving;
+        bool originalSaving = _isSaving;
         _isSaving = true; // 临时阻止保存
         
         try {
@@ -196,10 +196,10 @@ public class OnDutyPersistedConfigHandler {
         // 异步获取下一个节假日
         _ = Task.Run(async () => {
             try {
-                var nextHoliday = await HolidayService.GetNextHolidayAsync(DateTime.Today);
+                (DateTime Date, string Name)? nextHoliday = await HolidayService.GetNextHolidayAsync(DateTime.Today);
                 if (nextHoliday.HasValue) {
                     // 只更新属性，不触发保存（避免频繁保存）
-                    var wasSaving = _isSaving;
+                    bool wasSaving = _isSaving;
                     _isSaving = true;
                     try {
                         Data.NextHolidayName = nextHoliday.Value.Name;

@@ -1,6 +1,4 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using System.IO;
 using System.Windows;
 using Avalonia.Threading;
