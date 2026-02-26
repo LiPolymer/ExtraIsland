@@ -11,7 +11,7 @@ using RoutedEventArgs = Avalonia.Interactivity.RoutedEventArgs;
 
 namespace ExtraIsland.AuthorizeProvider;
 
-[AuthorizeProviderInfo("extraIsland.authProviders.usbDrive","U盘","U")]
+[AuthorizeProviderInfo("extraIsland.authProviders.usbDrive","U盘","\uF3A2")]
 public partial class UsbDriveAuthorizer : AuthorizeProviderControlBase<UsbDriveAuthorizerSettings> {
 
     readonly WindowsUtils.UsbDriveMonitor _monitor = new WindowsUtils.UsbDriveMonitor();

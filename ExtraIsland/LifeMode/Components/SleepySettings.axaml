@@ -19,7 +19,7 @@
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
         <StackPanel Classes="settings-container animated-intro">
             <controls:SettingsExpander
-                IconSource="{ci:FluentIconSource Glyph=A}"
+                IconSource="{ci:FluentIconSource &#xEDCF;}"
                 Header = "请求API"
                 Description="连接你要视奸的人(bushi">
                 <controls:SettingsExpander.Footer>
@@ -28,7 +28,7 @@
                 </controls:SettingsExpander.Footer>
             </controls:SettingsExpander>
             <controls:SettingsExpander
-                IconSource="{ci:FluentIconSource Glyph=A}"
+                IconSource="{ci:FluentIconSource &#xF361;}"
                 Header = "更新间隔"
                 Description="你要多久视奸别人一次(雾">
                 <controls:SettingsExpander.Footer>
@@ -40,7 +40,7 @@
                 </controls:SettingsExpander.Footer>
             </controls:SettingsExpander>
             <controls:SettingsExpander
-                IconSource="{ci:FluentIconSource Glyph=A}"
+                IconSource="{ci:FluentIconSource &#xF373;}"
                 Header = "轮播间隔"
                 Description="多久切换一次展示的信息,设为0即关闭">
                 <controls:SettingsExpander.Footer>

@@ -23,6 +23,7 @@
                     CornerRadius="4"
                     Margin="3,4,0,0">
                 <StackPanel Orientation="Horizontal" Margin="4">
+                    <ci:LucideIcon Glyph="&#xE07B;" Margin="0,0,5,0"/>
                     <TextBlock>
                         请尽量使用正规U盘进行验证
                         <LineBreak />
@@ -32,7 +33,7 @@
             </Border>
             <controls:SettingsExpander x:Name="ModeSettingsControl"
                                        Margin="4"
-                                       IconSource="{ci:FluentIconSource Glyph=&#xE2C8;}"
+                                       IconSource="{ci:LucideIconSource Glyph=&#xE31F;}"
                                        Header="使用文件模式"
                                        Description="以自动放置的密钥文件而不是S/N作为验证依据">
                 <controls:SettingsExpander.Footer>
@@ -47,6 +48,7 @@
                             IsVisible="{Binding Settings.OperationFinished, Converter={StaticResource InverseBooleanConverter}}">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
+                                <ci:LucideIcon Glyph="&#xE655;" Margin="0,0,5,0"/>
                                 <TextBlock>
                                     设置验证存储器
                                 </TextBlock>
@@ -70,6 +72,7 @@
             Orientation="Vertical">
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
+                    <ci:LucideIcon Glyph="&#xE35A;" Margin="0,0,5,0"/>
                     <TextBlock VerticalAlignment="Center" FontSize="20">
                         请插入U盘开始验证
                     </TextBlock>
