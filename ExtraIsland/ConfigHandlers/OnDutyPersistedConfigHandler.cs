@@ -395,7 +395,8 @@ public class OnDutyPersistedConfigData : ObservableObject {
         return pit;
     }
     
-    public List<PeopleItem> GetWhoOnDuty() {
+    public List<PeopleItem> GetWhoOnDuty(bool reset = false) {
+        if (reset) DutyState = 0;
         return DutyState switch {
             DutyStateData.Grouped => GetGroupedPeoples(),
             DutyStateData.InOut => EiUtils.IsOdd(CurrentPeopleIndex) switch {
@@ -408,7 +409,7 @@ public class OnDutyPersistedConfigData : ObservableObject {
                     GetPeopleOnDuty(CurrentPeopleIndex + 1)
                 ]
             },
-            _ => throw new ArgumentOutOfRangeException()
+            _ => GetWhoOnDuty(true)
         };
     }
     
