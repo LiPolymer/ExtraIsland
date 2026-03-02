@@ -5,9 +5,9 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ExtraIsland.Controls.ExperimentalBadge"
              Margin="0,0,10,0">
-    <Border BorderBrush="{DynamicResource AccentFillColorSelectedTextBackgroundBrush}" BorderThickness="1"
+    <Border BorderBrush="#80f2a0" BorderThickness="1"
             Padding="8 0" Height="28" CornerRadius="14"
-            Background="{DynamicResource AccentAcrylicBackgroundFillColorBaseBrush}">
+            Background="#4580f2a0">
         <Label Margin="0 2 0 0">实验性</Label>
     </Border>
 </UserControl>

@@ -26,7 +26,7 @@
                     VerticalAlignment="Center" />
                 <Label VerticalAlignment="Center" FontSize="30">全局 · 主设置</Label>
             </StackPanel>
-            <Border ClipToBounds="True" CornerRadius="4">
+            <Border ClipToBounds="True" CornerRadius="4" BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
                 <controls1:SettingsExpanderItem>
                 <Grid HorizontalAlignment="Stretch" Margin="12">
                     <Grid.ColumnDefinitions>
