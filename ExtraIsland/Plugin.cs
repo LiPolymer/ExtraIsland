@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Runtime.InteropServices;
 using ClassIsland.Core;
 using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
@@ -7,7 +8,7 @@ using ClassIsland.Core.Extensions.Registry;
 using ClassIsland.Core.Services.Registry;
 using ClassIsland.Shared;
 using ExtraIsland.Automations;
-//using ExtraIsland.AuthorizeProvider;
+using ExtraIsland.AuthorizeProvider;
 //using ExtraIsland.Automations;
 using ExtraIsland.Components;
 using ExtraIsland.ConfigHandlers;
@@ -129,7 +130,9 @@ public class Plugin : PluginBase {
         Register.Claim(services);
         
         //Authorizer
-        //services.AddAuthorizeProvider<UsbDriveAuthorizer>();
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+            services.AddAuthorizeProvider<UsbDriveAuthorizer>();
+        }
         
         //LifeMode
         if (GlobalConstants.Handlers.MainConfig.Data.IsLifeModeActivated) {

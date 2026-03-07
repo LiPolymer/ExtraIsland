@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using ClassIsland.Shared.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ExtraIsland.Shared;
@@ -80,7 +81,7 @@ public partial class MainConfigData : ObservableObject {
             if (value == _isExperimentalModeActivated) return;
             _isExperimentalModeActivated = value;
             OnPropertyChanged();
-            //RestartPropertyChanged?.Invoke();
+            RestartPropertyChanged?.Invoke();
         }
     }
     

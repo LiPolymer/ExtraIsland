@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
@@ -14,26 +16,26 @@ using ExtraIsland.Shared;
 namespace ExtraIsland.SettingPages;
 
 [HidePageTitle]
-[SettingsPageInfo("extraisland.duty","值日","\uECDB","\uECDA")]
+[SettingsPageInfo("extraisland.duty","值日表","\uECDB","\uECDA")]
 public partial class DutySettingsPage : SettingsPageBase {
     bool _isUpdatingHolidayInfo = false; // 防止循环更新的标志
     public OnDutyPersistedConfigHandler Settings { get; }
+    public MainConfigHandler MainSettings { get; }
     
     public List<OnDutyPersistedConfigData.DutyStateData> DutyStates { get; } = [
-        OnDutyPersistedConfigData.DutyStateData.Single,
-        OnDutyPersistedConfigData.DutyStateData.Double,
-        OnDutyPersistedConfigData.DutyStateData.InOut,
-        OnDutyPersistedConfigData.DutyStateData.Quadrant
+        OnDutyPersistedConfigData.DutyStateData.Grouped,
+        OnDutyPersistedConfigData.DutyStateData.InOut
     ];
 
     public DutySettingsPage() {
         Settings = GlobalConstants.Handlers.OnDuty!;
+        MainSettings = GlobalConstants.Handlers.MainConfig!;
         InitializeComponent();
         
         UpdateOnDuty();
         UpdateHolidayInfo();
         Settings.OnDutyUpdated += UpdateOnDuty;
-        Settings.Data.PropertyChanged += OnDataPropertyChanged;
+        Settings.Data.PropertyChanged += OnDataOnPropertyChanged;
         
 #if DEBUG
         DebugSwapButton.IsVisible = true;
@@ -42,11 +44,11 @@ public partial class DutySettingsPage : SettingsPageBase {
     
     void DutySettingsPage_OnUnloaded(object sender, RoutedEventArgs e) {
         Settings.OnDutyUpdated -= UpdateOnDuty;
-        Settings.Data.PropertyChanged -= OnDataPropertyChanged;
+        Settings.Data.PropertyChanged -= OnDataOnPropertyChanged;
         Settings.Save();
     }
     
-    void OnDataPropertyChanged() {
+    void OnDataOnPropertyChanged(object? sender,PropertyChangedEventArgs propertyChangedEventArgs) {
         // 防止循环更新，只在节假日功能开启且当前没有正在更新时才执行
         if (Settings.Data.IsHolidaySkipEnabled && !_isUpdatingHolidayInfo) {
             UpdateHolidayInfo();
@@ -125,12 +127,12 @@ public partial class DutySettingsPage : SettingsPageBase {
                 try {
                     // 更新上次跳过的节假日信息显示
                     LastSkippedHolidayLabel.Text = string.IsNullOrEmpty(Settings.Data.LastSkippedHoliday)
-                        ? "上次跳过的节假日：暂无\n索引变化：- → -"
-                        : $"上次跳过的节假日：{Settings.Data.LastSkippedHoliday}\n索引变化：{Settings.Data.LastSkippedOriginalIndex} → {Settings.Data.LastSkippedNewIndex}";
+                        ? "暂无\n- → -"
+                        : $"{Settings.Data.LastSkippedHoliday}\n{Settings.Data.LastSkippedOriginalIndex} → {Settings.Data.LastSkippedNewIndex}";
                     
                     // 更新下一个节假日信息显示
                     string nextHolidayName = string.IsNullOrEmpty(Settings.Data.NextHolidayName) ? "查询中..." : Settings.Data.NextHolidayName;
-                    NextHolidayLabel.Text = $"即将跳过的节假日：{nextHolidayName}";
+                    NextHolidayLabel.Text = $"{nextHolidayName}";
                 }
                 catch {
                     // UI已被释放时忽略错误

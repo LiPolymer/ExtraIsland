@@ -26,7 +26,7 @@
                     VerticalAlignment="Center" />
                 <Label VerticalAlignment="Center" FontSize="30">全局 · 主设置</Label>
             </StackPanel>
-            <Border ClipToBounds="True" CornerRadius="4">
+            <Border ClipToBounds="True" CornerRadius="4" BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
                 <controls1:SettingsExpanderItem>
                 <Grid HorizontalAlignment="Stretch" Margin="12">
                     <Grid.ColumnDefinitions>
@@ -41,7 +41,7 @@
                             VerticalAlignment="Center" />
                         <TextBlock Margin="4 0 0 0">
                                     <Run Text="ExtraIsland" FontSize="24" />
-                                    <Run Text="R1.10" />
+                                    <Run Text="R1.20fix1" />
                                     <LineBreak />
                                     <Run Text="Copyright © 2024-2025 LiPolymer"/>
                                     <LineBreak />
@@ -176,7 +176,10 @@
                                         Description="启用尚未开发完成,已经知道有Bug的功能(启用后请勿提交Bug)"
                                         Header="实验性功能">
                 <controls1:SettingsExpander.Footer>
+                <StackPanel Orientation="Horizontal">
+                    <controls:ExperimentalBadge IsVisible="{Binding Settings.IsExperimentalModeActivated}"/>
                     <ToggleSwitch IsChecked="{Binding Settings.IsExperimentalModeActivated, Mode=TwoWay}"/>
+                </StackPanel>
                 </controls1:SettingsExpander.Footer>
             </controls1:SettingsExpander>
         </StackPanel>

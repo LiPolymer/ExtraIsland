@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Text.Json.Serialization;
 using ClassIsland.Shared.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ExtraIsland.Shared;
 
 namespace ExtraIsland.ConfigHandlers;
@@ -35,8 +37,12 @@ public class OnDutyPersistedConfigHandler {
             GlobalConstants.HostInterfaces.LessonsService!.PostMainTimerTicked += Updater;
         };
         Data.PropertyChanged += Save;
+        if (!GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) Data.IsHolidaySkipEnabled = false;
     }
-    
+    void Save(object? sender,PropertyChangedEventArgs e) {
+        Save();
+    }
+
     public void Save() {
         // 防止递归保存
         if (_isSaving) return;
@@ -63,10 +69,8 @@ public class OnDutyPersistedConfigHandler {
     public string PeoplesOnDutyString {
         get {
             return Data.DutyState switch {
-                OnDutyPersistedConfigData.DutyStateData.Single => PeoplesOnDuty[0].Name,
-                OnDutyPersistedConfigData.DutyStateData.Double => $"{PeoplesOnDuty[0].Name} {PeoplesOnDuty[1].Name}",
+                OnDutyPersistedConfigData.DutyStateData.Grouped => string.Join(" ",PeoplesOnDuty.Select(pit => pit.Name)),
                 OnDutyPersistedConfigData.DutyStateData.InOut => $"内:{PeoplesOnDuty[0].Name} 外:{PeoplesOnDuty[1].Name}",
-                OnDutyPersistedConfigData.DutyStateData.Quadrant => $"{PeoplesOnDuty[0].Name} {PeoplesOnDuty[1].Name} {PeoplesOnDuty[2].Name} {PeoplesOnDuty[3].Name}",
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -118,11 +122,8 @@ public class OnDutyPersistedConfigHandler {
         };
         // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
         switch (Data.DutyState) {
-            case OnDutyPersistedConfigData.DutyStateData.Double:
-                Data.CurrentPeopleIndex += 2;
-                break;
-            case OnDutyPersistedConfigData.DutyStateData.Quadrant:
-                Data.CurrentPeopleIndex += 4;
+            case OnDutyPersistedConfigData.DutyStateData.Grouped:
+                Data.CurrentPeopleIndex += Data.NumberOfPeoples;
                 break;
             default:
                 Data.CurrentPeopleIndex++;
@@ -137,8 +138,8 @@ public class OnDutyPersistedConfigHandler {
     /// 带节假日跳过功能的值日轮换
     /// </summary>
     public async Task SwapOnDutyWithHolidaySkipAsync() {
-        var lastUpdateDate = Data.LastUpdate.Date;
-        var currentDate = DateTime.Today;
+        DateTime lastUpdateDate = Data.LastUpdate.Date;
+        DateTime currentDate = DateTime.Today;
         
         // 如果是同一天，不需要轮换
         if (lastUpdateDate == currentDate) {
@@ -146,8 +147,8 @@ public class OnDutyPersistedConfigHandler {
         }
         
         // 计算需要处理的日期范围
-        var datesToProcess = new List<DateTime>();
-        for (var date = lastUpdateDate.AddDays(1); date <= currentDate; date = date.AddDays(1)) {
+        List<DateTime> datesToProcess = new List<DateTime>();
+        for (DateTime date = lastUpdateDate.AddDays(1); date <= currentDate; date = date.AddDays(1)) {
             datesToProcess.Add(date);
         }
         
@@ -155,12 +156,12 @@ public class OnDutyPersistedConfigHandler {
         int originalIndex = Data.CurrentPeopleIndex;
         string lastSkippedHoliday = "";
         
-        foreach (var date in datesToProcess) {
+        foreach (DateTime date in datesToProcess) {
             bool isHoliday = await HolidayService.IsHolidayAsync(date);
             
             if (isHoliday) {
                 // 获取节假日信息
-                var holidayInfo = await HolidayService.GetHolidayInfoAsync(date);
+                HolidayInfo? holidayInfo = await HolidayService.GetHolidayInfoAsync(date);
                 lastSkippedHoliday = holidayInfo?.Name ?? "节假日";
             } else {
                 // 非节假日，执行轮换
@@ -169,7 +170,7 @@ public class OnDutyPersistedConfigHandler {
         }
         
         // 批量更新属性，减少PropertyChanged事件触发次数
-        var originalSaving = _isSaving;
+        bool originalSaving = _isSaving;
         _isSaving = true; // 临时阻止保存
         
         try {
@@ -195,10 +196,10 @@ public class OnDutyPersistedConfigHandler {
         // 异步获取下一个节假日
         _ = Task.Run(async () => {
             try {
-                var nextHoliday = await HolidayService.GetNextHolidayAsync(DateTime.Today);
+                (DateTime Date, string Name)? nextHoliday = await HolidayService.GetNextHolidayAsync(DateTime.Today);
                 if (nextHoliday.HasValue) {
                     // 只更新属性，不触发保存（避免频繁保存）
-                    var wasSaving = _isSaving;
+                    bool wasSaving = _isSaving;
                     _isSaving = true;
                     try {
                         Data.NextHolidayName = nextHoliday.Value.Name;
@@ -219,11 +220,8 @@ public class OnDutyPersistedConfigHandler {
     /// </summary>
     private void IncrementDutyIndex() {
         switch (Data.DutyState) {
-            case OnDutyPersistedConfigData.DutyStateData.Double:
-                Data.CurrentPeopleIndex += 2;
-                break;
-            case OnDutyPersistedConfigData.DutyStateData.Quadrant:
-                Data.CurrentPeopleIndex += 4;
+            case OnDutyPersistedConfigData.DutyStateData.Grouped:
+                Data.CurrentPeopleIndex += Data.NumberOfPeoples;
                 break;
             default:
                 Data.CurrentPeopleIndex++;
@@ -237,9 +235,9 @@ public class OnDutyPersistedConfigHandler {
 }
 
 //TODO: 从ObservableObject继承并重构此类
-public class OnDutyPersistedConfigData {
+public class OnDutyPersistedConfigData : ObservableObject {
 
-    public event Action? PropertyChanged;
+    //public event Action? OnPropertyChanged;
 
     ObservableCollection<PeopleItem> _peoples = [
         new PeopleItem { Index = 0,Name = "张三" },
@@ -250,7 +248,7 @@ public class OnDutyPersistedConfigData {
         get => _peoples;
         set {
             _peoples = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
@@ -259,7 +257,7 @@ public class OnDutyPersistedConfigData {
         get => _lastUpdate;
         set {
             _lastUpdate = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
@@ -268,7 +266,7 @@ public class OnDutyPersistedConfigData {
         get => _doubleState;
         set {
             _doubleState = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
@@ -277,7 +275,7 @@ public class OnDutyPersistedConfigData {
         get => _currentPeopleIndex;
         set {
             _currentPeopleIndex = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
@@ -286,7 +284,16 @@ public class OnDutyPersistedConfigData {
         get => _isCycled;
         set {
             _isCycled = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
+        }
+    }
+
+    int _numberOfPeoples = 1;
+    public int NumberOfPeoples {
+        get => _numberOfPeoples;
+        set {
+            _numberOfPeoples = value;
+            OnPropertyChanged();
         }
     }
     
@@ -298,29 +305,25 @@ public class OnDutyPersistedConfigData {
             if (value) {
                 LastUpdate = LastUpdate.Date;
             }
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
-    DutyStateData _dutyState = DutyStateData.Single;
+    DutyStateData _dutyState = DutyStateData.Grouped;
     public DutyStateData DutyState {
         get => _dutyState;
         set {
             _dutyState = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
     //TODO:整合为n人值日
     public enum DutyStateData {
-        [Description("单人值日")] 
-        Single,
-        [Description("双人值日")] 
-        Double,
+        [Description("N人值日")] 
+        Grouped,
         [Description("内/外 双人轮换值日")] 
-        InOut,
-        [Description("(实验性)四人值日")] 
-        Quadrant
+        InOut
     }
 
     TimeSpan _dutyChangeDuration = TimeSpan.FromDays(1);
@@ -328,7 +331,7 @@ public class OnDutyPersistedConfigData {
         get => _dutyChangeDuration;
         set {
             _dutyChangeDuration = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
@@ -344,7 +347,7 @@ public class OnDutyPersistedConfigData {
         get => _isHolidaySkipEnabled;
         set {
             _isHolidaySkipEnabled = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
@@ -353,7 +356,7 @@ public class OnDutyPersistedConfigData {
         get => _lastSkippedHoliday;
         set {
             _lastSkippedHoliday = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
@@ -362,7 +365,7 @@ public class OnDutyPersistedConfigData {
         get => _lastSkippedOriginalIndex;
         set {
             _lastSkippedOriginalIndex = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
@@ -371,7 +374,7 @@ public class OnDutyPersistedConfigData {
         get => _lastSkippedNewIndex;
         set {
             _lastSkippedNewIndex = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
@@ -380,25 +383,22 @@ public class OnDutyPersistedConfigData {
         get => _nextHolidayName;
         set {
             _nextHolidayName = value;
-            PropertyChanged?.Invoke();
+            OnPropertyChanged();
         }
     }
 
-    public List<PeopleItem> GetWhoOnDuty() {
+    public List<PeopleItem> GetGroupedPeoples() {
+        List<PeopleItem> pit = [];
+        for (int k = 0; k < NumberOfPeoples; k++) {
+            pit.Add(GetPeopleOnDuty(CurrentPeopleIndex + k));
+        }
+        return pit;
+    }
+    
+    public List<PeopleItem> GetWhoOnDuty(bool reset = false) {
+        if (reset) DutyState = 0;
         return DutyState switch {
-            DutyStateData.Single => [
-                GetPeopleOnDuty(CurrentPeopleIndex)
-            ],
-            DutyStateData.Double => EiUtils.IsOdd(CurrentPeopleIndex) switch {
-                true => [
-                    GetPeopleOnDuty(CurrentPeopleIndex - 1),
-                    GetPeopleOnDuty(CurrentPeopleIndex)
-                ],
-                false => [
-                    GetPeopleOnDuty(CurrentPeopleIndex),
-                    GetPeopleOnDuty(CurrentPeopleIndex + 1)
-                ]
-            },
+            DutyStateData.Grouped => GetGroupedPeoples(),
             DutyStateData.InOut => EiUtils.IsOdd(CurrentPeopleIndex) switch {
                 true => [
                     GetPeopleOnDuty(CurrentPeopleIndex),
@@ -409,21 +409,7 @@ public class OnDutyPersistedConfigData {
                     GetPeopleOnDuty(CurrentPeopleIndex + 1)
                 ]
             },
-            DutyStateData.Quadrant => EiUtils.IsOdd(CurrentPeopleIndex) switch {
-                true => [
-                    GetPeopleOnDuty(CurrentPeopleIndex - 1),
-                    GetPeopleOnDuty(CurrentPeopleIndex),
-                    GetPeopleOnDuty(CurrentPeopleIndex + 1),
-                    GetPeopleOnDuty(CurrentPeopleIndex + 2)
-                ],
-                false => [
-                    GetPeopleOnDuty(CurrentPeopleIndex),
-                    GetPeopleOnDuty(CurrentPeopleIndex + 1),
-                    GetPeopleOnDuty(CurrentPeopleIndex + 2),
-                    GetPeopleOnDuty(CurrentPeopleIndex + 3)
-                ]
-            },
-            _ => throw new ArgumentOutOfRangeException()
+            _ => GetWhoOnDuty(true)
         };
     }
     

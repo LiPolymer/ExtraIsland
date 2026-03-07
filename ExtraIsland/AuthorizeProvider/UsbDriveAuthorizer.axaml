@@ -1,0 +1,93 @@
+<ci:AuthorizeProviderControlBase x:TypeArguments="local:UsbDriveAuthorizerSettings"
+                                 x:Class="ExtraIsland.AuthorizeProvider.UsbDriveAuthorizer"
+                                 xmlns="https://github.com/avaloniaui"
+                                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                 xmlns:local="clr-namespace:ExtraIsland.AuthorizeProvider"
+                                 xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                                 xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+                                 xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
+                                 xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                                 mc:Ignorable="d"
+                                 Loaded="UsbDriveAuthorizer_OnLoaded"
+                                 Unloaded="UsbDriveAuthorizer_OnUnloaded">
+    <ci:AuthorizeProviderControlBase.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </ci:AuthorizeProviderControlBase.Resources>
+    <StackPanel Orientation="Horizontal"
+                DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:UsbDriveAuthorizer}}">
+        <StackPanel IsVisible="{Binding IsEditingMode}"
+                    Orientation="Vertical">
+            <Border Background="#3f00eff1"
+                    CornerRadius="4"
+                    Margin="3,4,0,0">
+                <StackPanel Orientation="Horizontal" Margin="4">
+                    <ci:LucideIcon Glyph="&#xE07B;" Margin="0,0,5,0"/>
+                    <TextBlock>
+                        请尽量使用正规U盘进行验证
+                        <LineBreak />
+                        推荐同时设置密码,防止认证设备损坏
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+            <controls:SettingsExpander x:Name="ModeSettingsControl"
+                                       Margin="4"
+                                       IconSource="{ci:LucideIconSource Glyph=&#xE31F;}"
+                                       Header="使用文件模式"
+                                       Description="以自动放置的密钥文件而不是S/N作为验证依据">
+                <controls:SettingsExpander.Footer>
+                    <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
+                    <ToggleSwitch IsChecked="{Binding Settings.IsFileModeEnabled, Mode=OneTime}"
+                                  Click="SetCredential"/>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
+            <StackPanel Orientation="Horizontal">
+                <Label IsVisible="{Binding Settings.Operating, Converter={StaticResource InverseBooleanConverter}}">
+                    <Button Click="SetCredential"
+                            IsVisible="{Binding Settings.OperationFinished, Converter={StaticResource InverseBooleanConverter}}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <ci:LucideIcon Glyph="&#xE655;" Margin="0,0,5,0"/>
+                                <TextBlock>
+                                    设置验证存储器
+                                </TextBlock>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </Label>
+                <Label Foreground="SkyBlue"
+                       IsVisible="{Binding Settings.Operating}"
+                       Content="现在插入U盘" />
+                <Label Foreground="LightGreen"
+                       IsVisible="{Binding Settings.OperationFinished}"
+                       Content="完成!" />
+            </StackPanel>
+            <Label Foreground="{DynamicResource MaterialDesignBodyLight}">
+                Added by ExtraIsland
+            </Label>
+        </StackPanel>
+        <StackPanel
+            IsVisible="{Binding IsEditingMode, Converter={StaticResource InverseBooleanConverter}}"
+            Orientation="Vertical">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <ci:LucideIcon Glyph="&#xE35A;" Margin="0,0,5,0"/>
+                    <TextBlock VerticalAlignment="Center" FontSize="20">
+                        请插入U盘开始验证
+                    </TextBlock>
+                </StackPanel>
+                <Button Click="VerifyButton_OnClick"
+                        Content="已经插入?点此扫描"
+                        HorizontalContentAlignment="Left"
+                        BorderBrush="Transparent"
+                        Background="Transparent"
+                        Foreground="{DynamicResource PrimaryHueMidBrush}" />
+                <Label
+                    IsVisible="{Binding Settings.OperationFinished}"
+                    Foreground="OrangeRed"
+                    Content="验证失败，请使用正确的设备重试!" />
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</ci:AuthorizeProviderControlBase>

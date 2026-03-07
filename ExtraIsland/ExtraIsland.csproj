@@ -4,6 +4,7 @@
 		<TargetFramework>net8.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
 		<EnableDynamicLoading>True</EnableDynamicLoading>
 	</PropertyGroup>
 
@@ -14,7 +15,7 @@
 		<PackageReference Include="LycheeLib.Interface" Version="1.0.0" />
 		<PackageReference Include="Sentry" Version="5.5.0" />
 		<PackageReference Include="SuperAutoIsland.Interface" Version="0.1.2.1" />
-		<PackageReference Include="System.Management" Version="10.0.0-preview.3.25171.5" />
+        <PackageReference Include="System.Management" Version="10.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
