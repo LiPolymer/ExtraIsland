@@ -55,14 +55,32 @@ public partial class ProfileInformation : ComponentBase<ProfileInformationConfig
     int GetWeekInSemester(DateTime? current = null) {
         current ??= _exactTimeService.GetCurrentLocalDateTime();
         DateTime orientation = (DateTime)((dynamic)AppBase.Current).Settings.SingleWeekStartTime;
-        int oriWeek = orientation.DayOfWeek == DayOfWeek.Sunday ? 6 : Convert.ToInt32(orientation.DayOfWeek) - 1;
         
-        //regulate
-        DateTime startMonday = orientation.AddDays(-oriWeek);
-        int lastDelta = current.Value.DayOfWeek != DayOfWeek.Sunday ? 7 - Convert.ToInt32(current.Value.DayOfWeek) : 0;
-        DateTime lastEnd = current.Value.AddDays(lastDelta);
+        // 计算学期开始时间所在周的第一天（根据配置）
+        DayOfWeek firstDayOfWeek = ConvertToDayOfWeek(Settings.FirstDayOfWeek);
         
-        TimeSpan totalWeekDelta = lastEnd - startMonday;
+        // 计算从学期开始日期到本周第一天的天数差
+        int daysToStartOfWeek = ((int)orientation.DayOfWeek - (int)firstDayOfWeek + 7) % 7;
+        DateTime startDay = orientation.AddDays(-daysToStartOfWeek);
+        
+        // 计算当前日期所在周的最后一天
+        int daysToEndOfWeek = ((int)firstDayOfWeek - (int)current.Value.DayOfWeek + 6) % 7;
+        DateTime lastEnd = current.Value.AddDays(daysToEndOfWeek);
+        
+        TimeSpan totalWeekDelta = lastEnd - startDay;
         return Convert.ToInt32(totalWeekDelta.Days + 1) / 7;
+    }
+    
+    DayOfWeek ConvertToDayOfWeek(FirstDayOfWeek firstDayOfWeek) {
+        return firstDayOfWeek switch {
+            FirstDayOfWeek.Sunday => DayOfWeek.Sunday,
+            FirstDayOfWeek.Monday => DayOfWeek.Monday,
+            FirstDayOfWeek.Tuesday => DayOfWeek.Tuesday,
+            FirstDayOfWeek.Wednesday => DayOfWeek.Wednesday,
+            FirstDayOfWeek.Thursday => DayOfWeek.Thursday,
+            FirstDayOfWeek.Friday => DayOfWeek.Friday,
+            FirstDayOfWeek.Saturday => DayOfWeek.Saturday,
+            _ => DayOfWeek.Sunday
+        };
     }
 }

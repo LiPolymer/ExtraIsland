@@ -35,6 +35,22 @@
                     <ToggleSwitch IsChecked="{Binding Settings.IsShortModeEnabled, Mode=TwoWay}"/>
                 </controls:SettingsExpander.Footer>
             </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE787;}"
+                                       Header="每周第一天"
+                                       Description="设置每周的第一天是周几">
+                <controls:SettingsExpander.Footer>
+                    <ComboBox
+                        MinWidth="20"
+                        SelectedItem="{Binding Settings.FirstDayOfWeek, Mode=TwoWay}"
+                        ItemsSource="{Binding FirstDayOfWeekOptions}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </controls:SettingsExpander.Footer>
+            </controls:SettingsExpander>
             <Label HorizontalAlignment="Center" 
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland
