@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ExtraIsland.Components;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class BetterCountdownConfig : ObservableObject {
+public partial class BetterCountdownConfig : ObservableObject {
     public BetterCountdownConfig() {
         Separators.PropertyChanged += (_,_) => OnPropertyChanged();
         TargetDateTime = DateTime.Now.AddMinutes(1);
@@ -87,6 +88,9 @@ public class BetterCountdownConfig : ObservableObject {
     public string LeftIcon { get; set; } = "\uE352";
     
     public string RightIcon { get; set; } = "";
+    
+    [ObservableProperty] ObservableCollection<TimeNode> _times = [];
+    //public BetterCountdownConfig Self => this;
 }
 
 public class CountdownSeparatorConfigs : ObservableObject {
@@ -137,4 +141,12 @@ public enum CountdownAccuracy {
     Minute,
     [Description("秒")]
     Second
+}
+
+public partial class TimeNode:ObservableObject {
+    //public BetterCountdownConfig Config {get;set;}
+    [ObservableProperty]
+    TimeSpan _countdownTime;
+    bool _changeText;
+    bool _notify;
 }

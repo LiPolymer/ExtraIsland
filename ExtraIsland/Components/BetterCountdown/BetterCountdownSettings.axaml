@@ -100,6 +100,13 @@
                     </StackPanel>
                 </controls:SettingsExpander.Footer>
             </controls:SettingsExpander>
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4B5;}"
+                                       Header="时间节点"
+                                       Description="某时间节点要执行的任务">
+                <controls:SettingsExpander.Items>
+                    <components:TimeNodeControl Times="{Binding Settings.Times}"/>
+                </controls:SettingsExpander.Items>
+            </controls:SettingsExpander>
             <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE5E5;}"
                                        Header="时间精度"
                                        Description="倒计时显示的差值精度">
