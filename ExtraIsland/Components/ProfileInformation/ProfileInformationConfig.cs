@@ -12,7 +12,7 @@ public partial class ProfileInformationConfig : ObservableObject {
     bool _isShortModeEnabled;
     
     [ObservableProperty]
-    FirstDayOfWeek _firstDayOfWeek = FirstDayOfWeek.Monday;
+    DayOfWeek _firstDayOfWeek = DayOfWeek.Monday;
 }
 
 public enum ProfileInformationType {
@@ -20,21 +20,4 @@ public enum ProfileInformationType {
     WeekOfSemester,
     [Description("单双周")]
     ParityOfWeek
-}
-
-public enum FirstDayOfWeek {
-    [Description("周日")]
-    Sunday,
-    [Description("周一")]
-    Monday,
-    [Description("周二")]
-    Tuesday,
-    [Description("周三")]
-    Wednesday,
-    [Description("周四")]
-    Thursday,
-    [Description("周五")]
-    Friday,
-    [Description("周六")]
-    Saturday
 }
