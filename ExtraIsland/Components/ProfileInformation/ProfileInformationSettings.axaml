@@ -36,7 +36,7 @@
                     <ToggleSwitch IsChecked="{Binding Settings.IsShortModeEnabled, Mode=TwoWay}"/>
                 </controls:SettingsExpander.Footer>
             </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE787;}"
+            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE310;}"
                                        Header="每周第一天"
                                        Description="设置每周的第一天是周几">
                 <controls:SettingsExpander.Footer>
