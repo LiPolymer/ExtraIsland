@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ExtraIsland.Shared;
 
 namespace ExtraIsland.Components;
 
@@ -89,7 +90,7 @@ public partial class BetterCountdownConfig : ObservableObject {
     
     public string RightIcon { get; set; } = "";
     
-    [ObservableProperty] ObservableCollection<TimeNode> _times = [];
+    [ObservableProperty] TimeNodeObservableCollection _times = [];
     //public BetterCountdownConfig Self => this;
 }
 
@@ -143,10 +144,13 @@ public enum CountdownAccuracy {
     Second
 }
 
-public partial class TimeNode:ObservableObject {
+public partial class TimeNode: ObservableObject {
     //public BetterCountdownConfig Config {get;set;}
     [ObservableProperty]
-    TimeSpan _countdownTime;
+    TimeSpan _countdownTime = new TimeSpan(1, 1 ,1 ,1 );
     bool _changeText;
     bool _notify;
+    public override string ToString() {
+        return CountdownTime.ToString();
+    }
 }
