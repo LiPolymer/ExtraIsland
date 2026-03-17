@@ -10,6 +10,9 @@ public partial class ProfileInformationConfig : ObservableObject {
     
     [ObservableProperty]
     bool _isShortModeEnabled;
+    
+    [ObservableProperty]
+    DayOfWeek _firstDayOfWeek = DayOfWeek.Monday;
 }
 
 public enum ProfileInformationType {

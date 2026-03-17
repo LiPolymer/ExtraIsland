@@ -11,4 +11,14 @@ public partial class ProfileInformationSettings : ComponentBase<ProfileInformati
         ProfileInformationType.WeekOfSemester,
         ProfileInformationType.ParityOfWeek
     ];
+
+    public List<DayOfWeek> FirstDayOfWeekOptions { get; } = [
+        DayOfWeek.Sunday,
+        DayOfWeek.Monday,
+        DayOfWeek.Tuesday,
+        DayOfWeek.Wednesday,
+        DayOfWeek.Thursday,
+        DayOfWeek.Friday,
+        DayOfWeek.Saturday
+    ];
 }

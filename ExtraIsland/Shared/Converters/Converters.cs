@@ -75,6 +75,27 @@ public class EnumDescriptionConverter : IValueConverter {
     }
 }
 
+public class DayOfWeekEnumFullStringConverter : IValueConverter {
+    object IValueConverter.Convert(object? value,Type targetType,object? parameter,CultureInfo culture) {
+        DayOfWeek day = (DayOfWeek)value!;
+        string description = day switch {
+            DayOfWeek.Sunday => "周日",
+            DayOfWeek.Monday => "周一",
+            DayOfWeek.Tuesday => "周二",
+            DayOfWeek.Wednesday => "周三",
+            DayOfWeek.Thursday => "周四",
+            DayOfWeek.Friday => "周五",
+            DayOfWeek.Saturday => "周六",
+            _ => "???"
+        };
+        return description;
+    }
+
+    object IValueConverter.ConvertBack(object? value,Type targetType,object? parameter,CultureInfo culture) {
+        return string.Empty;
+    }
+}
+
 public class DayOfWeekEnumStringConverter : IValueConverter {
     object IValueConverter.Convert(object? value,Type targetType,object? parameter,CultureInfo culture) {
         DayOfWeek day = (DayOfWeek)value!;

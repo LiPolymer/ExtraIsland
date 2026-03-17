@@ -55,14 +55,11 @@ public partial class ProfileInformation : ComponentBase<ProfileInformationConfig
     int GetWeekInSemester(DateTime? current = null) {
         current ??= _exactTimeService.GetCurrentLocalDateTime();
         DateTime orientation = (DateTime)((dynamic)AppBase.Current).Settings.SingleWeekStartTime;
-        int oriWeek = orientation.DayOfWeek == DayOfWeek.Sunday ? 6 : Convert.ToInt32(orientation.DayOfWeek) - 1;
-        
-        //regulate
-        DateTime startMonday = orientation.AddDays(-oriWeek);
-        int lastDelta = current.Value.DayOfWeek != DayOfWeek.Sunday ? 7 - Convert.ToInt32(current.Value.DayOfWeek) : 0;
-        DateTime lastEnd = current.Value.AddDays(lastDelta);
-        
-        TimeSpan totalWeekDelta = lastEnd - startMonday;
+        int daysToStartOfWeek = ((int)orientation.DayOfWeek - (int)Settings.FirstDayOfWeek + 7) % 7;
+        DateTime startDay = orientation.AddDays(-daysToStartOfWeek);
+        int daysToEndOfWeek = ((int)Settings.FirstDayOfWeek - (int)current.Value.DayOfWeek + 6) % 7;
+        DateTime lastEnd = current.Value.AddDays(daysToEndOfWeek);
+        TimeSpan totalWeekDelta = lastEnd - startDay;
         return Convert.ToInt32(totalWeekDelta.Days + 1) / 7;
     }
 }
