@@ -94,8 +94,8 @@ public partial class Rhesis : ComponentBase<RhesisConfig> {
                                                            _ => $"https://v1.hitokoto.cn/?{Settings.HitokotoLengthArgs}{Settings.HitokotoProp}"
                                                        },
                                                        Settings.SainticProp switch {
-                                                           "" => "https://open.saintic.com/api/sentence/",
-                                                           _ => $"https://open.saintic.com/api/sentence/{Settings.SainticProp}.json"
+                                                           "" => "https://hub.saintic.com/openservice/sentence/all.json",
+                                                           _ => $"https://hub.saintic.com/openservice/sentence/{Settings.SainticProp}.json"
                                                        },
                                                        Settings.LengthLimitation);
             Showing = data.Content;

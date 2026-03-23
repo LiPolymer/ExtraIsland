@@ -38,8 +38,6 @@ public static class RhesisHandler {
                     RhesisDataSource.Jinrishici => JinrishiciData.Fetch().ToRhesisData(),
                     RhesisDataSource.Saint => SainticData.Fetch(sainticRequestUrl).ToRhesisData(),
                     RhesisDataSource.Hitokoto => HitokotoData.Fetch(hitokotoRequestUrl).ToRhesisData(),
-                    RhesisDataSource.SaintJinrishici => new RhesisData { Content = "处理时出现错误" },
-                    RhesisDataSource.All => new RhesisData { Content = "处理时出现错误" },
                     _ => new RhesisData { Content = "处理时出现错误" }
                 };
                 if (lengthLimitation == 0 | dataFetched.Content.Length <= lengthLimitation) {
