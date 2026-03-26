@@ -1,5 +1,5 @@
 # ExtraIsland
-⌈R1.20fix1⌋
+⌈R1.21⌋ [更新日志](https://gitlab.com/LiPolymer/ExtraIsland/-/releases/1.2.1.0)
 
 > 现已正式上架 ClassIsland v2!
 
