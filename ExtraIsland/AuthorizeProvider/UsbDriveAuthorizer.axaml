@@ -26,8 +26,10 @@
                     <ci:LucideIcon Glyph="&#xE07B;" Margin="0,0,5,0"/>
                     <TextBlock>
                         请尽量使用正规U盘进行验证
-                        <LineBreak />
+                        <LineBreak/>
                         推荐同时设置密码,防止认证设备损坏
+                        <LineBreak/>
+                        暂不支持多分区, 请谨慎使用相关设备!
                     </TextBlock>
                 </StackPanel>
             </Border>
