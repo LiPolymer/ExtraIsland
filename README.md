@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="./ExtraIsland/Assets/fullLogo.svg" alt="ExtraIsland Logo" style="height: 100px;">
+<img src="./ExtraIsland/Assets/fullLogo.svg" alt="ExtraIsland Logo" height="100">
 
 # ExtraIsland
 
@@ -16,6 +16,10 @@
 ![Repobeatsa](https://repobeats.axiom.co/api/embed/1f18128f350eea1c2612fe115498942e5c4fefff.svg "Repobeats Analytics Image")
 
 [ExtraIsland](https://docs.lipoly.ink/ExtraIsland) 是一款 [ClassIsland](https://classisland.tech/) 的实用插件，为 ClassIsland 增加了更好的倒计日、流畅时钟、名句一言、值日表、换届导引、Sleepy 等组件和功能！
+
+<img src="https://lipoly.ink/assets/badges/humanity.svg" alt="This project was built by human" width="200">
+
+*~~算是吧...~~*
 
 ![GitHub Commit Activity](https://img.shields.io/github/commit-activity/t/LiPolymer/ExtraIsland)
 ![GitHub Last Commit](https://img.shields.io/github/last-commit/LiPolymer/ExtraIsland)
