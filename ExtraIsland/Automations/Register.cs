@@ -29,8 +29,11 @@ public class Register : IHostedService {
         // 行动
         services.AddAction<SetFlagAction,SetFlag>();
         services.AddAction<UpdateRuleAction,Actions.EmptySettings>();
-        if (EiUtils.IsPluginInstalled("Plugin.IslandCaller")) {
+        if (EiUtils.IsPluginInstalled("IslandCaller.Plugin2")) {
             services.AddAction<IslandCallerAction,Actions.EmptySettings>();
+            if (GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) {
+                services.AddAction<IslandCallerAdvancedAction,Actions.EmptySettings>();
+            }
         }
         // 规则
         services.AddRule<TodayIsConfig,TodayIs>
@@ -147,7 +150,7 @@ public class Register : IHostedService {
                         }
                     ]
                 };
-                if (EiUtils.IsPluginInstalled("Plugin.IslandCaller")) {
+                if (EiUtils.IsPluginInstalled("IslandCaller.Plugin2")) {
                     regData.Actions.Add(new BlockMetadata {
                         Id = "extraIsland.action.islandCaller",
                         Name = "拉起IslandCaller",
@@ -158,6 +161,18 @@ public class Register : IHostedService {
                         InlineBlock = false,
                         IsRule = false
                     });
+                    if (GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) {
+                        regData.Actions.Add(new BlockMetadata {
+                            Id = "extraIsland.action.islandCallerAdvanced",
+                            Name = "(实验性)拉起IslandCaller-高级",
+                            Icon = ("拉起IslandCaller", "\uECB5"),
+                            Args = [],
+                            DropdownUseNumbers = false,
+                            InlineField = false,
+                            InlineBlock = false,
+                            IsRule = false
+                        });
+                    }
                 }
                 saiServerService.RegisterBlocks("ExtraIsland", regData);
             };

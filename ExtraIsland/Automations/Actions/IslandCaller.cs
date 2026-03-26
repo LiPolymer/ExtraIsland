@@ -13,7 +13,18 @@ public class IslandCallerAction : ActionBase {
     protected override Task OnInvoke() {
         base.OnInvoke();
         Dispatcher.UIThread.Invoke(() => {
-            UriNavigationCommands.UriNavigationCommand.Execute("classisland://plugins/IslandCaller/Run");
+            UriNavigationCommands.UriNavigationCommand.Execute("classisland://plugins/IslandCaller/Simple");
+        });
+        return Task.CompletedTask;
+    }
+}
+
+[ActionInfo("extraIsland.action.islandCallerAdvanced", "(实验性)拉起IslandCaller-高级", "\uECB5")]
+public class IslandCallerAdvancedAction : ActionBase {
+    protected override Task OnInvoke() {
+        base.OnInvoke();
+        Dispatcher.UIThread.Invoke(() => {
+            UriNavigationCommands.UriNavigationCommand.Execute("classisland://plugins/IslandCaller/Advanced/GUI");
         });
         return Task.CompletedTask;
     }
