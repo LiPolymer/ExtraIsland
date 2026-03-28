@@ -8,8 +8,8 @@ namespace ExtraIsland.Shared;
 
 public class TimeNodeObservableCollection : ObservableCollection<TimeNode> {
     readonly IExactTimeService _exactTimeService;
-    
-    public void SortAll() {
+    public BetterCountdownConfig? Config;
+    void SortAll() {
         if (Count <= 1) return;
         var sortedList = this.OrderBy(_ => _.CountdownTime).ToList();
         bool needSort = false;
@@ -23,21 +23,46 @@ public class TimeNodeObservableCollection : ObservableCollection<TimeNode> {
         if (!needSort) return;
         base.ClearItems();
         foreach (TimeNode tn in sortedList) {
-            base.InsertItem(Count, tn);
+            base.InsertItem(0, tn);
         }
         OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
     public TimeNodeObservableCollection() {
         _exactTimeService = IAppHost.GetService<IExactTimeService>();
+        Items.Add(new TimeNode());
     }
     
-    public TimeNode? GetLatest(BetterCountdownConfig config) {
-        foreach (TimeNode tn in Items) {
-            if((config.TargetDateTime -
-               (!config.IsSystemTime ? 
-                   _exactTimeService.GetCurrentLocalDateTime()
-                   : DateTime.Now)) <= tn.CountdownTime) return Items[IndexOf(tn)-1];
+    public void GetLatest() {
+        if (Items.Count <= 0 || Config is null) {
+            Console.WriteLine("quit check");
+            return;
+        };
+        SortAll();
+        TimeSpan timeDistance = EiUtils.GetDateTimeSpan(!Config.IsSystemTime ?
+            _exactTimeService.GetCurrentLocalDateTime()
+            : DateTime.Now, 
+            Config.TargetDateTime);
+        if (timeDistance < TimeSpan.Zero) {
+            Config.LatestNode = null;
+            Console.WriteLine("Quit below 0");
+            return;
         }
-        return null;
+        Console.WriteLine(("In GL"));
+        if (timeDistance >= Items.First().CountdownTime) {
+            Config.LatestNode = Items.First();
+            Console.WriteLine("Return Last Node:" + Config.LatestNode);
+            return;
+        }
+        Console.WriteLine("TimeDistance" + timeDistance);
+        foreach (TimeNode tn in Items) {
+            Console.WriteLine("Now:"+tn);
+            if (timeDistance >= tn.CountdownTime) {
+                Config.LatestNode = tn;
+                Console.WriteLine("Return Node in for:" + Config.LatestNode);
+                return;
+            }
+        }
+        Config.LatestNode = null;
     }
+    
 }

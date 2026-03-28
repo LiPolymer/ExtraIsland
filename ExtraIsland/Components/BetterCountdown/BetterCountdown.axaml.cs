@@ -39,6 +39,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         SilentUpdater();
         OnTimeChanged += DetectEvent;
         OnTimeChanged += DetectTimeUp;
+        OnTimeChanged += DetectTimeNode;
         Settings.OnAccuracyChanged += UpdateAccuracy;
         Settings.OnNoGapDisplayChanged += UpdateGap;
         LessonsService.PostMainTimerTicked += UpdateTime;
@@ -115,7 +116,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
                 _dyAnimator.Update(_days,Settings.IsAnimationEnabled);
             }
         }
-        if ((_hours != span.Hours.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 1)) {
+        if ((_hours != span.Hours.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 1 | Settings.LatestNode is not null)) {
             int hourI = span.Hours;
             int hourCi = (int)Settings.Accuracy == 1 & Settings.IsCorrectorEnabled ? hourI + 1 : hourI;
             _hours = hourCi.ToString();
@@ -132,7 +133,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
                 _hrAnimator.Update(_hours,Settings.IsAnimationEnabled);
             }
         }
-        if ((_minutes != span.Minutes.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 2)) {
+        if ((_minutes != span.Minutes.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 2 | Settings.LatestNode is not null)) {
             int minuteI = span.Minutes;
             int minuteCi = (int)Settings.Accuracy == 2 & Settings.IsCorrectorEnabled ? minuteI + 1 : minuteI;
             _minutes = minuteCi.ToString();
@@ -156,7 +157,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
             }
         }
         // ReSharper disable once InvertIf
-        if ((_seconds != span.Seconds.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 3)) {
+        if ((_seconds != span.Seconds.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 3 | Settings.LatestNode is not null)) {
             _seconds = span.Seconds.ToString();
             string s = _seconds;
             if (s.Length == 1) {
@@ -175,12 +176,12 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
             _days = (int)Settings.Accuracy == 0 ? (dayI + 1).ToString() : dayI.ToString();
             _dyAnimator.SilentUpdate(_days);
         }
-        if ((_hours != span.Hours.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 1)) {
+        if ((_hours != span.Hours.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 1 | Settings.LatestNode is not null)) {
             int hourI = span.Hours;
             _hours = (int)Settings.Accuracy == 1 ? (hourI + 1).ToString() : hourI.ToString();
             _hrAnimator.SilentUpdate(_hours);
         }
-        if ((_minutes != span.Minutes.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 2)) {
+        if ((_minutes != span.Minutes.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 2 | Settings.LatestNode is not null)) {
             int minuteI = span.Minutes;
             _minutes = (int)Settings.Accuracy == 2 ? (minuteI + 1).ToString() : minuteI.ToString();
             string m = _minutes;
@@ -190,7 +191,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
             _mnAnimator.SilentUpdate(m);
         }
         // ReSharper disable once InvertIf
-        if ((_seconds != span.Seconds.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 3)) {
+        if ((_seconds != span.Seconds.ToString() | _isAccurateChanged) & (Settings.IsNotify | (int)Settings.Accuracy >= 3 | Settings.LatestNode is not null)) {
             _seconds = span.Seconds.ToString();
             string s = _seconds;
             if (s.Length == 1) {
@@ -200,9 +201,14 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         }
     }
 
-    void Notify() {
-        BetterCountdownNotification.Notify(Settings.Name, Settings.Message,
+    void TimeUpNotify() {
+        BetterCountdownNotification.Notify(Settings.Name, Settings.Message, 0,
                                   Settings.LeftIcon, Settings.RightIcon);
+        Settings.IsNotified = true;
+    }
+    void TimeNodeNotify(TimeNode tn) {
+        BetterCountdownNotification.Notify(Settings.Name, tn.NotifyText, 1,
+            Settings.LeftIcon, Settings.RightIcon, tn.ToString());
         Settings.IsNotified = true;
     }
     
@@ -210,26 +216,58 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
         if (!Settings.IsNotify || Settings.IsNotified) return;
         if (Settings.IsCorrectorEnabled) {
             if ((int)Settings.Accuracy == 1 & _days == "0" & _hours == "1" & _minutes == "0" & _seconds == "-1") {
-                Notify();
+                TimeUpNotify();
             }
             if ((int)Settings.Accuracy == 2 & _days == "0" & _hours == "0" & _minutes == "1" & _seconds == "-1") {
-                Notify();
+                TimeUpNotify();
             }
             if ((int)Settings.Accuracy == 3 & _days == "0" & _hours == "0" & _minutes == "0" & _seconds == "0") {
-                Notify();
+                TimeUpNotify();
             }
         } else {
             if (_days == "0" & _hours == "0" & _minutes == "0" & _seconds == "0") {
-                Notify();
+                TimeUpNotify();
             }
+        }
+    }
+    void DetectTimeNode() {
+        if (Settings.LatestNode is null || Settings.IsNotified) return;
+        int day = Settings.LatestNode.CountdownTime.Days;
+        int hr = Settings.LatestNode.CountdownTime.Hours;
+        int min = Settings.LatestNode.CountdownTime.Minutes;
+        int sec = Settings.LatestNode.CountdownTime.Seconds;
+        if (Settings.IsCorrectorEnabled) {
+            
+            if ((int)Settings.Accuracy == 1 & _days == day.ToString() & _hours == (hr+1).ToString()) {
+                TimeNodeNotify(Settings.LatestNode);
+                Settings.LatestNode = Settings.Times[Settings.Times.IndexOf(Settings.LatestNode)+1];
+            }
+            if ((int)Settings.Accuracy == 2 & _days == day.ToString() & _hours == hr.ToString() & _minutes == (min+1).ToString()) {
+                TimeNodeNotify(Settings.LatestNode);
+                Settings.LatestNode = Settings.Times[Settings.Times.IndexOf(Settings.LatestNode)+1];
+            }
+            if ((int)Settings.Accuracy == 3 & _days == day.ToString() & _hours == hr.ToString() & _minutes == min.ToString() & _seconds == sec.ToString()) {
+                TimeNodeNotify(Settings.LatestNode);
+                Settings.LatestNode = Settings.Times[Settings.Times.IndexOf(Settings.LatestNode)+1];
+            }
+        } else {
+            if (_days == day.ToString() & _hours == hr.ToString() & _minutes == min.ToString() & _seconds == sec.ToString()) {
+                TimeNodeNotify(Settings.LatestNode);
+                Settings.LatestNode = Settings.Times[Settings.Times.IndexOf(Settings.LatestNode)+1];
+            }
+            System.Console.WriteLine(Settings.LatestNode);
         }
     }
     void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         Dispatcher.UIThread.InvokeAsync(OnLoad);
+        Console.WriteLine("OATV调用!");
+        Settings.Times.Config = Settings;
+        Settings.Times.GetLatest();
     }
     void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         OnTimeChanged -= DetectEvent;
         OnTimeChanged -= DetectTimeUp;
+        OnTimeChanged -= DetectTimeNode;
         Settings.OnAccuracyChanged -= UpdateAccuracy;
         Settings.OnNoGapDisplayChanged -= UpdateGap;
         LessonsService.PostMainTimerTicked -= UpdateTime;

@@ -6,20 +6,21 @@
              xmlns:components="clr-namespace:ExtraIsland.Components"
              xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:ci="http://classisland.tech/schemas/xaml/core"
-             xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              >
-    <UserControl.Resources>
-        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
-        
-    </UserControl.Resources>
-
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=components:TimeNodeControl}}">
-        <Button HorizontalAlignment="Left"
-                Click="ButtonAddTime_Click">
-            <ci:IconText Glyph="&#xE00C;"
-                         Text="添加"/>
-        </Button>
+        <StackPanel Orientation="Horizontal">
+            <Button HorizontalAlignment="Left"
+                    Click="ButtonAddTime_Click">
+                <ci:IconText Glyph="&#xE00C;"
+                             Text="添加"/>
+            </Button>
+            <Button HorizontalAlignment="Left"
+                    Click="SaveButton_OnClick">
+                <ci:IconText Glyph="&#xEEB4;"
+                             Text="保存"/>
+            </Button>
+        </StackPanel>
         <ItemsControl ItemsSource="{Binding Times}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -28,22 +29,20 @@
                                                Description="选择一个时间, 并选择该节点要执行的操作">
                         <controls:SettingsExpander.Footer>
                             <StackPanel Orientation="Horizontal">
-                                <StackPanel Orientation="Horizontal">
-                                    <NumericUpDown
-                                        Width="150"
-                                        Minimum="0"
-                                        Maximum="114514"
-                                        FormatString="0"
-                                        Value="{Binding CountdownTime.Days, Mode=TwoWay}"
-                                        ValueChanged="NumericUpDown_OnValueChanged"
-                                        Watermark="天"/>
-                                    <TextBlock Text="天" VerticalAlignment="Center"/>
-                                    <TimePicker UseSeconds="True"
-                                                Margin="5,0,0,0"
-                                                Loaded="CountdownTimeModeTp_OnLoaded"
-                                                SelectedTimeChanged="CountdownTimeModeTp_SelectedTimeChanged"
-                                                Tag="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
-                                </StackPanel>
+                                <NumericUpDown
+                                    Width="150"
+                                    Minimum="0"
+                                    Maximum="114514"
+                                    FormatString="0"
+                                    Value="{Binding CountdownTime.Days, Mode=TwoWay}"
+                                    ValueChanged="NumericUpDown_OnValueChanged"
+                                    Watermark="天"/>
+                                <TextBlock Text="天" VerticalAlignment="Center"/>
+                                <TimePicker UseSeconds="True"
+                                            Margin="5,0,0,0"
+                                            Loaded="CountdownTimeModeTp_OnLoaded"
+                                            SelectedTimeChanged="CountdownTimeModeTp_SelectedTimeChanged"
+                                            Tag="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
                                 <Button Command="{Binding ButtonRemoveTimeCommand,
                                          RelativeSource={RelativeSource AncestorType=components:TimeNodeControl}}"
                                         CommandParameter="{Binding}">
@@ -51,6 +50,23 @@
                                 </Button>
                             </StackPanel>
                         </controls:SettingsExpander.Footer>
+                        <controls:SettingsExpander.Items>
+                            <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE4D4;}"
+                                                       Content="提醒"
+                                                       Description="到达该时间点时，发送提醒">
+                                <controls:SettingsExpanderItem.Footer>
+                                    <ToggleSwitch IsChecked="{Binding IsNotify,Mode=TwoWay}"/>
+                                </controls:SettingsExpanderItem.Footer>
+                            </controls:SettingsExpanderItem>
+                            <controls:SettingsExpanderItem 
+                                IconSource="{ci:FluentIconSource &#xE4C0;}"
+                                Content="提醒文本"
+                                Description="提醒内容的文本,{t}表示剩余时间，{n}表示事件名称">
+                                <controls:SettingsExpanderItem.Footer>
+                                    <TextBox Text="{Binding NotifyText, Mode=TwoWay}"/>
+                                </controls:SettingsExpanderItem.Footer>
+                            </controls:SettingsExpanderItem>
+                        </controls:SettingsExpander.Items>
                     </controls:SettingsExpander>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

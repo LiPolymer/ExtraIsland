@@ -1,14 +1,16 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ExtraIsland.Shared;
 
 namespace ExtraIsland.Components;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public partial class BetterCountdownConfig : ObservableObject {
+public class BetterCountdownConfig : ObservableObject {
     public BetterCountdownConfig() {
         Separators.PropertyChanged += (_,_) => OnPropertyChanged();
+        Console.WriteLine("Bcd Consturct!");
+        Times = [];
+        Times.Config = this;
         TargetDateTime = DateTime.Now.AddMinutes(1);
     }
 
@@ -19,6 +21,8 @@ public partial class BetterCountdownConfig : ObservableObject {
             if (_targetDateTime == value) return;
             _targetDateTime = value;
             IsNotified = false;
+
+            Times.GetLatest();
         }
     }
     
@@ -90,8 +94,15 @@ public partial class BetterCountdownConfig : ObservableObject {
     
     public string RightIcon { get; set; } = "";
     
-    [ObservableProperty] TimeNodeObservableCollection _times = [];
-    //public BetterCountdownConfig Self => this;
+    //TimeNodeObservableCollection _times;
+    
+    public TimeNodeObservableCollection Times { 
+        get;
+        set;
+    }
+    
+    public TimeNode? LatestNode { get; set; }
+
 }
 
 public class CountdownSeparatorConfigs : ObservableObject {
@@ -145,12 +156,12 @@ public enum CountdownAccuracy {
 }
 
 public partial class TimeNode: ObservableObject {
-    //public BetterCountdownConfig Config {get;set;}
+
     [ObservableProperty]
     TimeSpan _countdownTime = new TimeSpan(1, 1 ,1 ,1 );
-    bool _changeText;
-    bool _notify;
+    public bool IsNotify { get; set; }
+    public String NotifyText { get; set; } = "距离{n}仅剩{t}";
     public override string ToString() {
-        return CountdownTime.ToString();
+        return CountdownTime.Days + "天" + CountdownTime.Hours + "小时" + CountdownTime.Minutes+"分"+CountdownTime.Seconds+"秒";
     }
 }

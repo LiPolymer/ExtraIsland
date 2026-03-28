@@ -14,7 +14,7 @@
         <ScrollViewer Margin="0">
             <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4BD;}"
                                        Header="提醒文案"
-                                       Description="提醒内容的后半段文案,可被组件设置中覆盖">
+                                       Description="提醒内容的后半段文案,可被组件设置中覆盖, {n}表示事件名称">
                 <controls:SettingsExpander.Footer>
                     <TextBox Text="{Binding Settings.Message, Mode=TwoWay}"></TextBox>
                 </controls:SettingsExpander.Footer>

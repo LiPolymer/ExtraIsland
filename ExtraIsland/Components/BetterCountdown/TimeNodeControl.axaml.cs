@@ -1,8 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using System.Collections.ObjectModel;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using ExtraIsland.Shared;
 
@@ -19,10 +17,16 @@ public partial class TimeNodeControl : UserControl {
     
     public TimeNodeObservableCollection Times {
         get => GetValue(TimesProperty);
-        set => SetValue(TimesProperty, value);
+        set {
+            Console.WriteLine("Times属性被设置！");
+            SetValue(TimesProperty,value);
+        }
     }
     
     public void ButtonAddTime_Click(object? sender, RoutedEventArgs e) {
+        if (Times is null) {
+            Console.WriteLine("Times为空");
+        }
         Times.Add(new TimeNode());
     }
     
@@ -40,21 +44,7 @@ public partial class TimeNodeControl : UserControl {
         }
     }
     
-    DispatcherTimer? _waitTimer;
-    public void OnTpTimeChanged() {
-        _waitTimer?.Start();
-        _waitTimer = new DispatcherTimer(
-            TimeSpan.FromSeconds(3),
-            DispatcherPriority.Background,
-            (_, __) => {
-                _waitTimer?.Stop();
-                Times.SortAll();
-            });
-    }
-
-    bool _isProcessing = false; 
-    async void CountdownTimeModeTp_SelectedTimeChanged(object? sender,TimePickerSelectedValueChangedEventArgs e) {
-        if(_isProcessing) return;
+    void CountdownTimeModeTp_SelectedTimeChanged(object? sender,TimePickerSelectedValueChangedEventArgs e) {
         if (sender is TimePicker 
             {                                   
                 DataContext: TimeNode tn,   
@@ -62,18 +52,10 @@ public partial class TimeNodeControl : UserControl {
             } tp) {
             TimeSpan newTime = new TimeSpan(tn.CountdownTime.Days, tp.SelectedTime.Value.Hours, tp.SelectedTime.Value.Minutes, tp.SelectedTime.Value.Seconds);
             if (newTime == tn.CountdownTime) return;
-            _isProcessing =  true;
-            try {
                 tn.CountdownTime = newTime;
-                OnTpTimeChanged();
-            }
-            finally {
-                await Task.Delay(200);
-                _isProcessing = false;
-            }
         }
     }
-    async void NumericUpDown_OnValueChanged(object? sender,NumericUpDownValueChangedEventArgs e) {
+    void NumericUpDown_OnValueChanged(object? sender,NumericUpDownValueChangedEventArgs e) {
         if (sender is NumericUpDown 
             {                                   
                 DataContext: TimeNode tn,   
@@ -81,15 +63,14 @@ public partial class TimeNodeControl : UserControl {
             } numericUpDown) {
             TimeSpan newTime = new TimeSpan((int)numericUpDown.Value, tn.CountdownTime.Hours, tn.CountdownTime.Minutes, tn.CountdownTime.Seconds);
             if (newTime == tn.CountdownTime) return;
-            _isProcessing =  true;
-            try {
                 tn.CountdownTime = newTime;
-                OnTpTimeChanged();
-            }
-            finally {
-                await Task.Delay(200);
-                _isProcessing = false;
-            }
+            
         }
     }
+    void SaveButton_OnClick(object? sender,RoutedEventArgs e) {
+        if(Times.Count == 0) return;
+        Console.WriteLine("SaveButton调用！");
+        Times.GetLatest();
+    }
+
 }
