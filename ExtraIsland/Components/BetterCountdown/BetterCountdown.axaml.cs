@@ -209,7 +209,7 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
     void TimeNodeNotify(TimeNode tn) {
         BetterCountdownNotification.Notify(Settings.Name, tn.NotifyText, 1,
             Settings.LeftIcon, Settings.RightIcon, tn.ToString());
-        Settings.IsNotified = true;
+        _isTimeNodeDetected = true;
     }
     
     void DetectTimeUp() {
@@ -230,37 +230,22 @@ public partial class BetterCountdown : ComponentBase<BetterCountdownConfig> {
             }
         }
     }
+    bool _isTimeNodeDetected = false;
     void DetectTimeNode() {
-        if (Settings.LatestNode is null || Settings.IsNotified) return;
-        int day = Settings.LatestNode.CountdownTime.Days;
-        int hr = Settings.LatestNode.CountdownTime.Hours;
-        int min = Settings.LatestNode.CountdownTime.Minutes;
-        int sec = Settings.LatestNode.CountdownTime.Seconds;
-        if (Settings.IsCorrectorEnabled) {
-            
-            if ((int)Settings.Accuracy == 1 & _days == day.ToString() & _hours == (hr+1).ToString()) {
-                TimeNodeNotify(Settings.LatestNode);
-                Settings.LatestNode = Settings.Times[Settings.Times.IndexOf(Settings.LatestNode)+1];
-            }
-            if ((int)Settings.Accuracy == 2 & _days == day.ToString() & _hours == hr.ToString() & _minutes == (min+1).ToString()) {
-                TimeNodeNotify(Settings.LatestNode);
-                Settings.LatestNode = Settings.Times[Settings.Times.IndexOf(Settings.LatestNode)+1];
-            }
-            if ((int)Settings.Accuracy == 3 & _days == day.ToString() & _hours == hr.ToString() & _minutes == min.ToString() & _seconds == sec.ToString()) {
-                TimeNodeNotify(Settings.LatestNode);
-                Settings.LatestNode = Settings.Times[Settings.Times.IndexOf(Settings.LatestNode)+1];
-            }
-        } else {
-            if (_days == day.ToString() & _hours == hr.ToString() & _minutes == min.ToString() & _seconds == sec.ToString()) {
-                TimeNodeNotify(Settings.LatestNode);
-                Settings.LatestNode = Settings.Times[Settings.Times.IndexOf(Settings.LatestNode)+1];
-            }
-            System.Console.WriteLine(Settings.LatestNode);
+        if (Settings.LatestNode is null || _isTimeNodeDetected) return;
+        TimeSpan span = EiUtils.GetDateTimeSpan(Now,Settings.TargetDateTime);
+        if (span.Days==Settings.LatestNode.CountdownTime.Days
+            && span.Hours==Settings.LatestNode.CountdownTime.Hours
+            && span.Minutes==Settings.LatestNode.CountdownTime.Minutes
+            && span.Seconds==Settings.LatestNode.CountdownTime.Seconds) {
+            TimeNodeNotify(Settings.LatestNode);
+            Settings.LatestNode = Settings.Times[Settings.Times.IndexOf(Settings.LatestNode) + 1];
+            Console.WriteLine(Settings.LatestNode);
         }
+        _isTimeNodeDetected = false;
     }
     void OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         Dispatcher.UIThread.InvokeAsync(OnLoad);
-        Console.WriteLine("OATV调用!");
         Settings.Times.Config = Settings;
         Settings.Times.GetLatest();
     }

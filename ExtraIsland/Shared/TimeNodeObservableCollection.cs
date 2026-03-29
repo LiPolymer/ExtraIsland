@@ -29,7 +29,6 @@ public class TimeNodeObservableCollection : ObservableCollection<TimeNode> {
     }
     public TimeNodeObservableCollection() {
         _exactTimeService = IAppHost.GetService<IExactTimeService>();
-        Items.Add(new TimeNode());
     }
     
     public void GetLatest() {

@@ -24,9 +24,6 @@ public partial class TimeNodeControl : UserControl {
     }
     
     public void ButtonAddTime_Click(object? sender, RoutedEventArgs e) {
-        if (Times is null) {
-            Console.WriteLine("Times为空");
-        }
         Times.Add(new TimeNode());
     }
     
@@ -72,5 +69,5 @@ public partial class TimeNodeControl : UserControl {
         Console.WriteLine("SaveButton调用！");
         Times.GetLatest();
     }
-
+    
 }
