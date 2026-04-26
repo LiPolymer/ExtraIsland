@@ -8,7 +8,6 @@ namespace ExtraIsland.Components;
 public class BetterCountdownConfig : ObservableObject {
     public BetterCountdownConfig() {
         Separators.PropertyChanged += (_,_) => OnPropertyChanged();
-        Console.WriteLine("Bcd Consturct!");
         Times = [];
         Times.Config = this;
         TargetDateTime = DateTime.Now.AddMinutes(1);

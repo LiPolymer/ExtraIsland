@@ -9,9 +9,10 @@ namespace ExtraIsland.Shared;
 public class TimeNodeObservableCollection : ObservableCollection<TimeNode> {
     readonly IExactTimeService _exactTimeService;
     public BetterCountdownConfig? Config;
+    TimeNode? LatestNode;
     void SortAll() {
         if (Count <= 1) return;
-        var sortedList = this.OrderBy(_ => _.CountdownTime).ToList();
+        List<TimeNode> sortedList = this.OrderBy(_ => _.CountdownTime).ToList();
         bool needSort = false;
         for (int i = 0; i < Count; i++) {
             if (!ReferenceEquals(this[i], sortedList[i]))
@@ -33,7 +34,6 @@ public class TimeNodeObservableCollection : ObservableCollection<TimeNode> {
     
     public void GetLatest() {
         if (Items.Count <= 0 || Config is null) {
-            Console.WriteLine("quit check");
             return;
         };
         SortAll();
@@ -43,25 +43,18 @@ public class TimeNodeObservableCollection : ObservableCollection<TimeNode> {
             Config.TargetDateTime);
         if (timeDistance < TimeSpan.Zero) {
             Config.LatestNode = null;
-            Console.WriteLine("Quit below 0");
             return;
         }
-        Console.WriteLine(("In GL"));
         if (timeDistance >= Items.First().CountdownTime) {
             Config.LatestNode = Items.First();
-            Console.WriteLine("Return Last Node:" + Config.LatestNode);
             return;
         }
-        Console.WriteLine("TimeDistance" + timeDistance);
         foreach (TimeNode tn in Items) {
-            Console.WriteLine("Now:"+tn);
             if (timeDistance >= tn.CountdownTime) {
                 Config.LatestNode = tn;
-                Console.WriteLine("Return Node in for:" + Config.LatestNode);
                 return;
             }
         }
         Config.LatestNode = null;
     }
-    
 }

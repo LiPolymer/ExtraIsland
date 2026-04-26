@@ -18,7 +18,6 @@ public partial class TimeNodeControl : UserControl {
     public TimeNodeObservableCollection Times {
         get => GetValue(TimesProperty);
         set {
-            Console.WriteLine("Times属性被设置！");
             SetValue(TimesProperty,value);
         }
     }
@@ -66,8 +65,7 @@ public partial class TimeNodeControl : UserControl {
     }
     void SaveButton_OnClick(object? sender,RoutedEventArgs e) {
         if(Times.Count == 0) return;
-        Console.WriteLine("SaveButton调用！");
         Times.GetLatest();
     }
-    
+
 }
