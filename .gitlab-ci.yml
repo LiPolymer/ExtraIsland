@@ -35,6 +35,8 @@ stages:
 build_job:
   stage: build
   image: mcr.microsoft.com/dotnet/sdk:8.0
+  variables:
+    ATTEST_BUILD_ARTIFACTS: true
   rules:
     - if: '($CI_COMMIT_MESSAGE !~ /^doc:.*/ && $CI_COMMIT_DESCRIPTION !~ /!noCi/ && $CI_COMMIT_MESSAGE !~ /^chore:.*/) || $CI_COMMIT_DESCRIPTION =~ /!forceCi/'
   script:
