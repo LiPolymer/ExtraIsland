@@ -25,7 +25,7 @@ public class Register : IHostedService {
     /// 注册ClassIsland元素
     /// </summary>
     /// <param name="services">应用服务集合</param>
-    public static void Claim(IServiceCollection services) {
+        public static void Claim(IServiceCollection services) {
         // 行动
         services.AddAction<SetFlagAction,SetFlag>();
         services.AddAction<UpdateRuleAction,Actions.EmptySettings>();
@@ -35,6 +35,8 @@ public class Register : IHostedService {
                 services.AddAction<IslandCallerAdvancedAction,Actions.EmptySettings>();
             }
         }
+        services.AddAction<DoSpeechAction,DoSpeechSettingsControl>();
+        
         // 规则
         services.AddRule<TodayIsConfig,TodayIs>
             ("extraIsland.rule.todayIs","今天是","\uE304");
@@ -174,6 +176,22 @@ public class Register : IHostedService {
                         });
                     }
                 }
+                // 将语音播报加入 SAI 注册列表
+                regData.Actions.Add(new BlockMetadata {
+                    Id = "extraIsland.action.doSpeech",
+                    Name = "语音播报",
+                    Icon = ("语音播报", "\uE5C7"),
+                    Args = new Dictionary<string,MetaArgsBase> {
+                        ["Text"] = new CommonMetaArgs {
+                            Name = "要播报的文本",
+                            Type = MetaType.text
+                        }
+                    },
+                    DropdownUseNumbers = false,
+                    InlineField = false,
+                    InlineBlock = false,
+                    IsRule = false
+                });
                 saiServerService.RegisterBlocks("ExtraIsland", regData);
             };
         }
