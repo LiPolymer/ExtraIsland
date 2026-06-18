@@ -1,0 +1,9 @@
+<!--
+  解决方案级MSBuild属性文件，用于在非Windows平台上启用IDE补全支持。
+-->
+<Project>
+  <PropertyGroup>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+</Project>
+
