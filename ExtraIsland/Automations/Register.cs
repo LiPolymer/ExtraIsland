@@ -25,7 +25,7 @@ public class Register : IHostedService {
     /// 注册ClassIsland元素
     /// </summary>
     /// <param name="services">应用服务集合</param>
-        public static void Claim(IServiceCollection services) {
+    public static void Claim(IServiceCollection services) {
         // 行动
         services.AddAction<SetFlagAction,SetFlag>();
         services.AddAction<UpdateRuleAction,Actions.EmptySettings>();
