@@ -160,5 +160,8 @@
 	    <DependentUpon>TeacherIs.axaml</DependentUpon>
 	    <SubType>Code</SubType>
 	  </Compile>
+	  <Compile Update="Automations\Actions\DoSpeech.axaml.cs">
+	    <DependentUpon>DoSpeech.axaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 </Project>
