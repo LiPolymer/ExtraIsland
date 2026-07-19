@@ -6,6 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
 		<EnableDynamicLoading>True</EnableDynamicLoading>
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -159,6 +160,9 @@
 	  <Compile Update="Automations\Rules\TeacherIs.axaml.cs">
 	    <DependentUpon>TeacherIs.axaml</DependentUpon>
 	    <SubType>Code</SubType>
+	  </Compile>
+	  <Compile Update="Automations\Actions\DoSpeech.axaml.cs">
+	    <DependentUpon>DoSpeech.axaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 </Project>
