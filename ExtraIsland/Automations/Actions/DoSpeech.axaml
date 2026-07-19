@@ -9,16 +9,16 @@
                               xmlns:controls="clr-namespace:ExtraIsland.Controls"
                               mc:Ignorable="d">
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=actions1:DoSpeechSettingsControl}}"
-                Spacing="8" Margin="10">
+                Spacing="8" Margin="10" Orientation="Horizontal">
         <TextBlock Text="语音播报"
                    FontWeight="Bold"
-                   FontSize="14" />
-
+                   FontSize="14"
+                   Margin="0,9,0,0"/>
         <TextBox Text="{Binding Settings.Text, Mode=TwoWay}"
                  Watermark="请输入要播报的文字"
+                 Padding="5,7,5,7"
                  AcceptsReturn="True"
-                 Height="120"
-                 Width="420"/>
+                 MinWidth="400"/>
     </StackPanel>
 </ci:ActionSettingsControlBase>
 
