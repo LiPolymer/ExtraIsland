@@ -27,10 +27,9 @@ public class DoSpeechSettings : ObservableRecipient {
 public class DoSpeechAction : ActionBase<DoSpeechSettings> {
     protected override Task OnInvoke() {
         base.OnInvoke();
-        var text = Settings.Text;
-        if (string.IsNullOrWhiteSpace(text)) {
+        string text = Settings.Text;
+        if (string.IsNullOrWhiteSpace(text))
             throw new InvalidOperationException("语音播报内容不能为空");
-        }
         IAppHost.GetService<ISpeechService>().EnqueueSpeechQueue(text);
         return Task.CompletedTask;
     }
