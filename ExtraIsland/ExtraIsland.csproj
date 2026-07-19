@@ -6,6 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
 		<EnableDynamicLoading>True</EnableDynamicLoading>
+        <EnableWindowsTargeting>true</EnableWindowsTargeting>
 	</PropertyGroup>
 
 	<ItemGroup>
