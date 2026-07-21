@@ -4,7 +4,7 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
                   xmlns:components="clr-namespace:ExtraIsland.Components"
-                  xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                  xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                   xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
                   mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                   x:TypeArguments="components:DynamicLyricsConfig"
@@ -15,10 +15,10 @@
     <ScrollViewer
         DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=components:DynamicLyricsSettings}}">
         <StackPanel Classes="settings-container animated-intro">
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEBCA;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEBCA;}"
                                        Header="歌词类型"
                                        Description="选择要显示的歌词类型">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ComboBox
                         MinWidth="20"
                         SelectedItem="{Binding Settings.DisplayType}"
@@ -29,8 +29,8 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
             <Label HorizontalAlignment="Center" 
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland

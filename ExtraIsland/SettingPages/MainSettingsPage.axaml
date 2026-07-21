@@ -5,7 +5,7 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:ci="http://classisland.tech/schemas/xaml/core"
                      xmlns:controls="clr-namespace:ExtraIsland.Controls"
-                     xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                     xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                      xmlns:settingPages="clr-namespace:ExtraIsland.SettingPages"
                      mc:Ignorable="d">
     <ci:SettingsPageBase.Resources>
@@ -27,7 +27,7 @@
                 <Label VerticalAlignment="Center" FontSize="30">全局 · 主设置</Label>
             </StackPanel>
             <Border ClipToBounds="True" CornerRadius="4" BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
-                <controls1:SettingsExpanderItem>
+                <fa:FASettingsExpanderItem>
                 <Grid HorizontalAlignment="Stretch" Margin="12">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -102,9 +102,9 @@
                         </Button>
                     </StackPanel>
                 </Grid>
-            </controls1:SettingsExpanderItem>
+            </fa:FASettingsExpanderItem>
             </Border>
-            <controls1:InfoBar x:Name="AnnouncementBar" 
+            <fa:FAInfoBar x:Name="AnnouncementBar" 
                                IsOpen="False" 
                                IsVisible="True" 
                                Severity="Success" 
@@ -123,7 +123,7 @@
                         <Label Margin="0,0,0,3" Content="加入群组"/>
                     </StackPanel>
                 </Button>
-            </controls1:InfoBar>
+            </fa:FAInfoBar>
             <Border x:Name="MessageZone"
                     IsVisible="False"
                     Background="#15ff0000" 
@@ -141,11 +141,11 @@
                     <Label/>
                 </StackPanel>
             </Border>
-            <controls1:SettingsExpander x:Name="LyricsStatCard" 
+            <fa:FASettingsExpander x:Name="LyricsStatCard" 
                                         IconSource="{ci:FluentIconSource Glyph=&#xEDC7;}"
                                         Description="显示歌词协议接口的状态,支持LycheeLib"
                                         Header="歌词接口状态">
-                <controls1:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <Border Background="Gray"
                             CornerRadius="{Binding Bounds.Height, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}"
                             Padding="12,4,12,2"
@@ -153,35 +153,35 @@
                         <Label Foreground="LightGray"
                                Content="IDLE"/>
                     </Border>
-                </controls1:SettingsExpander.Footer>
-            </controls1:SettingsExpander>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
             
-            <controls1:SettingsExpander x:Name="LifeModeCard"
+            <fa:FASettingsExpander x:Name="LifeModeCard"
                                         IconSource="{ci:FluentIconSource Glyph=&#xE436;}"
                                         Header="生活模式"
                                         Description="启用不适用于课堂环境的功能">
-                <controls1:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsLifeModeActivated, Mode=TwoWay}"/>
-                </controls1:SettingsExpander.Footer>
-            </controls1:SettingsExpander>
-            <controls1:SettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xE647;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource Glyph=&#xE647;}"
                                         Header="允许遥测"
                                         Description="允许我们通过Sentry采集崩溃报告,以便更好地改进本插件">
-                <controls1:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsTelemetryActivated, Mode=TwoWay}"/>
-                </controls1:SettingsExpander.Footer>
-            </controls1:SettingsExpander>
-            <controls1:SettingsExpander x:Name="ExpModeCard"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander x:Name="ExpModeCard"
                                         IconSource="{ci:FluentIconSource Glyph=&#xE2C8;}"
                                         Description="启用尚未开发完成,已经知道有Bug的功能(启用后请勿提交Bug)"
                                         Header="实验性功能">
-                <controls1:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                 <StackPanel Orientation="Horizontal">
                     <controls:ExperimentalBadge IsVisible="{Binding Settings.IsExperimentalModeActivated}"/>
                     <ToggleSwitch IsChecked="{Binding Settings.IsExperimentalModeActivated, Mode=TwoWay}"/>
                 </StackPanel>
-                </controls1:SettingsExpander.Footer>
-            </controls1:SettingsExpander>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
         </StackPanel>
     </ScrollViewer>
 </ci:SettingsPageBase>

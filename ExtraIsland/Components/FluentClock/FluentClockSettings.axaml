@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ci="http://classisland.tech/schemas/xaml/core"
              xmlns:components="clr-namespace:ExtraIsland.Components"
-             xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ExtraIsland.Components.FluentClockSettings"
              x:TypeArguments="components:FluentClockConfig">
@@ -12,55 +12,55 @@
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
         <!-- ReSharper disable once Xaml.StyleClassNotFound -->
         <StackPanel Classes="settings-container animated-intro" Margin="0">
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xF361;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xF361;}"
                                        Header="精确到秒"
                                        Description="启用后,将显示秒数,并关闭分隔符闪动">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsAccurate, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE095;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE095;}"
                                        Header="启用翻页动画"
                                        Description="禁用后,动画样式将被全部替换为微微闪烁">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsSwapAnimationEnabled, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-                <controls:SettingsExpander.Items>
-                    <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xEB94;}"
+                </fa:FASettingsExpander.Footer>
+                <fa:FASettingsExpander.Items>
+                    <fa:FASettingsExpanderItem IconSource="{ci:FluentIconSource &#xEB94;}"
                                                    Content="专注模式"
                                                    Description="启用后,秒数动画将被替换为微微闪烁,避免频繁的移动分散注意力">
-                        <controls:SettingsExpanderItem.Footer>
+                        <fa:FASettingsExpanderItem.Footer>
                             <ToggleSwitch IsEnabled="{Binding Settings.IsSwapAnimationEnabled, Mode=OneWay}"
                                           IsChecked="{Binding Settings.IsFocusedMode, Mode=TwoWay}"/>
-                        </controls:SettingsExpanderItem.Footer>
-                    </controls:SettingsExpanderItem>
-                </controls:SettingsExpander.Items>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4D4;}"
+                        </fa:FASettingsExpanderItem.Footer>
+                    </fa:FASettingsExpanderItem>
+                </fa:FASettingsExpander.Items>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE4D4;}"
                                        Header="使用系统时间"
                                        Description="启用后,将直接使用系统时间,无视ClassIsland设置">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsSystemTime, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE02B;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE02B;}"
                                        Header="启用整点强调特效"
                                        Description="启用后,整点时将显示一个强调特效">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsOClockEmp, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xF273;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xF273;}"
                                        Header="秒数小字号"
                                        Description="启用后,秒数将使用较小字体展示">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsSecondsSmall, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE0CE;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE0CE;}"
                                        Header="调整布局间隙"
                                        Description="调整元素之间水平空隙">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <Slider Minimum="0" Maximum="24" 
                                 TickFrequency="1" IsSnapToTickEnabled="True"
@@ -70,8 +70,8 @@
                         <TextBlock VerticalAlignment="Center"
                                    Text="{Binding Settings.HorizontalGap, StringFormat='{}{0:F0}'}"/>
                     </StackPanel>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
             <Label HorizontalAlignment="Center" 
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland

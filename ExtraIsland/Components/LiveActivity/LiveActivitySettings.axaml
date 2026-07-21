@@ -6,17 +6,17 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:local="clr-namespace:ExtraIsland.Components"
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
-                  xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                  xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                   mc:Ignorable="d"
                   d:DesignHeight="300" d:DesignWidth="300">
     <ScrollViewer
         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LiveActivitySettings}}">
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
         <StackPanel Classes="settings-container animated-intro">
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE093;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE093;}"
                                        Header="左右间距"
                                        Description="启用后,对应侧的元素边界将收缩至适合圆角">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="(左"
                                Foreground="Gray" />
@@ -30,21 +30,21 @@
                         <Label Content="右)"
                                Foreground="Gray" />
                     </StackPanel>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE051;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE051;}"
                                        Header="启用动画"
                                        Description="禁用后,将不再播放动画,对低性能设备友好!">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsAnimationEnabled, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xF196;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xF196;}"
                                        Header="替换规则"
                                        Description="可以在此处利用正则表达式匹配并替换展示的标题">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ci:FluentIcon Glyph="&#xF191;"/>
-                </controls:SettingsExpander.Footer>
+                </fa:FASettingsExpander.Footer>
                                     <StackPanel Orientation="Vertical">
                         <DataGrid Margin="20,6,70,6"
                                   IsReadOnly="False"
@@ -86,7 +86,7 @@
                             </Button>
                         </StackPanel>
                     </StackPanel>
-            </controls:SettingsExpander>
+            </fa:FASettingsExpander>
             <Border x:Name="ConflictHintContainer"
                     Background="#1500F0F0"
                     Margin="0 0 0 5"
@@ -103,67 +103,67 @@
                         </TextBlock>
                     </StackPanel>
             </Border>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEBC8;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEBC8;}"
                                        Header="启用歌词"
                                        Description="启用后,将在组件显示歌词,使用LyricsIsland协议或LycheeLib">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsEnabled="{Binding IsLyricsIslandNotLoaded}"
                                   IsChecked="{Binding Settings.IsLyricsEnabled, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
             
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE1F5;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE1F5;}"
                                        Header="Sleepy上报"
                                        IsVisible="{Binding IsLifeModeEnabled}"
                                        Description="向一个Sleepy实例上报当前活动数据"
                                        IsExpanded="{Binding Settings.IsSleepyUploaderEnabled, Mode=OneWay}">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsSleepyUploaderEnabled, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-                <controls:SettingsExpanderItem Content="目标URL">
-                    <controls:SettingsExpanderItem.Footer>
+                </fa:FASettingsExpander.Footer>
+                <fa:FASettingsExpanderItem Content="目标URL">
+                    <fa:FASettingsExpanderItem.Footer>
                         <TextBox MinWidth="50"
                                  Foreground="{DynamicResource MaterialDesignBody}"
                                  Text="{Binding Settings.SleepyUrl}"
                                  Margin="3,0,3,0" />
-                    </controls:SettingsExpanderItem.Footer>
-                </controls:SettingsExpanderItem>
+                    </fa:FASettingsExpanderItem.Footer>
+                </fa:FASettingsExpanderItem>
                 <Expander Background="Transparent"
                           IsExpanded="False"
                           TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
                     <Expander.Header>
-                        <controls:SettingsExpanderItem Content="密钥"/>
+                        <fa:FASettingsExpanderItem Content="密钥"/>
                     </Expander.Header>
                     <TextBox MinWidth="50"
                              Foreground="{DynamicResource MaterialDesignBody}"
                              Text="{Binding Settings.SleepySecret}"
                              Margin="6,0,6,3" />
                 </Expander>
-                <controls:SettingsExpanderItem Content="设备名">
-                    <controls:SettingsExpanderItem.Footer>
+                <fa:FASettingsExpanderItem Content="设备名">
+                    <fa:FASettingsExpanderItem.Footer>
                         <TextBox MinWidth="50"
                                  Foreground="{DynamicResource MaterialDesignBody}"
                                  Text="{Binding Settings.SleepyDevice}"
                                  Margin="3,0,3,0" />
-                    </controls:SettingsExpanderItem.Footer>
-                </controls:SettingsExpanderItem>
-                <controls:SettingsExpanderItem Content="设备ID">
-                    <controls:SettingsExpanderItem.Footer>
+                    </fa:FASettingsExpanderItem.Footer>
+                </fa:FASettingsExpanderItem>
+                <fa:FASettingsExpanderItem Content="设备ID">
+                    <fa:FASettingsExpanderItem.Footer>
                         <TextBox MinWidth="20"
                                  Foreground="{DynamicResource MaterialDesignBody}"
                                  Text="{Binding Settings.SleepyDeviceId}"
                                  Margin="3,0,3,0" />
-                    </controls:SettingsExpanderItem.Footer>
-                </controls:SettingsExpanderItem>
-                <controls:SettingsExpanderItem Content="上传格式">
-                    <controls:SettingsExpanderItem.Footer>
+                    </fa:FASettingsExpanderItem.Footer>
+                </fa:FASettingsExpanderItem>
+                <fa:FASettingsExpanderItem Content="上传格式">
+                    <fa:FASettingsExpanderItem.Footer>
                         <TextBox MinWidth="20"
                                  Foreground="{DynamicResource MaterialDesignBody}"
                                  Text="{Binding Settings.SleepyPattern}"
                                  Margin="3,0,3,0" />
-                    </controls:SettingsExpanderItem.Footer>
-                </controls:SettingsExpanderItem>
-            </controls:SettingsExpander>
+                    </fa:FASettingsExpanderItem.Footer>
+                </fa:FASettingsExpanderItem>
+            </fa:FASettingsExpander>
             <Label HorizontalAlignment="Center"
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland

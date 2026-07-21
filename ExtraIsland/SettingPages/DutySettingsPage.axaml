@@ -5,7 +5,7 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:ci="http://classisland.tech/schemas/xaml/core"
                      xmlns:controls="clr-namespace:ExtraIsland.Controls"
-                     xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                     xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                      xmlns:settingPages="clr-namespace:ExtraIsland.SettingPages"
                      xmlns:sc="clr-namespace:ExtraIsland.Shared.Converters"
                      mc:Ignorable="d"
@@ -32,16 +32,16 @@
                 <Label VerticalAlignment="Center" FontSize="30">全局 · 值日表</Label>
             </StackPanel>
 
-            <controls1:InfoBar Severity="Warning" IconSource="{ci:FluentIconSource &#xF430;}" IsOpen="True"
+            <fa:FAInfoBar Severity="Warning" IconSource="{ci:FluentIconSource &#xF430;}" IsOpen="True"
                                IsClosable="False">
-                <controls1:InfoBar.Title>
+                <fa:FAInfoBar.Title>
                     本功能将只提供简单的值日表功能, 将不会增加任何奇怪或复杂的轮换方案, 如需更高级的值日表, 请移步 DutyIsland
-                </controls1:InfoBar.Title>
-            </controls1:InfoBar>
+                </fa:FAInfoBar.Title>
+            </fa:FAInfoBar>
 
-            <controls1:SettingsExpander IconSource="{ci:FluentIconSource &#xE4C4;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE4C4;}"
                                         Header="时间" IsExpanded="True">
-                <controls1:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <Border BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1"
                             Padding="8 0" Height="28" CornerRadius="14"
                             Background="{DynamicResource ControlFillColorTransparentBrush}">
@@ -51,22 +51,22 @@
                                    Content="{Binding Settings.Data.LastUpdate}" />
                         </StackPanel>
                     </Border>
-                </controls1:SettingsExpander.Footer>
+                </fa:FASettingsExpander.Footer>
 
-                <controls1:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE5C9;}"
+                <fa:FASettingsExpanderItem IconSource="{ci:FluentIconSource &#xE5C9;}"
                                                 Content="自动时间抹零" Description="开启后，每次更新都将只记录日期数据">
-                    <controls1:SettingsExpanderItem.Footer>
+                    <fa:FASettingsExpanderItem.Footer>
                         <ToggleSwitch IsChecked="{Binding Settings.Data.IsAutoShearEnabled}" />
-                    </controls1:SettingsExpanderItem.Footer>
-                </controls1:SettingsExpanderItem>
+                    </fa:FASettingsExpanderItem.Footer>
+                </fa:FASettingsExpanderItem>
 
-                <controls1:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE131;}"
+                <fa:FASettingsExpanderItem IconSource="{ci:FluentIconSource &#xE131;}"
                                                 Content="时间抹零" IsClickEnabled="True"
                                                 Click="ClearTimeButton_OnClick" />
-            </controls1:SettingsExpander>
+            </fa:FASettingsExpander>
 
-            <controls1:SettingsExpander IconSource="{ci:FluentIconSource &#xECDB;}" Header="值日列表" IsExpanded="True">
-                <controls1:SettingsExpander.Footer>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xECDB;}" Header="值日列表" IsExpanded="True">
+                <fa:FASettingsExpander.Footer>
                     <Border BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1"
                             Padding="8 0" Height="28" CornerRadius="14"
                             Background="{DynamicResource ControlFillColorTransparentBrush}">
@@ -77,9 +77,9 @@
                             <Label x:Name="PeopleOnDutyLabel" Content="{Binding Settings.PeoplesOnDutyString}" />
                         </StackPanel>
                     </Border>
-                </controls1:SettingsExpander.Footer>
+                </fa:FASettingsExpander.Footer>
 
-                <controls1:SettingsExpanderItem>
+                <fa:FASettingsExpanderItem>
                     <DataGrid x:Name="PeopleDataGrid"
                               Margin="6,6,6,0"
                               MaxHeight="240"
@@ -100,7 +100,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                                 <DataGridTemplateColumn.CellEditingTemplate>
                                     <DataTemplate>
-                                        <controls1:NumberBox SpinButtonPlacementMode="Compact"
+                                        <fa:FANumberBox SpinButtonPlacementMode="Compact"
                                                              Value="{Binding Index}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellEditingTemplate>
@@ -124,9 +124,9 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                </controls1:SettingsExpanderItem>
+                </fa:FASettingsExpanderItem>
 
-                <controls1:SettingsExpanderItem>
+                <fa:FASettingsExpanderItem>
                     <StackPanel Orientation="Horizontal" Spacing="4">
                         <Button Click="AddButton_Click">
                             <ci:IconText Glyph="&#xE00D;" Text="新建" />
@@ -143,57 +143,57 @@
                             <ci:IconText Glyph="&#xE13B;" Text="[Debug]交班" />
                         </Button>
                     </StackPanel>
-                </controls1:SettingsExpanderItem>
-            </controls1:SettingsExpander>
+                </fa:FASettingsExpanderItem>
+            </fa:FASettingsExpander>
 
-            <controls1:SettingsExpander IconSource="{ci:FluentIconSource &#xEC26;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEC26;}"
                                         Header="索引" Description="手动修改当前索引">
-                <controls1:SettingsExpander.Footer>
-                    <controls1:NumberBox MinWidth="20" SpinButtonPlacementMode="Compact"
+                <fa:FASettingsExpander.Footer>
+                    <fa:FANumberBox MinWidth="20" SpinButtonPlacementMode="Compact"
                                          Minimum="0"
                                          Value="{Binding Settings.Data.CurrentPeopleIndex}" />
-                </controls1:SettingsExpander.Footer>
-            </controls1:SettingsExpander>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
 
-            <controls1:SettingsExpander IconSource="{ci:FluentIconSource &#xE0BD;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE0BD;}"
                                         Header="循环" Description="开启后，每当列表遍历完毕，索引将自动归零">
-                <controls1:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.Data.IsCycled}" />
-                </controls1:SettingsExpander.Footer>
-            </controls1:SettingsExpander>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
 
-            <controls1:SettingsExpander IconSource="{ci:FluentIconSource &#xE304;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE304;}"
                                         IsVisible="{Binding MainSettings.Data.IsExperimentalModeActivated}"
                                         Header="自动跳过节假日" Description="自动跳过国定假日和双休日的值日轮换"
                                         IsExpanded="{Binding Settings.Data.IsHolidaySkipEnabled, Mode=OneWay}">
-                <controls1:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <StackPanel Orientation="Horizontal">
                         <controls:ExperimentalBadge />
                         <ToggleSwitch IsChecked="{Binding Settings.Data.IsHolidaySkipEnabled}" />
                     </StackPanel>
-                </controls1:SettingsExpander.Footer>
+                </fa:FASettingsExpander.Footer>
 
-                <controls1:SettingsExpanderItem>
-                    <controls1:InfoBar Severity="Informational" IconSource="{ci:FluentIconSource &#xF430;}"
+                <fa:FASettingsExpanderItem>
+                    <fa:FAInfoBar Severity="Informational" IconSource="{ci:FluentIconSource &#xF430;}"
                                        IsOpen="True" IsClosable="False">
-                        <controls1:InfoBar.Title>
+                        <fa:FAInfoBar.Title>
                             本功能使用 timor.tech API 跳过国家法定假日/调休日/双休日
-                        </controls1:InfoBar.Title>
-                    </controls1:InfoBar>
-                </controls1:SettingsExpanderItem>
+                        </fa:FAInfoBar.Title>
+                    </fa:FAInfoBar>
+                </fa:FASettingsExpanderItem>
 
-                <controls1:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE31C;}"
+                <fa:FASettingsExpanderItem IconSource="{ci:FluentIconSource &#xE31C;}"
                                                 Content="节假日跳过历史" Description="上次跳过的节假日信息">
-                    <controls1:SettingsExpanderItem.Footer>
+                    <fa:FASettingsExpanderItem.Footer>
                         <TextBlock x:Name="LastSkippedHolidayLabel"
                                    TextWrapping="Wrap"
                                    Text="暂无&#x0a;- → -" />
-                    </controls1:SettingsExpanderItem.Footer>
-                </controls1:SettingsExpanderItem>
+                    </fa:FASettingsExpanderItem.Footer>
+                </fa:FASettingsExpanderItem>
 
-                <controls1:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE31A;}"
+                <fa:FASettingsExpanderItem IconSource="{ci:FluentIconSource &#xE31A;}"
                                                 Content="即将跳过的节假日" Description="下一个将要跳过的节假日">
-                    <controls1:SettingsExpanderItem.Footer>
+                    <fa:FASettingsExpanderItem.Footer>
                         <Border BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}" BorderThickness="1"
                                 Padding="8 0" Height="28" CornerRadius="14"
                                 Background="{DynamicResource ControlFillColorTransparentBrush}">
@@ -202,27 +202,27 @@
                                        Foreground="{DynamicResource MaterialDesignBody}"
                                        Text="---" />
                         </Border>
-                    </controls1:SettingsExpanderItem.Footer>
-                </controls1:SettingsExpanderItem>
-            </controls1:SettingsExpander>
+                    </fa:FASettingsExpanderItem.Footer>
+                </fa:FASettingsExpanderItem>
+            </fa:FASettingsExpander>
 
-            <controls1:SettingsExpander IconSource="{ci:FluentIconSource &#xEFEF;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEFEF;}"
                                         Header="轮换间隔" Description="轮换到下一位间隔的天数">
-                <controls1:SettingsExpander.Footer>
-                    <controls1:NumberBox MinWidth="20" SpinButtonPlacementMode="Compact"
+                <fa:FASettingsExpander.Footer>
+                    <fa:FANumberBox MinWidth="20" SpinButtonPlacementMode="Compact"
                                          Minimum="1"
                                          Value="{Binding Settings.Data.DutyChangeDurationDays}" />
-                </controls1:SettingsExpander.Footer>
-            </controls1:SettingsExpander>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
 
-            <controls1:SettingsExpander IconSource="{ci:FluentIconSource &#xECFB;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xECFB;}"
                                         Header="轮换方式" Description="选择值日生轮换方法">
-                <controls1:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <StackPanel Orientation="Horizontal">
                         <Label VerticalAlignment="Center" 
                                VerticalContentAlignment="Center"
                                IsVisible="{Binding Settings.Data.DutyState, Converter={StaticResource DutyStateToNBoxVisibilityBoolConverter}}">N=</Label>
-                        <controls1:NumberBox
+                        <fa:FANumberBox
                             IsVisible="{Binding Settings.Data.DutyState, Converter={StaticResource DutyStateToNBoxVisibilityBoolConverter}}"
                             Value="{Binding Settings.Data.NumberOfPeoples}"
                             SpinButtonPlacementMode="Compact"
@@ -238,8 +238,8 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
-                </controls1:SettingsExpander.Footer>
-            </controls1:SettingsExpander>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
         </StackPanel>
     </ScrollViewer>
 </ci:SettingsPageBase>

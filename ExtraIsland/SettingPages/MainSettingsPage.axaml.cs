@@ -67,7 +67,7 @@ public partial class MainSettingsPage : SettingsPageBase {
     }
     public string StaticAnnouncement { get => "插件社区Q群 ClassIsPlugins 现已建立! 点击下方按钮, 即刻加入!"; }
 
-    void AnnouncementBar_OnClosed(InfoBar sender,InfoBarClosedEventArgs args) {
+    void AnnouncementBar_OnClosed(FAInfoBar faInfoBar,FAInfoBarClosedEventArgs faInfoBarClosedEventArgs) {
         Settings.LastAcceptedAnnouncement = StaticAnnouncement;
     }
     
