@@ -34,7 +34,7 @@ stages:
 
 build_job:
   stage: build
-  image: mcr.microsoft.com/dotnet/sdk:8.0
+  image: mcr.microsoft.com/dotnet/sdk:10.0
   variables:
     ATTEST_BUILD_ARTIFACTS: true
   rules:

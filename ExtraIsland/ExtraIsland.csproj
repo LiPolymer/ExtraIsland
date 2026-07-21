@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0-windows</TargetFramework>
+		<TargetFramework>net10.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
         <UseWPF>true</UseWPF>
@@ -10,7 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ClassIsland.PluginSdk" Version="2.0.0-dev-v2">
+		<PackageReference Include="ClassIsland.PluginSdk" Version="2.1.1">
 			<ExcludeAssets>runtime; native</ExcludeAssets>
 		</PackageReference>
 		<PackageReference Include="LycheeLib.Interface" Version="1.0.0" />

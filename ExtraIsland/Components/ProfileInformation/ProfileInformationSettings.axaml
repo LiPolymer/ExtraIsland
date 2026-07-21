@@ -2,7 +2,7 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
                   xmlns:components="clr-namespace:ExtraIsland.Components"
-                  xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                  xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                   xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
                   x:Class="ExtraIsland.Components.ProfileInformationSettings"
                   x:TypeArguments="components:ProfileInformationConfig">
@@ -13,10 +13,10 @@
     <ScrollViewer
         DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=components:ProfileInformationSettings}}">
         <StackPanel Classes="settings-container animated-intro">
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE4B4;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE4B4;}"
                                        Header="信息类型"
                                        Description="选择要显示的信息类型">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ComboBox
                         MinWidth="20"
                         SelectedItem="{Binding Settings.Type}"
@@ -27,19 +27,19 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE486;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE486;}"
                                        Header="简洁模式"
                                        Description="启用时, 将只显示信息最关键的部分">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsShortModeEnabled, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE310;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE310;}"
                                        Header="每周第一天"
                                        Description="设置每周的第一天是周几">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ComboBox
                         MinWidth="20"
                         SelectedItem="{Binding Settings.FirstDayOfWeek, Mode=TwoWay}"
@@ -50,8 +50,8 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
             <Label HorizontalAlignment="Center" 
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland

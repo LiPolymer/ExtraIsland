@@ -7,7 +7,7 @@
                   xmlns:local="clr-namespace:ExtraIsland.Components"
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
                   xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
-                  xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                  xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                   mc:Ignorable="d"
                   d:DesignHeight="300" d:DesignWidth="300">
     <ci:ComponentBase.Resources>
@@ -50,10 +50,10 @@
                         </TextBlock>
                     </DockPanel>
             </Border>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE21D;}" 
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE21D;}" 
                                        Header="数据来源"
                                        Description="选择使用的API">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <Grid>
                         <ComboBox
                             MinWidth="20"
@@ -66,12 +66,12 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </Grid>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xF321;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xF321;}"
                                        Header="字数限制"
                                        Description="当字数大于该设置时,不显示并重新获取(一言为API级限制),设为0即禁用">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <Grid>
                         <StackPanel Orientation="Horizontal">
                             <NumericUpDown
@@ -83,12 +83,12 @@
                                 MinWidth="30"/>
                         </StackPanel>
                     </Grid>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEF75;}" 
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEF75;}" 
                                        Header="刷新间隔"
                                        Description="设定自动刷新的时间间隔,单位为秒,设为0即禁用">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <StackPanel Orientation="Horizontal">
                         <NumericUpDown
                             Value="{Binding Settings.UpdateTimeGapSeconds, Mode=TwoWay}"
@@ -98,12 +98,12 @@
                             InputMethod.IsInputMethodEnabled="False"
                             MinWidth="30" />
                     </StackPanel>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEBFA;}" 
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEBFA;}" 
                                        Header="额外信息展示方法"
                                        Description="选择如何展示额外信息,没有则不展示">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <Grid>
                         <ComboBox
                             MinWidth="20"
@@ -116,27 +116,27 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </Grid>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEC0C;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEC0C;}"
                                        Header="展示作者"
                                        Description="将作者作为额外信息展示,未获取到则不显示">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsAuthorShowEnabled, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEC08;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEC08;}"
                                        Header="展示出处"
                                        Description="将出处作为额外信息展示,未获取到则不显示">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsTitleShowEnabled, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEE39;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEE39;}"
                                        IsVisible="{Binding Settings.AttributesRule, Converter={StaticResource AttributesDisplayVisibilityConverter}, Mode=OneWay}"
                                        Header="额外信息展示时长"
                                        Description="设置额外信息被展示的时长">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <Grid>
                         <StackPanel Orientation="Horizontal">
                             <NumericUpDown
@@ -149,42 +149,42 @@
                                 MinWidth="30"/>
                         </StackPanel>
                     </Grid>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE051;}"
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE051;}"
                                        Header="启用动画"
                                        Description="禁用后,将不再播放动画,对低性能设备友好!">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ToggleSwitch IsChecked="{Binding Settings.IsAnimationEnabled, Mode=TwoWay}"/>
-                </controls:SettingsExpander.Footer>
-                <controls:SettingsExpander.Items>
-                    <controls:SettingsExpanderItem IconSource="{ci:FluentIconSource &#xE095;}"
+                </fa:FASettingsExpander.Footer>
+                <fa:FASettingsExpander.Items>
+                    <fa:FASettingsExpanderItem IconSource="{ci:FluentIconSource &#xE095;}"
                                                    Content="启用翻页动画"
                                                    Description="启用后,切换动画样式将被替换为翻页(额外信息不受影响)">
-                        <controls:SettingsExpanderItem.Footer>
+                        <fa:FASettingsExpanderItem.Footer>
                             <ToggleSwitch IsChecked="{Binding Settings.IsSwapAnimationEnabled, Mode=TwoWay}"/>
-                        </controls:SettingsExpanderItem.Footer>
-                    </controls:SettingsExpanderItem>
-                </controls:SettingsExpander.Items>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xE3DA;}"
+                        </fa:FASettingsExpanderItem.Footer>
+                    </fa:FASettingsExpanderItem>
+                </fa:FASettingsExpander.Items>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE3DA;}"
                                        Header="排除列表"
                                        Description="包含位于此列表中的字符串的内容更新将被忽略,一行一个">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <ci:FluentIcon Glyph="&#xEBD8;"/>
-                </controls:SettingsExpander.Footer>
+                </fa:FASettingsExpander.Footer>
                     <TextBox Text="{Binding Settings.IgnoreListString}"
                              Background="Transparent"
                              AcceptsReturn="True"
                              VerticalContentAlignment="Top"
                              TextWrapping="Wrap"
                              Margin="6,6,6,6"/>
-            </controls:SettingsExpander>
-            <controls:SettingsExpander IconSource="{ci:FluentIconSource &#xEDCD;}"
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEDCD;}"
                                        Header="高级 · 接口参数"
                                        Description="自定义接口参数,留空即不应用">
-                <controls:SettingsExpanderItem Content="一言">
-                    <controls:SettingsExpanderItem.Footer>
+                <fa:FASettingsExpanderItem Content="一言">
+                    <fa:FASettingsExpanderItem.Footer>
                         <StackPanel Orientation="Horizontal">
                             <Label HorizontalAlignment="Right" 
                                    Padding="0"
@@ -201,10 +201,10 @@
                                      VerticalAlignment="Center"
                                      MinWidth="30" />
                         </StackPanel>
-                    </controls:SettingsExpanderItem.Footer>
-                </controls:SettingsExpanderItem>
-                <controls:SettingsExpanderItem Content="诏预">
-                    <controls:SettingsExpanderItem.Footer>
+                    </fa:FASettingsExpanderItem.Footer>
+                </fa:FASettingsExpanderItem>
+                <fa:FASettingsExpanderItem Content="诏预">
+                    <fa:FASettingsExpanderItem.Footer>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                             <Label Foreground="{DynamicResource MaterialDesignBodyLight}"
                                    Padding="0"
@@ -220,9 +220,9 @@
                                 .json
                             </Label>
                         </StackPanel>
-                    </controls:SettingsExpanderItem.Footer>
-                </controls:SettingsExpanderItem>
-            </controls:SettingsExpander>
+                    </fa:FASettingsExpanderItem.Footer>
+                </fa:FASettingsExpanderItem>
+            </fa:FASettingsExpander>
             <Label HorizontalAlignment="Center"
                    Foreground="{DynamicResource MaterialDesignBodyLight}">
                 Added by ExtraIsland

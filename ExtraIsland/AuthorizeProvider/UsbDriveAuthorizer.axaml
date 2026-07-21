@@ -8,7 +8,7 @@
                                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
                                  xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                                  xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
-                                 xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                                 xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                                  mc:Ignorable="d"
                                  Loaded="UsbDriveAuthorizer_OnLoaded"
                                  Unloaded="UsbDriveAuthorizer_OnUnloaded">
@@ -33,17 +33,17 @@
                     </TextBlock>
                 </StackPanel>
             </Border>
-            <controls:SettingsExpander x:Name="ModeSettingsControl"
+            <fa:FASettingsExpander x:Name="ModeSettingsControl"
                                        Margin="4"
                                        IconSource="{ci:LucideIconSource Glyph=&#xE31F;}"
                                        Header="使用文件模式"
                                        Description="以自动放置的密钥文件而不是S/N作为验证依据">
-                <controls:SettingsExpander.Footer>
+                <fa:FASettingsExpander.Footer>
                     <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
                     <ToggleSwitch IsChecked="{Binding Settings.IsFileModeEnabled, Mode=OneTime}"
                                   Click="SetCredential"/>
-                </controls:SettingsExpander.Footer>
-            </controls:SettingsExpander>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
             <StackPanel Orientation="Horizontal">
                 <Label IsVisible="{Binding Settings.Operating, Converter={StaticResource InverseBooleanConverter}}">
                     <Button Click="SetCredential"
