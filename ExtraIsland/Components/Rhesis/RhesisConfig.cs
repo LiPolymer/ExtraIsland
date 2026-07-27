@@ -67,7 +67,7 @@ public class RhesisConfig : ObservableObject {
         Separate
     }
 
-    // 兼容旧版单选来源配置；迁移完成后不再参与选源。
+    // 兼容旧版单选来源配置, 在v2移除
     [JsonPropertyName("DataSource")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public LegacyRhesisDataSource? LegacyDataSource { get; set; }
@@ -136,6 +136,8 @@ public class RhesisConfig : ObservableObject {
             case LegacyRhesisDataSource.Hitokoto:
                 EnableProvider(HitokotoRhesisProvider.ProviderId,1);
                 break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
