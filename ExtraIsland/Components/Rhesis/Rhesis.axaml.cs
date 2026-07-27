@@ -14,7 +14,7 @@ namespace ExtraIsland.Components;
                   "FBB380C2-5480-4FED-8349-BA5F4EAD2688",
                   "名句一言",
                   "\uE3F4",
-                  "显示一句古今名言,可使用三个API"
+                  "显示一句古今名言，支持可扩展内容来源"
               )]
 public partial class Rhesis : ComponentBase<RhesisConfig> {
     public Rhesis(ILessonsService lessonsService) {
@@ -88,16 +88,11 @@ public partial class Rhesis : ComponentBase<RhesisConfig> {
     }
 
     void Update() {
-        Task.Run(() => {
-            RhesisData data = _rhesisHandler.LegacyGet(Settings.DataSource,Settings.HitokotoProp switch {
-                                                           "" => "https://v1.hitokoto.cn/",
-                                                           _ => $"https://v1.hitokoto.cn/?{Settings.HitokotoLengthArgs}{Settings.HitokotoProp}"
-                                                       },
-                                                       Settings.SainticProp switch {
-                                                           "" => "https://hub.saintic.com/openservice/sentence/all.json",
-                                                           _ => $"https://hub.saintic.com/openservice/sentence/{Settings.SainticProp}.json"
-                                                       },
-                                                       Settings.LengthLimitation);
+        Task.Run(async () => {
+            Settings.EnsureProviderSettings(RhesisHandler.Providers);
+            RhesisData data = await _rhesisHandler.GetAsync(
+                Settings.ProviderSettings,
+                Settings.LengthLimitation);
             Showing = data.Content;
             Title = data.Title;
             Author = data.Author;

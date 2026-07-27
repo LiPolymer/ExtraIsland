@@ -13,9 +13,7 @@
     <ci:ComponentBase.Resources>
         <converters:DoubleToStringConverter x:Key="DoubleToStringConverter" />
         <ci:IntToStringConverter x:Key="IntToStringConverter" />
-        <converters:HitokotoVisibilityConverter x:Key="HitokotoVisibilityConverter"/>
         <converters:SeparateAttributesDisplayVisibilityConverter x:Key="AttributesDisplayVisibilityConverter"/>
-        <local:LimitIntToArgConverter x:Key="LimitIntToArgConverter"/>
         <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
     </ci:ComponentBase.Resources>
     <ScrollViewer
@@ -36,38 +34,41 @@
                     </DockPanel>
                 </Grid>
             </Border>
-            <Border Background="#15ff0000"
-                    IsVisible="{Binding Settings.DataSource, Converter={StaticResource HitokotoVisibilityConverter}, Mode= OneWay}"
-                    Margin="0 0 0 5"
-                    CornerRadius="4">
-                    <DockPanel Margin="8 4">
-                        <ci:FluentIcon Glyph="&#xE02B;"/>
-                        <TextBlock VerticalAlignment="Center"
-                                   Margin="4 2 0 0">
-                            <Run>警告   近期收到大量反馈 </Run>
-                            <Bold>一言源中存在部分不良内容</Bold>
-                            <Run> 请注意进行相应过滤设置</Run>
-                        </TextBlock>
-                    </DockPanel>
-            </Border>
-            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE21D;}" 
-                                       Header="数据来源"
-                                       Description="选择使用的API">
-                <fa:FASettingsExpander.Footer>
-                    <Grid>
-                        <ComboBox
-                            MinWidth="20"
-                            SelectedItem="{Binding Settings.DataSource}"
-                            ItemsSource="{Binding DataSources}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </Grid>
-                </fa:FASettingsExpander.Footer>
-            </fa:FASettingsExpander>
+            <TextBlock Text="内容来源"
+                       FontWeight="SemiBold"
+                       Margin="4 8 4 4"/>
+            <ItemsControl ItemsSource="{Binding ProviderItems}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE21D;}"
+                                               Header="{Binding DisplayName}"
+                                               Description="{Binding Description}">
+                            <fa:FASettingsExpander.Footer>
+                                <ToggleSwitch IsChecked="{Binding Configuration.IsEnabled, Mode=TwoWay}"/>
+                            </fa:FASettingsExpander.Footer>
+                            <fa:FASettingsExpander.Items>
+                                <fa:FASettingsExpanderItem Content="概率权重"
+                                                           Description="数值越大，被选中的概率越高；设为 0 等同于不参与选择">
+                                    <fa:FASettingsExpanderItem.Footer>
+                                        <NumericUpDown Value="{Binding Configuration.Weight, Mode=TwoWay}"
+                                                       Minimum="0"
+                                                       Maximum="10000"
+                                                       FormatString="0"
+                                                       InputMethod.IsInputMethodEnabled="False"
+                                                       MinWidth="60"/>
+                                    </fa:FASettingsExpanderItem.Footer>
+                                </fa:FASettingsExpanderItem>
+                                <fa:FASettingsExpanderItem Content="来源配置"
+                                                           IsVisible="{Binding HasSettings}">
+                                    <fa:FASettingsExpanderItem.Footer>
+                                        <ContentControl Content="{Binding SettingsControl}"/>
+                                    </fa:FASettingsExpanderItem.Footer>
+                                </fa:FASettingsExpanderItem>
+                            </fa:FASettingsExpander.Items>
+                        </fa:FASettingsExpander>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
             <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xF321;}"
                                        Header="字数限制"
                                        Description="当字数大于该设置时,不显示并重新获取(一言为API级限制),设为0即禁用">
@@ -179,49 +180,6 @@
                              VerticalContentAlignment="Top"
                              TextWrapping="Wrap"
                              Margin="6,6,6,6"/>
-            </fa:FASettingsExpander>
-            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEDCD;}"
-                                       Header="高级 · 接口参数"
-                                       Description="自定义接口参数,留空即不应用">
-                <fa:FASettingsExpanderItem Content="一言">
-                    <fa:FASettingsExpanderItem.Footer>
-                        <StackPanel Orientation="Horizontal">
-                            <Label HorizontalAlignment="Right" 
-                                   Padding="0"
-                                   Foreground="{DynamicResource MaterialDesignBodyLight}"
-                                   VerticalContentAlignment="Center" VerticalAlignment="Center">
-                                v1.hitokoto.cn/?
-                            </Label>
-                            <Label HorizontalAlignment="Right" 
-                                   Padding="0"
-                                   Foreground="{DynamicResource MaterialDesignBodyLight}"
-                                   VerticalContentAlignment="Center" VerticalAlignment="Center"
-                                   Content="{Binding Settings.LengthLimitation, Converter={StaticResource LimitIntToArgConverter}}"/>
-                            <TextBox Text="{Binding Settings.HitokotoProp, Mode=TwoWay}"
-                                     VerticalAlignment="Center"
-                                     MinWidth="30" />
-                        </StackPanel>
-                    </fa:FASettingsExpanderItem.Footer>
-                </fa:FASettingsExpanderItem>
-                <fa:FASettingsExpanderItem Content="诏预">
-                    <fa:FASettingsExpanderItem.Footer>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                            <Label Foreground="{DynamicResource MaterialDesignBodyLight}"
-                                   Padding="0"
-                                   VerticalContentAlignment="Center" VerticalAlignment="Center">
-                                open.saintic.com/api/sentence/
-                            </Label>
-                            <TextBox Text="{Binding Settings.SainticProp, Mode=TwoWay}"
-                                     VerticalAlignment="Center"
-                                     MinWidth="30" />
-                            <Label Foreground="{DynamicResource MaterialDesignBodyLight}"
-                                   Padding="0"
-                                   VerticalContentAlignment="Center" VerticalAlignment="Center">
-                                .json
-                            </Label>
-                        </StackPanel>
-                    </fa:FASettingsExpanderItem.Footer>
-                </fa:FASettingsExpanderItem>
             </fa:FASettingsExpander>
             <Label HorizontalAlignment="Center"
                    Foreground="{DynamicResource MaterialDesignBodyLight}">

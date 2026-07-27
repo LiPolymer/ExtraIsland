@@ -85,6 +85,11 @@ public class Plugin : PluginBase {
         services.AddHostedService<ServicesFetcherService>();
         services.AddHostedService<Register>();
         
+        // Rhesis providers
+        RhesisHandler.RegisterProvider(new HitokotoRhesisProvider());
+        RhesisHandler.RegisterProvider(new JinrishiciRhesisProvider());
+        RhesisHandler.RegisterProvider(new SainticRhesisProvider());
+
         //Components
         services.AddComponent<BetterCountdown,BetterCountdownSettings>();
         services.AddComponent<FluentClock,FluentClockSettings>();

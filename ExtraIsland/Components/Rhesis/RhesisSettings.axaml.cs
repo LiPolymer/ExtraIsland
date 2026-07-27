@@ -1,48 +1,39 @@
-﻿using System.Text.RegularExpressions;
-using Avalonia.Data.Converters;
+using System.Collections.ObjectModel;
+using Avalonia.Controls;
 using ClassIsland.Core.Abstractions.Controls;
-using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
 
 namespace ExtraIsland.Components;
 
 public partial class RhesisSettings : ComponentBase<RhesisConfig> {
     public RhesisSettings() {
-        MainConfig = GlobalConstants.Handlers.MainConfig!.Data;
         InitializeComponent();
+        AttachedToVisualTree += (_,_) => RefreshProviderItems();
     }
 
-    public MainConfigData MainConfig { get; set; } 
-        
-    [GeneratedRegex("[^0-9]+")]
-    private static partial Regex NumberRegex();
-    
-    public List<RhesisDataSource> DataSources { get; } = [
-        RhesisDataSource.All,
-        RhesisDataSource.Hitokoto,
-        RhesisDataSource.Jinrishici,
-        RhesisDataSource.Saint,
-        RhesisDataSource.SaintJinrishici
-    ];
-    
+    public ObservableCollection<RhesisProviderSettingsItem> ProviderItems { get; } = [];
+
     public List<RhesisConfig.AttributesDisplayRule> AttributesRules { get; } = [
         RhesisConfig.AttributesDisplayRule.Sametime,
         RhesisConfig.AttributesDisplayRule.Separate
     ];
-}
 
-public class LimitIntToArgConverter : IValueConverter {
-    public object Convert(object? value,Type targetType,object? parameter,
-        System.Globalization.CultureInfo culture) {
-        return (int)value! switch {
-            0 => "",
-            _ => $"max_length={((int)value).ToString()}&"
-        };
-    }
-
-    public object ConvertBack(object? value,Type targetType,object? parameter,
-        System.Globalization.CultureInfo culture) {
-        return 0;
+    void RefreshProviderItems() {
+        Settings.EnsureProviderSettings(RhesisHandler.Providers);
+        ProviderItems.Clear();
+        foreach (IRhesisProvider provider in RhesisHandler.Providers) {
+            ProviderItems.Add(new RhesisProviderSettingsItem(
+                provider,
+                Settings.ProviderSettings[provider.Id]));
+        }
     }
 }
 
+public sealed class RhesisProviderSettingsItem(IRhesisProvider provider,RhesisProviderConfig configuration) {
+    public string Id { get; } = provider.Id;
+    public string DisplayName { get; } = provider.DisplayName;
+    public string Description { get; } = provider.Description;
+    public RhesisProviderConfig Configuration { get; } = configuration;
+    public Control? SettingsControl { get; } = (provider as IRhesisProviderSettingsFactory)?.CreateSettingsControl(configuration);
+    public bool HasSettings { get => SettingsControl != null; }
+}

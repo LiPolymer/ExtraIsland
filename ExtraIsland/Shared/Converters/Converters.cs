@@ -132,22 +132,6 @@ public class DoubleMultipleConverter : IValueConverter
     }
 }
 
-public class HitokotoVisibilityConverter : IValueConverter {
-    public object Convert(object? value,Type targetType,object? parameter,
-        CultureInfo culture) {
-        return (RhesisDataSource)value! switch {
-            RhesisDataSource.All => true,
-            RhesisDataSource.Hitokoto => true,
-            _ => false
-        };
-    }
-
-    public object ConvertBack(object? value,Type targetType,object? parameter,
-        CultureInfo culture) {
-        throw new NotSupportedException();
-    }
-}
-
 public class SeparateAttributesDisplayVisibilityConverter : IValueConverter {
     public object Convert(object? value,Type targetType,object? parameter,
         CultureInfo culture) {
