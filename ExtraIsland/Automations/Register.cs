@@ -3,6 +3,7 @@ using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Extensions.Registry;
 using ClassIsland.Shared;
 using ExtraIsland.Automations.Actions;
+using ExtraIsland.Automations.Data;
 using ExtraIsland.Automations.Rules;
 using ExtraIsland.Automations.Triggers;
 using ExtraIsland.Shared;
@@ -86,8 +87,21 @@ public class Register : IHostedService {
                             },
                             DropdownUseNumbers = false,
                             InlineField = false,
-                            InlineBlock = false,
-                            IsRule = false
+                            InlineBlock = false
+                        },
+                        new BlockMetadata {
+                            Id = "extraIsland.action.doSpeech",
+                            Name = "语音播报",
+                            Icon = ("语音播报", "\uE5C7"),
+                            Args = new Dictionary<string,MetaArgsBase> {
+                                ["Text"] = new CommonMetaArgs {
+                                    Name = "要播报的文本",
+                                    Type = MetaType.text
+                                }
+                            },
+                            DropdownUseNumbers = false,
+                            InlineField = false,
+                            InlineBlock = false
                         }
                     ],
                     Rules = [
@@ -98,8 +112,7 @@ public class Register : IHostedService {
                             Args = [],
                             DropdownUseNumbers = false,
                             InlineField = false,
-                            InlineBlock = false,
-                            IsRule = true
+                            InlineBlock = false
                         },
                         new BlockMetadata {
                             Id = "extraIsland.rule.currentTeacherIs",
@@ -113,8 +126,7 @@ public class Register : IHostedService {
                             },
                             DropdownUseNumbers = false,
                             InlineField = false,
-                            InlineBlock = false,
-                            IsRule = true
+                            InlineBlock = false
                         },
                         new BlockMetadata {
                             Id = "extraIsland.rule.nextTeacherIs",
@@ -128,8 +140,7 @@ public class Register : IHostedService {
                             },
                             DropdownUseNumbers = false,
                             InlineField = false,
-                            InlineBlock = false,
-                            IsRule = true
+                            InlineBlock = false
                         },
                         new BlockMetadata {
                             Id = "extraIsland.rule.flagIs",
@@ -147,8 +158,24 @@ public class Register : IHostedService {
                             },
                             DropdownUseNumbers = false,
                             InlineField = false,
-                            InlineBlock = false,
-                            IsRule = true
+                            InlineBlock = false
+                        }
+                    ],
+                    Data = [
+                        new BlockMetadata
+                        {
+                            Id = "extraIsland.data.getFlag",
+                            Name = "读标志",
+                            Icon = ("读标志","\uE844"),
+                            Args = new Dictionary<string,MetaArgsBase> {
+                                ["TargetFlag"] = new CommonMetaArgs {
+                                    Name = "ID",
+                                    Type = MetaType.text
+                                }
+                            },
+                            DropdownUseNumbers = false,
+                            InlineField = false,
+                            InlineBlock = false
                         }
                     ]
                 };
@@ -160,8 +187,7 @@ public class Register : IHostedService {
                         Args = [],
                         DropdownUseNumbers = false,
                         InlineField = false,
-                        InlineBlock = false,
-                        IsRule = false
+                        InlineBlock = false
                     });
                     if (GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) {
                         regData.Actions.Add(new BlockMetadata {
@@ -171,28 +197,23 @@ public class Register : IHostedService {
                             Args = [],
                             DropdownUseNumbers = false,
                             InlineField = false,
-                            InlineBlock = false,
-                            IsRule = false
+                            InlineBlock = false
                         });
                     }
                 }
-                // 将语音播报加入 SAI 注册列表
-                regData.Actions.Add(new BlockMetadata {
-                    Id = "extraIsland.action.doSpeech",
-                    Name = "语音播报",
-                    Icon = ("语音播报", "\uE5C7"),
-                    Args = new Dictionary<string,MetaArgsBase> {
-                        ["Text"] = new CommonMetaArgs {
-                            Name = "要播报的文本",
-                            Type = MetaType.text
-                        }
-                    },
-                    DropdownUseNumbers = false,
-                    InlineField = false,
-                    InlineBlock = false,
-                    IsRule = false
-                });
                 saiServerService.RegisterBlocks("ExtraIsland", regData);
+                
+                saiServerService.RegisterDataGetter<GetFlagConfig>("extraIsland.data.getFlag",data => {
+                    if (data is not GetFlagConfig config) {
+                        return Task.FromResult("???");
+                    }
+                    Dictionary<string,string> merged = GlobalConstants.Handlers.PersistedFlagHandler?.FlagsTable != null
+                        ? new Dictionary<string, string>(GlobalConstants.Handlers.PersistedFlagHandler.FlagsTable)
+                        : [];
+                    foreach (KeyValuePair<string,string> kv in Flag.Flags)
+                        merged[kv.Key] = kv.Value; // 内存标志覆盖持久化标志
+                    return Task.FromResult(merged.GetValueOrDefault(config.TargetFlag,"[未设置值]"));
+                });
             };
         }
     }
