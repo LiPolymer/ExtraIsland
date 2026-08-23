@@ -162,8 +162,7 @@ public class Register : IHostedService {
                         }
                     ],
                     Data = [
-                        new BlockMetadata
-                        {
+                        new BlockMetadata {
                             Id = "extraIsland.data.getFlag",
                             Name = "读标志",
                             Icon = ("读标志","\uE844"),
@@ -173,6 +172,15 @@ public class Register : IHostedService {
                                     Type = MetaType.text
                                 }
                             },
+                            DropdownUseNumbers = false,
+                            InlineField = false,
+                            InlineBlock = false
+                        },                        
+                        new BlockMetadata {
+                            Id = "extraIsland.data.getOnDuty",
+                            Name = "获取当前值日生",
+                            Icon = ("获取当前值日生","\uECDB"),
+                            Args = [],
                             DropdownUseNumbers = false,
                             InlineField = false,
                             InlineBlock = false
@@ -203,17 +211,8 @@ public class Register : IHostedService {
                 }
                 saiServerService.RegisterBlocks("ExtraIsland", regData);
                 
-                saiServerService.RegisterDataGetter<GetFlagConfig>("extraIsland.data.getFlag",data => {
-                    if (data is not GetFlagConfig config) {
-                        return Task.FromResult("???");
-                    }
-                    Dictionary<string,string> merged = GlobalConstants.Handlers.PersistedFlagHandler?.FlagsTable != null
-                        ? new Dictionary<string, string>(GlobalConstants.Handlers.PersistedFlagHandler.FlagsTable)
-                        : [];
-                    foreach (KeyValuePair<string,string> kv in Flag.Flags)
-                        merged[kv.Key] = kv.Value; // 内存标志覆盖持久化标志
-                    return Task.FromResult(merged.GetValueOrDefault(config.TargetFlag,"[未设置值]"));
-                });
+                saiServerService.RegisterDataGetter<GetFlag>("extraIsland.data.getFlag",GetFlag.Getter);
+                saiServerService.RegisterDataGetter<GetFlag>("extraIsland.data.getOnDuty",GetOnDuty.Getter);
             };
         }
     }
