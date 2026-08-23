@@ -92,7 +92,7 @@ public class Register : IHostedService {
                         new BlockMetadata {
                             Id = "extraIsland.action.doSpeech",
                             Name = "语音播报",
-                            Icon = ("语音播报", "\uE5C7"),
+                            Icon = ("语音播报", "\uED53"),
                             Args = new Dictionary<string,MetaArgsBase> {
                                 ["Text"] = new CommonMetaArgs {
                                     Name = "要播报的文本",
@@ -184,6 +184,60 @@ public class Register : IHostedService {
                             DropdownUseNumbers = false,
                             InlineField = false,
                             InlineBlock = false
+                        },
+                        new BlockMetadata {
+                            Id = "extraIsland.data.getRhesis",
+                            Name = "获取名句",
+                            Icon = ("获取名句","\uE3F4"),
+                            Args = new Dictionary<string,MetaArgsBase> {
+                                ["Dummy"] = new CommonMetaArgs {
+                                    Name = "",
+                                    Type = MetaType.dummy
+                                },
+                                ["HitokotoDummy"] = new CommonMetaArgs {
+                                    Name = "一言",
+                                    Type = MetaType.dummy
+                                },
+                                ["HitokotoWeight"] = new CommonMetaArgs {
+                                    Name = "├ 权重",
+                                    Type = MetaType.number
+                                },
+                                ["HitokotoQuery"] = new CommonMetaArgs {
+                                    Name = "╰ 附加查询参数",
+                                    Type = MetaType.text
+                                },
+                                ["JinrishiciDummy"] = new CommonMetaArgs {
+                                    Name = "今日诗词",
+                                    Type = MetaType.dummy
+                                },
+                                ["JinrishiciWeight"] = new CommonMetaArgs {
+                                    Name = "╰ 权重",
+                                    Type = MetaType.number
+                                },
+                                ["SainticDummy"] = new CommonMetaArgs {
+                                    Name = "诏预",
+                                    Type = MetaType.dummy
+                                },
+                                ["SainticWeight"] = new CommonMetaArgs {
+                                    Name = "├ 权重",
+                                    Type = MetaType.number
+                                },
+                                ["SainticPath"] = new CommonMetaArgs {
+                                    Name = "╰ 接口路径",
+                                    Type = MetaType.text
+                                },
+                                ["LengthLimitation"] = new CommonMetaArgs {
+                                    Name = "字数限制",
+                                    Type = MetaType.number
+                                },
+                                ["IgnoreListString"] = new CommonMetaArgs {
+                                    Name = "排除列表(回车分隔)",
+                                    Type = MetaType.text
+                                }
+                            },
+                            DropdownUseNumbers = false,
+                            InlineField = false,
+                            InlineBlock = false
                         }
                     ]
                 };
@@ -213,6 +267,7 @@ public class Register : IHostedService {
                 
                 saiServerService.RegisterDataGetter<GetFlag>("extraIsland.data.getFlag",GetFlag.Getter);
                 saiServerService.RegisterDataGetter<GetFlag>("extraIsland.data.getOnDuty",GetOnDuty.Getter);
+                saiServerService.RegisterDataGetter<GetRhesis>("extraIsland.data.getRhesis",GetRhesis.Getter);
             };
         }
     }
