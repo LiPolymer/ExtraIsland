@@ -19,6 +19,7 @@ namespace ExtraIsland.SettingPages;
 [SettingsPageInfo("extraisland.duty","值日表","\uECDB","\uECDA")]
 public partial class DutySettingsPage : SettingsPageBase {
     bool _isUpdatingHolidayInfo = false; // 防止循环更新的标志
+    readonly IHolidayService _holidayService;
     public OnDutyPersistedConfigHandler Settings { get; }
     public MainConfigHandler MainSettings { get; }
     
@@ -27,9 +28,10 @@ public partial class DutySettingsPage : SettingsPageBase {
         OnDutyPersistedConfigData.DutyStateData.InOut
     ];
 
-    public DutySettingsPage() {
-        Settings = GlobalConstants.Handlers.OnDuty!;
-        MainSettings = GlobalConstants.Handlers.MainConfig!;
+    public DutySettingsPage(OnDutyPersistedConfigHandler onDutyHandler,MainConfigHandler mainConfig,IHolidayService holidayService) {
+        Settings = onDutyHandler;
+        MainSettings = mainConfig;
+        _holidayService = holidayService;
         InitializeComponent();
         
         UpdateOnDuty();
@@ -96,7 +98,7 @@ public partial class DutySettingsPage : SettingsPageBase {
             // 异步获取下一个节假日信息
             _ = Task.Run(async () => {
                 try {
-                    (DateTime Date, string Name)? nextHoliday = await HolidayService.GetNextHolidayAsync(DateTime.Today);
+                    (DateTime Date, string Name)? nextHoliday = await _holidayService.GetNextHolidayAsync(DateTime.Today);
                     
                     Dispatcher.UIThread.Invoke(() => {
                         try {

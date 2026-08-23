@@ -3,7 +3,6 @@ using ClassIsland.Core.Abstractions.Automation;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Attributes;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ExtraIsland.Automations.Rules;
 using ExtraIsland.Shared;
 
 namespace ExtraIsland.Automations.Actions;
@@ -32,37 +31,25 @@ public partial class SetFlagConfig : ObservableRecipient {
 /// </summary>
 [ActionInfo("extraIsland.action.setFlag", "设标志", "\uE844")]
 public class SetFlagAction : ActionBase<SetFlagConfig> {
+    readonly IFlagService _flagService;
+
+    public SetFlagAction(IFlagService flagService) {
+        _flagService = flagService;
+    }
+
     protected override Task OnInvoke() {
         base.OnInvoke();
         SetFlagConfig settings = Settings;
-        if (settings.IsPersisted) {
-            WriteDict(GlobalConstants.Handlers.PersistedFlagHandler!.FlagsTable, settings.TargetFlag, settings.FlagContent);
-            GlobalConstants.Handlers.PersistedFlagHandler.Save();
-        } else {
-            WriteDict(Flag.Flags, settings.TargetFlag, settings.FlagContent);
-        }
-        Dispatcher.UIThread.Invoke(() => {
-            GlobalConstants.HostInterfaces.RulesetService?.NotifyStatusChanged();
-        });
+        _flagService.SetValue(settings.TargetFlag,settings.FlagContent,settings.IsPersisted);
+        Dispatcher.UIThread.Invoke(() => _flagService.NotifyStatusChanged());
         return Task.CompletedTask;
     }
     
     protected override Task OnRevert() {
         base.OnRevert();
         SetFlagConfig settings = Settings;
-        if (settings.IsPersisted) {
-            GlobalConstants.Handlers.PersistedFlagHandler!.FlagsTable.Remove(settings.TargetFlag);
-            GlobalConstants.Handlers.PersistedFlagHandler.Save();
-        } else {
-            Flag.Flags.Remove(settings.TargetFlag);
-        }
-        if (Settings.WillNotifyUpdate) Dispatcher.UIThread.Invoke(() => {
-            GlobalConstants.HostInterfaces.RulesetService?.NotifyStatusChanged();
-        });
+        _flagService.RemoveValue(settings.TargetFlag,settings.IsPersisted);
+        if (Settings.WillNotifyUpdate) Dispatcher.UIThread.Invoke(() => _flagService.NotifyStatusChanged());
         return Task.CompletedTask;
-    }
-
-    static void WriteDict(Dictionary<string, string> dict, string key, string value) {
-        if (dict.TryGetValue(key, out _)) dict[key] = value; else dict.Add(key, value);
     }
 }

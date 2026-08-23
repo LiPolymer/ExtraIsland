@@ -17,7 +17,7 @@ namespace ExtraIsland.Components;
                   "显示一句古今名言，支持可扩展内容来源"
               )]
 public partial class Rhesis : ComponentBase<RhesisConfig> {
-    public Rhesis(ILessonsService lessonsService) {
+    public Rhesis(ILessonsService lessonsService,IRhesisService rhesisService,IRhesisProviderRegistry registry) {
         _authorLabel = new Label {
             Content = Title,
             Margin = new Thickness(0,4,0,0),
@@ -53,17 +53,20 @@ public partial class Rhesis : ComponentBase<RhesisConfig> {
         };
         
         LessonsService = lessonsService;
+        _rhesisService = rhesisService;
+        _registry = registry;
         InitializeComponent();
         _mainLabelAnimator = new Animators.GenericContentSwapAnimator(MainLabel);
         _subLabelAnimator = new Animators.GenericContentSwapAnimator(SubLabel);
     }
 
     ILessonsService LessonsService { get; }
+    readonly IRhesisService _rhesisService;
+    readonly IRhesisProviderRegistry _registry;
 
     public string Showing { get; private set; } = "-----------------";
     public string Author { get; private set; } = "";
     public string Title { get; private set; } = "";
-    readonly RhesisHandler.Instance _rhesisHandler = new RhesisHandler.Instance();
     readonly Animators.GenericContentSwapAnimator _mainLabelAnimator;
     readonly Animators.GenericContentSwapAnimator _subLabelAnimator;
     readonly Grid _infoGrid;
@@ -89,8 +92,8 @@ public partial class Rhesis : ComponentBase<RhesisConfig> {
 
     void Update() {
         Task.Run(async () => {
-            Settings.EnsureProviderSettings(RhesisHandler.Providers);
-            RhesisData data = await _rhesisHandler.GetAsync(
+            Settings.EnsureProviderSettings(_registry.Providers);
+            RhesisData data = await _rhesisService.GetAsync(
                 Settings.ProviderSettings,
                 Settings.LengthLimitation);
             Showing = data.Content;

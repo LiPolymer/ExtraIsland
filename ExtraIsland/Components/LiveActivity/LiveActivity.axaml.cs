@@ -7,7 +7,9 @@ using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Platforms.Abstraction;
+using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
+using Microsoft.Extensions.Logging;
 
 namespace ExtraIsland.Components;
 
@@ -18,8 +20,22 @@ namespace ExtraIsland.Components;
     "展示前台窗口标题"
 )]
 public partial class LiveActivity : ComponentBase<LiveActivityConfig> {
-    public LiveActivity(ILessonsService lessonsService) {
+    readonly LyricsIslandLyricsProvider _lyricsIslandProvider;
+    readonly LycheeLyricsProvider _lycheeProvider;
+    readonly MainConfigHandler _mainConfig;
+    readonly ILogger<LiveActivity> _logger;
+
+    public LiveActivity(
+        ILessonsService lessonsService,
+        LyricsIslandLyricsProvider lyricsIslandProvider,
+        LycheeLyricsProvider lycheeProvider,
+        MainConfigHandler mainConfig,
+        ILogger<LiveActivity> logger) {
         LessonsService = lessonsService;
+        _lyricsIslandProvider = lyricsIslandProvider;
+        _lycheeProvider = lycheeProvider;
+        _mainConfig = mainConfig;
+        _logger = logger;
         IsLyricsIslandLoaded = EiUtils.IsLyricsIslandInstalled();
         InitializeComponent();
         _labelAnimator = new Animators.GenericContentSwapAnimator(CurrentLabel);
@@ -72,7 +88,7 @@ public partial class LiveActivity : ComponentBase<LiveActivityConfig> {
                                     Secret = Settings.SleepySecret,
                                     ShowName = Settings.SleepyDevice,
                                     Using = true
-                                }.Post(Settings.SleepyUrl);
+                                }.Post(Settings.SleepyUrl,_logger);
                             }).Start();
                         }
                     }
@@ -112,10 +128,9 @@ public partial class LiveActivity : ComponentBase<LiveActivityConfig> {
         }
         if (Settings.IsLyricsEnabled) {
             if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
-                _lyricsHandler = new LycheeLyricsProvider();
+                _lyricsHandler = _lycheeProvider;
             } else {
-                GlobalConstants.Handlers.LyricsIsland ??= new LyricsIslandLyricsProvider();
-                _lyricsHandler = GlobalConstants.Handlers.LyricsIsland;   
+                _lyricsHandler = _lyricsIslandProvider;   
             }
             _lyricsHandler.OnLyricsChanged += UpdateLyrics;
             new Thread(() => {
@@ -184,7 +199,7 @@ public partial class LiveActivity : ComponentBase<LiveActivityConfig> {
             Settings.IgnoreListString = string.Empty;
         }
         
-        if (!GlobalConstants.Handlers.MainConfig!.Data.IsLifeModeActivated) {
+        if (!_mainConfig.Data.IsLifeModeActivated) {
             Settings.IsSleepyUploaderEnabled = false;
         }
         UpdateMargin();

@@ -1,14 +1,15 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ClassIsland.Core.Abstractions.Controls;
+using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
 
 namespace ExtraIsland.Components;
 
 public partial class LiveActivitySettings : ComponentBase<LiveActivityConfig> {
-    public LiveActivitySettings() {
+    public LiveActivitySettings(MainConfigHandler mainConfig) {
         IsLyricsIslandLoaded = EiUtils.IsLyricsIslandInstalled();
-        IsLifeModeEnabled = GlobalConstants.Handlers.MainConfig!.Data.IsLifeModeActivated;
+        IsLifeModeEnabled = mainConfig.Data.IsLifeModeActivated;
         InitializeComponent();
     }
 

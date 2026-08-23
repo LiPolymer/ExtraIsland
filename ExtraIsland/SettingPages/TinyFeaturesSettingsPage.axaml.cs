@@ -10,8 +10,8 @@ namespace ExtraIsland.SettingPages;
 [HidePageTitle]
 [SettingsPageInfo("extraisland.tiny","微功能","\uEDC5","\uEDC4")]
 public partial class TinyFeaturesSettingsPage : SettingsPageBase {
-    public TinyFeaturesSettingsPage() {
-        Settings = GlobalConstants.Handlers.MainConfig!.Data.TinyFeatures;
+    public TinyFeaturesSettingsPage(MainConfigHandler mainConfig) {
+        Settings = mainConfig.Data.TinyFeatures;
         InitializeComponent();
         dynamic app = AppBase.Current;
         AppSettings = app.Settings;

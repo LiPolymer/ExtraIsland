@@ -11,8 +11,8 @@ public class MainConfigHandler {
     readonly string _configPath;
     public MainConfigData Data { get; set; }
 
-    public MainConfigHandler() {
-        _configPath = Path.Combine(GlobalConstants.PluginConfigFolder!,"Main.json");
+    public MainConfigHandler(PluginEnvironment environment) {
+        _configPath = environment.GetPath("Main.json");
         Data = new MainConfigData();
 
         InitializeConfig();
@@ -20,10 +20,6 @@ public class MainConfigHandler {
     }
 
     void InitializeConfig() {
-        if (string.IsNullOrEmpty(GlobalConstants.PluginConfigFolder)) {
-            throw new InvalidOperationException("配置文件夹路径未设置");
-        }
-
         if (!File.Exists(_configPath)) {
             Save();
             return;

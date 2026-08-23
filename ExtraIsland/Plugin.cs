@@ -9,16 +9,12 @@ using ClassIsland.Core.Services.Registry;
 using ClassIsland.Shared;
 using ExtraIsland.Automations;
 using ExtraIsland.AuthorizeProvider;
-//using ExtraIsland.Automations;
 using ExtraIsland.Components;
 using ExtraIsland.ConfigHandlers;
 using ExtraIsland.LifeMode.Components;
 using ExtraIsland.SettingPages;
-//using ExtraIsland.LifeMode.Components;
-//using ExtraIsland.SettingsPages;
 using ExtraIsland.Shared;
 using ExtraIsland.Notification;
-//using ExtraIsland.TinyFeatures;
 using LycheeLib.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,22 +34,37 @@ namespace ExtraIsland;
 // ReSharper disable once UnusedType.Global
 // ReSharper disable once ClassNeverInstantiated.Global
 public class Plugin : PluginBase {
+    const string AsciiLogo = """
+                              ___________          __                   .___         .__                       .___
+                              \_   _____/___  ____/  |_ _______ _____   |   |  ______|  |  _____     ____    __| _/
+                               |    __)_ \  \/  /\   __\\_  __ \\__  \  |   | /  ___/|  |  \__  \   /    \  / __ |
+                               |        \ >    <  |  |   |  | \/ / __ \_|   | \___ \ |  |__ / __ \_|   |  \/ /_/ |
+                              /_______  //__/\_ \ |__|   |__|   (____  /|___|/____  >|____/(____  /|___|  /\____ |
+                                      \/       \/                    \/           \/            \/      \/      \/
+                              """;
+    
     public override void Initialize(HostBuilderContext context, IServiceCollection services) {
         ChainedTerminal ct = new ChainedTerminal("&aExtraIsland");
         ConsoleColor defaultColor = Console.ForegroundColor;
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("[ExIsLand][Splash]-------------------------------------------------------------------\r\n" 
-                          + GlobalConstants.Assets.AsciiLogo
+                          + AsciiLogo
                           + "\r\n Copyright (C) 2024-2025 LiPolymer \r\n Licensed under GNU AGPLv3. \r\n" 
                           + "正在初始化...-------------------------------------------------------------------");
         Console.ForegroundColor = defaultColor;
         
         ChainedTerminal cct = ct.Chain("&3ConfigHandler");
         cct.WriteLine("正在载入主设置...");
-        //Initialize GlobalConstants/ConfigHandlers
-        GlobalConstants.PluginConfigFolder = PluginConfigFolder;
-        GlobalConstants.Handlers.MainConfig = new MainConfigHandler();
-        if (GlobalConstants.Handlers.MainConfig.Data.IsTelemetryActivated) {
+        //环境与配置
+        PluginEnvironment environment = new PluginEnvironment(PluginConfigFolder);
+        MainConfigHandler mainConfig = new MainConfigHandler(environment);
+        PersistedFlagHandler persistedFlagHandler = ConfigBase.Load<PersistedFlagHandler>(environment);
+        
+        services.AddSingleton(environment);
+        services.AddSingleton(mainConfig);
+        services.AddSingleton(persistedFlagHandler);
+        
+        if (mainConfig.Data.IsTelemetryActivated) {
             ChainedTerminal sct = ct.Chain("&5Sentry");
             #if DEBUG
                 sct.WriteLine("这是调试构建,遥测将被禁用!",Terminal.MessageType.Debug);
@@ -77,19 +88,28 @@ public class Plugin : PluginBase {
         }
         
         cct.WriteLine("正在载入其余配置...");
-        GlobalConstants.Handlers.OnDuty = new OnDutyPersistedConfigHandler();
-        GlobalConstants.Handlers.PersistedFlagHandler = ConfigBase.Load<PersistedFlagHandler>();
+        services.AddSingleton<OnDutyPersistedConfigHandler>();
         
         ct.WriteLine("正在注册ClassIsland要素...");
         //Services
-        services.AddHostedService<ServicesFetcherService>();
         services.AddHostedService<Register>();
         
-        // Rhesis providers
-        RhesisHandler.RegisterProvider(new HitokotoRhesisProvider());
-        RhesisHandler.RegisterProvider(new JinrishiciRhesisProvider());
-        RhesisHandler.RegisterProvider(new SainticRhesisProvider());
-
+        // 标志服务
+        services.AddSingleton<IFlagService,FlagService>();
+        // 节假日服务
+        services.AddSingleton<IHolidayService,HolidayService>();
+        
+        // 名句一言
+        services.AddSingleton<IRhesisProvider,HitokotoRhesisProvider>();
+        services.AddSingleton<IRhesisProvider,JinrishiciRhesisProvider>();
+        services.AddSingleton<IRhesisProvider,SainticRhesisProvider>();
+        services.AddSingleton<IRhesisProviderRegistry,RhesisProviderRegistry>();
+        services.AddSingleton<IRhesisService,RhesisService>();
+        
+        // 歌词提供方
+        services.AddSingleton<LyricsIslandLyricsProvider>();
+        services.AddSingleton<LycheeLyricsProvider>();
+        
         //Components
         services.AddComponent<BetterCountdown,BetterCountdownSettings>();
         services.AddComponent<FluentClock,FluentClockSettings>();
@@ -132,8 +152,8 @@ public class Plugin : PluginBase {
         //NotificationProvider
         services.AddNotificationProvider<TimeUpNotification>();
         
-        //Actions
-        Register.Claim(services);
+        //Actions / Rules / Triggers
+        Register.Claim(services,mainConfig);
         
         //Authorizer
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
@@ -141,16 +161,16 @@ public class Plugin : PluginBase {
         }
         
         //LifeMode
-        if (GlobalConstants.Handlers.MainConfig.Data.IsLifeModeActivated) {
+        if (mainConfig.Data.IsLifeModeActivated) {
             ct.WriteLine("&a生活模式已启用!");
             services.AddComponent<Sleepy,SleepySettings>();
         }
         
-        if (GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) {
+        if (mainConfig.Data.Dock.Enabled) {
             //services.AddComponent<ActionButton,ActionButtonSettings>();
         }
         
-        if (GlobalConstants.Handlers.MainConfig.Data.IsExperimentalModeActivated) {
+        if (mainConfig.Data.IsExperimentalModeActivated) {
             ct.WriteLine("&9实验模式已启用! &7若出现Bug,&c请勿报告&7!",Terminal.MessageType.Warn);
             services.AddComponent<DualLineContainer>();
             //services.AddComponent<DebugLyricsHandler>();
@@ -171,24 +191,6 @@ public class Plugin : PluginBase {
                 Rendezvous.Load(IAppHost.GetService<ILycheeLyrics>());
             };
         }
-        
-        //GlobalConstants.Triggers.OnLoaded += JuniorGuide.Trigger;
-        AppBase.Current.AppStarted += (_,_) => {
-            //GlobalConstants.Handlers.MainWindow = new MainWindowHandler();
-            //if (!GlobalConstants.Handlers.MainConfig.Data.Dock.Enabled) return;
-            //GlobalConstants.Handlers.MainWindow!.InitBar(accentState: GlobalConstants.Handlers.MainConfig.Data.Dock.AccentState);
-        };
-        
-        AppBase.Current.AppStopping += (_,_) => {
-            if (GlobalConstants.Handlers.LyricsIsland == null) return;
-            GlobalConstants.Handlers.LyricsIsland = null;
-            GlobalConstants.HostInterfaces.PluginLogger!.LogInformation("检测到内置LyricsIsland协议接口启动,5秒后将强制结束进程");
-            new Thread(() => {
-                Thread.Sleep(5000);
-                GlobalConstants.HostInterfaces.PluginLogger!.LogInformation("正在关闭...");
-                Environment.Exit(0);
-            }).Start();
-        };
         
         ct.WriteLine("完成!");
         ct.WriteLine("&a等待服务主机启动...");

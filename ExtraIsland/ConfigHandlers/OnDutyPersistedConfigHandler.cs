@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Text.Json.Serialization;
+using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Shared.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using ExtraIsland.Shared;
@@ -10,34 +11,37 @@ using ExtraIsland.Shared;
 namespace ExtraIsland.ConfigHandlers;
 
 public class OnDutyPersistedConfigHandler {
+    readonly PluginEnvironment _environment;
+    readonly IHolidayService _holidayService;
     private bool _isSaving = false; // 防止递归保存的标志
 
-    public OnDutyPersistedConfigHandler() {
+    public OnDutyPersistedConfigHandler(PluginEnvironment environment,ILessonsService lessonsService,MainConfigHandler mainConfig,IHolidayService holidayService) {
+        _environment = environment;
+        _holidayService = holidayService;
         Data = new OnDutyPersistedConfigData();
-        if (!File.Exists(Path.Combine(GlobalConstants.PluginConfigFolder!,"Persisted/OnDuty.json"))) {
-            if (!Directory.Exists(Path.Combine(GlobalConstants.PluginConfigFolder!,"Persisted/"))) {
-                Directory.CreateDirectory(Path.Combine(GlobalConstants.PluginConfigFolder!,"Persisted/"));
+        string configPath = environment.GetPath("Persisted/OnDuty.json");
+        if (!File.Exists(configPath)) {
+            if (!Directory.Exists(environment.GetPath("Persisted/"))) {
+                Directory.CreateDirectory(environment.GetPath("Persisted/"));
             }
             ConfigureFileHelper.SaveConfig<OnDutyPersistedConfigData>(
-                Path.Combine(GlobalConstants.PluginConfigFolder!,"Persisted/OnDuty.json"),
+                configPath,
                 Data);
         }
         try {
             Data = ConfigureFileHelper.LoadConfig<OnDutyPersistedConfigData>(
-                Path.Combine(GlobalConstants.PluginConfigFolder!,"Persisted/OnDuty.json"));
+                configPath);
         }
         catch {
-            File.Delete(Path.Combine(GlobalConstants.PluginConfigFolder!,"Persisted/OnDuty.json"));
+            File.Delete(configPath);
             ConfigureFileHelper.SaveConfig<OnDutyPersistedConfigData>(
-                Path.Combine(GlobalConstants.PluginConfigFolder!,"Persisted/OnDuty.json"),
+                configPath,
                 Data);
         }
         PeoplesOnDuty = Data.GetWhoOnDuty();
-        GlobalConstants.Triggers.OnLoaded += () => {
-            GlobalConstants.HostInterfaces.LessonsService!.PostMainTimerTicked += Updater;
-        };
+        lessonsService.PostMainTimerTicked += Updater;
         Data.PropertyChanged += Save;
-        if (!GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) Data.IsHolidaySkipEnabled = false;
+        if (!mainConfig.Data.IsExperimentalModeActivated) Data.IsHolidaySkipEnabled = false;
     }
     void Save(object? sender,PropertyChangedEventArgs e) {
         Save();
@@ -50,7 +54,7 @@ public class OnDutyPersistedConfigHandler {
         try {
             _isSaving = true;
             ConfigureFileHelper.SaveConfig<OnDutyPersistedConfigData>(
-                Path.Combine(GlobalConstants.PluginConfigFolder!,"Persisted/OnDuty.json"),
+                _environment.GetPath("Persisted/OnDuty.json"),
                 Data);
             UpdateOnDuty();
         }
@@ -157,11 +161,11 @@ public class OnDutyPersistedConfigHandler {
         string lastSkippedHoliday = "";
         
         foreach (DateTime date in datesToProcess) {
-            bool isHoliday = await HolidayService.IsHolidayAsync(date);
+            bool isHoliday = await _holidayService.IsHolidayAsync(date);
             
             if (isHoliday) {
                 // 获取节假日信息
-                HolidayInfo? holidayInfo = await HolidayService.GetHolidayInfoAsync(date);
+                HolidayInfo? holidayInfo = await _holidayService.GetHolidayInfoAsync(date);
                 lastSkippedHoliday = holidayInfo?.Name ?? "节假日";
             } else {
                 // 非节假日，执行轮换
@@ -196,7 +200,7 @@ public class OnDutyPersistedConfigHandler {
         // 异步获取下一个节假日
         _ = Task.Run(async () => {
             try {
-                (DateTime Date, string Name)? nextHoliday = await HolidayService.GetNextHolidayAsync(DateTime.Today);
+                (DateTime Date, string Name)? nextHoliday = await _holidayService.GetNextHolidayAsync(DateTime.Today);
                 if (nextHoliday.HasValue) {
                     // 只更新属性，不触发保存（避免频繁保存）
                     bool wasSaving = _isSaving;

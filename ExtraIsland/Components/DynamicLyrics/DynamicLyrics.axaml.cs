@@ -14,12 +14,11 @@ namespace ExtraIsland.Components;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public partial class DynamicLyrics: ComponentBase<DynamicLyricsConfig> {
-    public DynamicLyrics() {
+    public DynamicLyrics(LyricsIslandLyricsProvider lyricsIslandProvider,LycheeLyricsProvider lycheeProvider) {
         if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
-            _handler = new LycheeLyricsProvider();
+            _handler = lycheeProvider;
         } else {
-            GlobalConstants.Handlers.LyricsIsland ??= new LyricsIslandLyricsProvider();
-            _handler = GlobalConstants.Handlers.LyricsIsland;   
+            _handler = lyricsIslandProvider;
         }
         InitializeComponent();
         _handler.OnLyricsChanged += UpdateLyrics;

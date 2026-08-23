@@ -3,6 +3,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ExtraIsland.Shared;
 
+public class RhesisData {
+    public string Title { get; set; } = string.Empty;
+    public string Content { get; set; } = string.Empty;
+    public string Author { get; set; } = string.Empty;
+    public string Source { get; set; } = string.Empty;
+    public string Catalog { get; set; } = string.Empty;
+}
+
 /// <summary>
 /// Provides rhesis content from a single source.
 /// </summary>

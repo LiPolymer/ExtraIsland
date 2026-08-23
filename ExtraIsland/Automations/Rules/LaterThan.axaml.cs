@@ -1,8 +1,8 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ClassIsland.Core.Abstractions.Controls;
+using ClassIsland.Core.Abstractions.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
-using ExtraIsland.Shared;
 
 namespace ExtraIsland.Automations.Rules;
 
@@ -11,9 +11,9 @@ public partial class LaterThan : RuleSettingsControlBase<LaterThanConfig> {
         InitializeComponent();
     }
     
-    public static bool Rule(object? rawConfig) {
+    public static bool Rule(object? rawConfig,IExactTimeService exactTimeService) {
         LaterThanConfig config = (LaterThanConfig)rawConfig!;
-        TimeSpan current = GlobalConstants.HostInterfaces.ExactTimeService!.GetCurrentLocalDateTime().TimeOfDay;
+        TimeSpan current = exactTimeService.GetCurrentLocalDateTime().TimeOfDay;
         return current.CompareTo(config.TargetTime.TimeOfDay) switch {
             < 0 => false,
             >= 0 => true

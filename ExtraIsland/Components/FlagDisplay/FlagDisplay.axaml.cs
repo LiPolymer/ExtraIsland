@@ -3,7 +3,6 @@ using Avalonia;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Abstractions.Services;
 using ClassIsland.Core.Attributes;
-using ExtraIsland.Automations.Rules;
 using ExtraIsland.Shared;
 
 namespace ExtraIsland.Components;
@@ -16,14 +15,16 @@ namespace ExtraIsland.Components;
               )]
 // ReSharper disable once ClassNeverInstantiated.Global
 public partial class FlagDisplay : ComponentBase<FlagDisplayConfig> {
-    public FlagDisplay(ILessonsService lessonsService) {
+    readonly ILessonsService _lessonsService;
+    readonly IFlagService _flagService;
+    readonly Animators.GenericContentSwapAnimator _labelAnimator;
+
+    public FlagDisplay(ILessonsService lessonsService,IFlagService flagService) {
         _lessonsService = lessonsService;
+        _flagService = flagService;
         InitializeComponent();
         _labelAnimator = new Animators.GenericContentSwapAnimator(TextLabel);
     }
-
-    readonly ILessonsService _lessonsService;
-    readonly Animators.GenericContentSwapAnimator _labelAnimator;
 
     void OnAttachedToVisualTree(object? sender,VisualTreeAttachmentEventArgs e) {
         _lessonsService.PostMainTimerTicked += LessonsServiceOnPostMainTimerTicked;
@@ -44,8 +45,6 @@ public partial class FlagDisplay : ComponentBase<FlagDisplayConfig> {
     }
 
     string GetFlagContent() {
-        if (Flag.Flags.TryGetValue(Settings.TargetFlag, out string? flag)) return flag!;
-        return GlobalConstants.Handlers.PersistedFlagHandler!.FlagsTable
-            .TryGetValue(Settings.TargetFlag,out string? pFlag) ? pFlag : Settings.FallbackText;
+        return _flagService.GetValue(Settings.TargetFlag,Settings.FallbackText);
     }
 }

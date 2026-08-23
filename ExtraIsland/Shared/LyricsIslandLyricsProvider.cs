@@ -2,18 +2,21 @@
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 
 namespace ExtraIsland.Shared;
 
 public class LyricsIslandLyricsProvider : IDisposable, ILyricsProvider {
 
-    public LyricsIslandLyricsProvider(string url = "http://127.0.0.1:50063/") {
+    public LyricsIslandLyricsProvider(ILogger<LyricsIslandLyricsProvider> logger,string url = "http://127.0.0.1:50063/") {
+        _logger = logger;
         Url = url;
         _listener = new HttpListener();
         _listener.Prefixes.Add(Url);
         StartHttpListener();
     }
 
+    readonly ILogger<LyricsIslandLyricsProvider> _logger;
     readonly HttpClient _httpClient = new HttpClient();
     readonly HttpListener _listener;
     string Url { get; }
@@ -34,7 +37,7 @@ public class LyricsIslandLyricsProvider : IDisposable, ILyricsProvider {
         }
         catch (HttpListenerException ex) {
             Status = false;
-            Console.WriteLine($"[ExIsLand][Tracer][LyricsIslandHandler] 启动 HTTP 监听器失败: {ex.Message}");
+            _logger.LogWarning(ex,"启动 HTTP 监听器失败");
             LogMessage = $"启动失败 {ex.Message}";
         }
     }
@@ -50,7 +53,7 @@ public class LyricsIslandLyricsProvider : IDisposable, ILyricsProvider {
                 // 监听器已停止，无需处理。
             }
             catch (Exception ex) {
-                Console.WriteLine($"[ExIsLand][Tracer][LyricsIslandHandler] 监听过程中发生错误: {ex.Message}");
+                _logger.LogWarning(ex,"监听过程中发生错误");
                 LogMessage = $"解析错误 {ex.Message}";
             }
         }
@@ -77,7 +80,7 @@ public class LyricsIslandLyricsProvider : IDisposable, ILyricsProvider {
                 }
             }
             catch (Exception ex) {
-                Console.WriteLine($"处理请求时出错: {ex.Message}");
+                _logger.LogWarning(ex,"处理请求时出错");
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 await using StreamWriter writer = new StreamWriter(response.OutputStream);
                 await writer.WriteAsync("内部服务器错误");

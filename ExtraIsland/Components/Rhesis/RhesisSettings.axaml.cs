@@ -6,10 +6,13 @@ using ExtraIsland.Shared;
 namespace ExtraIsland.Components;
 
 public partial class RhesisSettings : ComponentBase<RhesisConfig> {
-    public RhesisSettings() {
+    public RhesisSettings(IRhesisProviderRegistry registry) {
+        _registry = registry;
         InitializeComponent();
         AttachedToVisualTree += (_,_) => RefreshProviderItems();
     }
+
+    readonly IRhesisProviderRegistry _registry;
 
     public ObservableCollection<RhesisProviderSettingsItem> ProviderItems { get; } = [];
 
@@ -19,9 +22,9 @@ public partial class RhesisSettings : ComponentBase<RhesisConfig> {
     ];
 
     void RefreshProviderItems() {
-        Settings.EnsureProviderSettings(RhesisHandler.Providers);
+        Settings.EnsureProviderSettings(_registry.Providers);
         ProviderItems.Clear();
-        foreach (IRhesisProvider provider in RhesisHandler.Providers) {
+        foreach (IRhesisProvider provider in _registry.Providers) {
             ProviderItems.Add(new RhesisProviderSettingsItem(
                 provider,
                 Settings.ProviderSettings[provider.Id]));

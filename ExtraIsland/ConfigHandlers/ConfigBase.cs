@@ -7,31 +7,43 @@ using ExtraIsland.Shared;
 namespace ExtraIsland.ConfigHandlers;
 
 public abstract class ConfigBase: ObservableObject {
-    public ConfigBase() {
+    internal PluginEnvironment Environment { get; set; } = null!;
+
+    protected ConfigBase() {
         // ReSharper disable once VirtualMemberCallInConstructor
         OnInitializing();
         PropertyChanged += Save;
     }
 
     public virtual void OnInitializing() {}
-    
+
     protected abstract string Path { get; }
 
-    public static T Load<T>() where T : ConfigBase,new() {
+    protected string GetConfigPath() {
+        return Environment.GetPath(Path);
+    }
+
+    /// <summary>
+    /// 加载配置文件:文件不存在时自动创建,返回已绑定环境的实例
+    /// </summary>
+    public static T Load<T>(PluginEnvironment environment) where T : ConfigBase,new() {
         T instance = new T();
-        string finalPath = System.IO.Path.Combine(GlobalConstants.PluginConfigFolder!,instance.Path);
+        instance.Environment = environment;
+        string finalPath = instance.GetConfigPath();
         if (!File.Exists(finalPath)) {
             ConfigureFileHelper.SaveConfig(finalPath,instance);
+            return instance;
         }
-        return ConfigureFileHelper.LoadConfig<T>(finalPath);
+        T loaded = ConfigureFileHelper.LoadConfig<T>(finalPath);
+        loaded.Environment = environment;
+        return loaded;
     }
-    
+
     void Save(object? sender,PropertyChangedEventArgs e) {
         Save();
     }
-    
+
     public virtual void Save() {
-        // todo:行为异常, 目前只保存ConfigBase而不是子类
-        ConfigureFileHelper.SaveConfig(System.IO.Path.Combine(GlobalConstants.PluginConfigFolder!,Path),this);
+        ConfigureFileHelper.SaveConfig(GetConfigPath(),this);
     }
 }

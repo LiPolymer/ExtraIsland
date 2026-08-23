@@ -67,7 +67,7 @@ public static class SleepyHandler {
             public string Secret { get; set; } = string.Empty;
             [JsonPropertyName("id")]
             public string Id { get; set; } = string.Empty;
-            public string Post(string url) {
+            public string Post(string url,ILogger? logger = null) {
                 try {
                     string jsonPayload = JsonSerializer.Serialize(this);
                     StringContent content = new StringContent(
@@ -80,7 +80,7 @@ public static class SleepyHandler {
                     return response.Content.ReadAsStringAsync().Result;
                 }
                 catch (Exception e) {
-                    GlobalConstants.HostInterfaces.PluginLogger!.LogWarning(e.Message);
+                    logger?.LogWarning(e.Message);
                     return string.Empty;
                 }
             }

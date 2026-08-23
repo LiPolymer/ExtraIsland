@@ -13,8 +13,9 @@ namespace ExtraIsland.SettingPages;
 [HidePageTitle]
 [SettingsPageInfo("extraisland.master","主设置","\uE51A","\uE519")]
 public partial class MainSettingsPage : SettingsPageBase {
-    public MainSettingsPage() {
-        Settings = GlobalConstants.Handlers.MainConfig!.Data;
+    public MainSettingsPage(MainConfigHandler mainConfig,LyricsIslandLyricsProvider lyricsIslandProvider) {
+        Settings = mainConfig.Data;
+        _lyricsIslandProvider = lyricsIslandProvider;
         InitializeComponent();
 
         AnnouncementBar.IsOpen = StaticAnnouncement != Settings.LastAcceptedAnnouncement;
@@ -31,6 +32,7 @@ public partial class MainSettingsPage : SettingsPageBase {
         
         Border indicatorBorder = ((Border)LyricsStatCard.Footer!);
         Label indicatorLabel = ((Label)((indicatorBorder).Child)!);
+        LyricsIslandLyricsProvider lyricsIsland = _lyricsIslandProvider;
         if (EiUtils.IsLyricsIslandInstalled()) {
             //((Chip)LyricsStatCard.Switcher!).Background = Brushes.LightSkyBlue;
             //((Chip)LyricsStatCard.Switcher!).Content = "禁用"; 
@@ -40,28 +42,25 @@ public partial class MainSettingsPage : SettingsPageBase {
         } else if (EiUtils.IsPluginInstalled("ink.lipoly.ext.lychee")) {
             indicatorBorder.Background = Brushes.Gray;
             indicatorLabel.Content = "Lychee";
-        }
-        else if (GlobalConstants.Handlers.LyricsIsland == null) {
-            indicatorBorder.Background = Brushes.Gray;
-            indicatorLabel.Content = "未使用";
         } else {
-            indicatorBorder.Background = GlobalConstants.Handlers.LyricsIsland.Status
+            indicatorBorder.Background = lyricsIsland.Status
                 ? Brushes.LightGreen
                 : Brushes.IndianRed;
-            indicatorLabel.Content = GlobalConstants.Handlers.LyricsIsland.Status
+            indicatorLabel.Content = lyricsIsland.Status
                 ? "正常"
                 : "错误";
-            indicatorLabel.Foreground = GlobalConstants.Handlers.LyricsIsland.Status
+            indicatorLabel.Foreground = lyricsIsland.Status
                 ? Brushes.DarkOliveGreen
                 : Brushes.White;
-            if (!GlobalConstants.Handlers.LyricsIsland.Status) {
+            if (!lyricsIsland.Status) {
                 MessageZone.IsVisible = true;
-                ErrorMessage.Content = GlobalConstants.Handlers.LyricsIsland.LogMessage;
+                ErrorMessage.Content = lyricsIsland.LogMessage;
             }
         }
         Settings.RestartPropertyChanged += SettingsOnPropertyChanged;
     }
     public MainConfigData Settings { get; set; }
+    readonly LyricsIslandLyricsProvider _lyricsIslandProvider;
     void SettingsOnPropertyChanged() {
         RequestRestart();
     }

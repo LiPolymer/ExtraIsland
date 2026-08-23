@@ -6,6 +6,7 @@ using ExtraIsland.Automations.Actions;
 using ExtraIsland.Automations.Data;
 using ExtraIsland.Automations.Rules;
 using ExtraIsland.Automations.Triggers;
+using ExtraIsland.ConfigHandlers;
 using ExtraIsland.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -21,18 +22,26 @@ namespace ExtraIsland.Automations;
 /// 自动化内容注册器
 /// </summary>
 public class Register : IHostedService {
+    readonly IRulesetService _rulesetService;
+    readonly IFlagService _flagService;
+    readonly ILessonsService _lessonsService;
+    readonly IProfileService _profileService;
+    readonly IExactTimeService _exactTimeService;
+    readonly MainConfigHandler _mainConfig;
+    readonly ILogger<Register> _logger;
 
     /// <summary>
     /// 注册ClassIsland元素
     /// </summary>
     /// <param name="services">应用服务集合</param>
-    public static void Claim(IServiceCollection services) {
+    /// <param name="mainConfig">主配置</param>
+    public static void Claim(IServiceCollection services,MainConfigHandler mainConfig) {
         // 行动
         services.AddAction<SetFlagAction,SetFlag>();
         services.AddAction<UpdateRuleAction,Actions.EmptySettings>();
         if (EiUtils.IsPluginInstalled("IslandCaller.Plugin2")) {
             services.AddAction<IslandCallerAction,Actions.EmptySettings>();
-            if (GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) {
+            if (mainConfig.Data.IsExperimentalModeActivated) {
                 services.AddAction<IslandCallerAdvancedAction,Actions.EmptySettings>();
             }
         }
@@ -53,12 +62,41 @@ public class Register : IHostedService {
             ("extraIsland.rule.isDoubleLesson","下节课连堂","\uE2AC");
         // 触发器
         services.AddTrigger<TimePassed,TimePassedSettings>();
+    }
 
+    /// <summary>
+    /// 注册处理逻辑
+    /// </summary>
+    /// <param name="rulesetService">规则集服务</param>
+    public Register(
+        IRulesetService rulesetService,
+        IFlagService flagService,
+        ILessonsService lessonsService,
+        IProfileService profileService,
+        IExactTimeService exactTimeService,
+        MainConfigHandler mainConfig,
+        ILogger<Register> logger) {
+        _rulesetService = rulesetService;
+        _flagService = flagService;
+        _lessonsService = lessonsService;
+        _profileService = profileService;
+        _exactTimeService = exactTimeService;
+        _mainConfig = mainConfig;
+        _logger = logger;
+
+        //规则
+        rulesetService.RegisterRuleHandler("extraIsland.rule.todayIs",TodayIs.Rule);
+        rulesetService.RegisterRuleHandler("extraIsland.rule.laterThan",raw => LaterThan.Rule(raw,_exactTimeService));
+        rulesetService.RegisterRuleHandler("extraIsland.rule.flagIs",raw => FlagIs.Rule(raw,_flagService));
+        rulesetService.RegisterRuleHandler("extraIsland.rule.currentTeacherIs",raw => TeacherIs.CurrentRule(raw,_lessonsService));
+        rulesetService.RegisterRuleHandler("extraIsland.rule.nextTeacherIs",raw => TeacherIs.NextRule(raw,_lessonsService));
+        rulesetService.RegisterRuleHandler("extraIsland.rule.isDoubleLesson",
+            raw => IsDoubleLesson.Rule(raw,_lessonsService,_profileService,_logger));
 
         //SAI Compactability
         if (EiUtils.IsPluginInstalled("lrs2187.sai")) {
             AppBase.Current.AppStarted += (_,_) => {
-                GlobalConstants.HostInterfaces.PluginLogger?.LogInformation("SAI 已载入 正在注册 Blocky 元素");
+                _logger.LogInformation("SAI 已载入 正在注册 Blocky 元素");
                 ISaiServer saiServerService = IAppHost.GetService<ISaiServer>();
                 // 注册 sai 元素
                 RegisterData regData = new RegisterData {
@@ -189,7 +227,7 @@ public class Register : IHostedService {
                         InlineField = false,
                         InlineBlock = false
                     });
-                    if (GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) {
+                    if (_mainConfig.Data.IsExperimentalModeActivated) {
                         regData.Actions.Add(new BlockMetadata {
                             Id = "extraIsland.action.islandCallerAdvanced",
                             Name = "(实验性)拉起IslandCaller-高级",
@@ -207,29 +245,10 @@ public class Register : IHostedService {
                     if (data is not GetFlagConfig config) {
                         return Task.FromResult("???");
                     }
-                    Dictionary<string,string> merged = GlobalConstants.Handlers.PersistedFlagHandler?.FlagsTable != null
-                        ? new Dictionary<string, string>(GlobalConstants.Handlers.PersistedFlagHandler.FlagsTable)
-                        : [];
-                    foreach (KeyValuePair<string,string> kv in Flag.Flags)
-                        merged[kv.Key] = kv.Value; // 内存标志覆盖持久化标志
-                    return Task.FromResult(merged.GetValueOrDefault(config.TargetFlag,"[未设置值]"));
+                    return Task.FromResult(_flagService.GetValue(config.TargetFlag));
                 });
             };
         }
-    }
-
-    /// <summary>
-    /// 注册处理逻辑
-    /// </summary>
-    /// <param name="rulesetService">规则集服务</param>
-    public Register(IRulesetService rulesetService) {
-        //规则
-        rulesetService.RegisterRuleHandler("extraIsland.rule.todayIs",TodayIs.Rule);
-        rulesetService.RegisterRuleHandler("extraIsland.rule.laterThan",LaterThan.Rule);
-        rulesetService.RegisterRuleHandler("extraIsland.rule.flagIs",FlagIs.Rule);
-        rulesetService.RegisterRuleHandler("extraIsland.rule.currentTeacherIs",TeacherIs.CurrentRule);
-        rulesetService.RegisterRuleHandler("extraIsland.rule.nextTeacherIs",TeacherIs.NextRule);
-        rulesetService.RegisterRuleHandler("extraIsland.rule.isDoubleLesson",IsDoubleLesson.Rule);
     }
 
     public Task StartAsync(CancellationToken _) {

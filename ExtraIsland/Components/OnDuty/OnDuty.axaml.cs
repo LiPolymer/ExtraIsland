@@ -12,8 +12,8 @@ namespace ExtraIsland.Components;
 public partial class OnDuty : ComponentBase<OnDutyConfig> {
     OnDutyPersistedConfigHandler PersistedSettings { get; }
     
-    public OnDuty() {
-        PersistedSettings = GlobalConstants.Handlers.OnDuty!;
+    public OnDuty(OnDutyPersistedConfigHandler onDutyHandler) {
+        PersistedSettings = onDutyHandler;
         InitializeComponent();
     }
     
