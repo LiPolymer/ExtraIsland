@@ -98,6 +98,7 @@ public class Plugin : PluginBase {
         services.AddComponent<LiveActivity,LiveActivitySettings>();
         services.AddComponent<DynamicLyrics,DynamicLyricsSettings>();
         services.AddComponent<ProfileInformation,ProfileInformationSettings>();
+        services.AddComponent<FlagDisplay,FlagDisplaySettings>();
         
         //SettingsPages
         services.AddSettingsPage<MainSettingsPage>();

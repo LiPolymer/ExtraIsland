@@ -5,7 +5,7 @@ using ExtraIsland.Shared;
 namespace ExtraIsland.Automations.Rules;
 
 public static class Flag {
-    public static readonly Dictionary<string,string> Flags = [];
+    public static readonly Dictionary<string,string?> Flags = [];
 }
 
 public partial class FlagIs: RuleSettingsControlBase<FlagIsConfig> {

@@ -7,7 +7,8 @@
                               xmlns:ci="http://classisland.tech/schemas/xaml/core"
                               xmlns:actions1="clr-namespace:ExtraIsland.Automations.Actions"
                               xmlns:controls="clr-namespace:ExtraIsland.Controls"
-                              mc:Ignorable="d">
+                              mc:Ignorable="d"
+                              x:CompileBindings="False">
     <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=actions1:DoSpeechSettingsControl}}"
                 Spacing="8" Margin="10" Orientation="Horizontal">
         <TextBlock Text="语音播报"
@@ -19,6 +20,9 @@
                  Padding="5,7,5,7"
                  AcceptsReturn="True"
                  MinWidth="400"/>
+        <controls:FullLogoGrayScale Margin="4,0,0,0" 
+                                    Height="20" 
+                                    Opacity="0.5"/>
     </StackPanel>
 </ci:ActionSettingsControlBase>
 

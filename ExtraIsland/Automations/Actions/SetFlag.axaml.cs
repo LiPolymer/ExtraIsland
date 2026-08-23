@@ -15,12 +15,16 @@ public partial class SetFlag: ActionSettingsControlBase<SetFlagConfig> {
 }
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class SetFlagConfig : ObservableRecipient {
-    public string TargetFlag { get; set; } = "";
-    public string FlagContent { get; set; } = "";
+public partial class SetFlagConfig : ObservableRecipient {
+    [ObservableProperty]
+    string _targetFlag = "";
+    [ObservableProperty]
+    string _flagContent = "";
 
-    public bool IsPersisted { get; set; }
-    public bool WillNotifyUpdate { get; set; } = true;
+    [ObservableProperty]
+    bool _isPersisted;
+    [ObservableProperty]
+    bool _willNotifyUpdate = true;
 }
 
 /// <summary>
