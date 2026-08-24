@@ -10,9 +10,7 @@ using ExtraIsland.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using SuperAutoIsland.Interface;
-using SuperAutoIsland.Interface.MetaData;
-using SuperAutoIsland.Interface.MetaData.ArgsType;
+using SuperAutoIsland.Interface.Metadata;
 using SuperAutoIsland.Interface.Services;
 
 namespace ExtraIsland.Automations;
@@ -37,7 +35,7 @@ public class Register : IHostedService {
             }
         }
         services.AddAction<DoSpeechAction,DoSpeechSettingsControl>();
-        
+
         // 规则
         services.AddRule<TodayIsConfig,TodayIs>
             ("extraIsland.rule.todayIs","今天是","\uE304");
@@ -60,214 +58,81 @@ public class Register : IHostedService {
             AppBase.Current.AppStarted += (_,_) => {
                 GlobalConstants.HostInterfaces.PluginLogger?.LogInformation("SAI 已载入 正在注册 Blocky 元素");
                 ISaiServer saiServerService = IAppHost.GetService<ISaiServer>();
-                // 注册 sai 元素
-                RegisterData regData = new RegisterData {
-                    Actions = [
-                        new BlockMetadata {
-                            Id = "extraIsland.action.setFlag",
+                // 注册 sai 元素 (v2 接口)
+                saiServerService.RegisterBlocks("ExtraIsland",it => {
+                    it.AddLabel("行动")
+                        .AddBlock(new BlockMetadata("extraIsland.action.setFlag") {
+                            Kind = BlockKind.Action,
                             Name = "设定标志",
                             Icon = ("设标志","\uE844"),
-                            Args = new Dictionary<string,MetaArgsBase> {
-                                ["TargetFlag"] = new CommonMetaArgs {
-                                    Name = "ID",
-                                    Type = MetaType.text
-                                },
-                                ["FlagContent"] = new CommonMetaArgs {
-                                    Name = "标志",
-                                    Type = MetaType.text
-                                },
-                                ["IsPersisted"] = new CommonMetaArgs {
-                                    Name = "持久化",
-                                    Type = MetaType.boolean
-                                },
-                                ["WillNotifyUpdate"] = new CommonMetaArgs {
-                                    Name = "立即更新规则",
-                                    Type = MetaType.boolean
-                                }
-                            },
-                            DropdownUseNumbers = false,
-                            InlineField = false,
-                            InlineBlock = false
-                        },
-                        new BlockMetadata {
-                            Id = "extraIsland.action.doSpeech",
+                            Fields = new Dictionary<string,Field> {
+                                ["TargetFlag"] = BasicFields.Text("ID"),
+                                ["FlagContent"] = BasicFields.Text("标志"),
+                                ["IsPersisted"] = BasicFields.Boolean("持久化"),
+                                ["WillNotifyUpdate"] = BasicFields.Boolean("立即更新规则")
+                            }
+                        })
+                        .AddBlock(new BlockMetadata("extraIsland.action.doSpeech") {
+                            Kind = BlockKind.Action,
                             Name = "语音播报",
-                            Icon = ("语音播报", "\uED53"),
-                            Args = new Dictionary<string,MetaArgsBase> {
-                                ["Text"] = new CommonMetaArgs {
-                                    Name = "要播报的文本",
-                                    Type = MetaType.text
-                                }
-                            },
-                            DropdownUseNumbers = false,
-                            InlineField = false,
-                            InlineBlock = false
+                            Icon = ("语音播报","\uED53"),
+                            Fields = new Dictionary<string,Field> {
+                                ["Text"] = BasicFields.Text("要播报的文本")
+                            }
+                        });
+                    if (EiUtils.IsPluginInstalled("IslandCaller.Plugin2")) {
+                        it.AddBlock(new BlockMetadata("extraIsland.action.islandCaller") {
+                            Kind = BlockKind.Action,
+                            Name = "拉起IslandCaller",
+                            Icon = ("拉起IslandCaller","\uECB5"),
+                            Fields = new Dictionary<string,Field>()
+                        });
+                        if (GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) {
+                            it.AddBlock(new BlockMetadata("extraIsland.action.islandCallerAdvanced") {
+                                Kind = BlockKind.Action,
+                                Name = "(实验性)拉起IslandCaller-高级",
+                                Icon = ("拉起IslandCaller","\uECB5"),
+                                Fields = new Dictionary<string,Field>()
+                            });
                         }
-                    ],
-                    Rules = [
-                        new BlockMetadata {
-                            Id = "extraIsland.rule.isDoubleLesson",
+                    }
+                    it.AddLabel("规则")
+                        .AddBlock(new BlockMetadata("extraIsland.rule.isDoubleLesson") {
+                            Kind = BlockKind.Rule,
                             Name = "下节课是连堂",
                             Icon = ("连堂","\uE2AC"),
-                            Args = [],
-                            DropdownUseNumbers = false,
-                            InlineField = false,
-                            InlineBlock = false
-                        },
-                        new BlockMetadata {
-                            Id = "extraIsland.rule.currentTeacherIs",
+                            Fields = new Dictionary<string,Field>()
+                        })
+                        .AddBlock(new BlockMetadata("extraIsland.rule.currentTeacherIs") {
+                            Kind = BlockKind.Rule,
                             Name = "当前教师是",
                             Icon = ("当前教师是","\uECF9"),
-                            Args = new Dictionary<string,MetaArgsBase> {
-                                ["Teacher"] = new CommonMetaArgs {
-                                    Name = "",
-                                    Type = MetaType.text
-                                }
-                            },
-                            DropdownUseNumbers = false,
-                            InlineField = false,
-                            InlineBlock = false
-                        },
-                        new BlockMetadata {
-                            Id = "extraIsland.rule.nextTeacherIs",
+                            Fields = new Dictionary<string,Field> {
+                                ["Teacher"] = BasicFields.Text("")
+                            }
+                        })
+                        .AddBlock(new BlockMetadata("extraIsland.rule.nextTeacherIs") {
+                            Kind = BlockKind.Rule,
                             Name = "下节课教师是",
                             Icon = ("下节课教师是","\uECF7"),
-                            Args = new Dictionary<string,MetaArgsBase> {
-                                ["Teacher"] = new CommonMetaArgs {
-                                    Name = "",
-                                    Type = MetaType.text
-                                }
-                            },
-                            DropdownUseNumbers = false,
-                            InlineField = false,
-                            InlineBlock = false
-                        },
-                        new BlockMetadata {
-                            Id = "extraIsland.rule.flagIs",
+                            Fields = new Dictionary<string,Field> {
+                                ["Teacher"] = BasicFields.Text("")
+                            }
+                        })
+                        .AddBlock(new BlockMetadata("extraIsland.rule.flagIs") {
+                            Kind = BlockKind.Rule,
                             Name = "标志是",
                             Icon = ("读标志","\uE844"),
-                            Args = new Dictionary<string,MetaArgsBase> {
-                                ["TargetFlag"] = new CommonMetaArgs {
-                                    Name = "ID",
-                                    Type = MetaType.text
-                                },
-                                ["FlagContent"] = new CommonMetaArgs {
-                                    Name = "期望标志",
-                                    Type = MetaType.text
-                                }
-                            },
-                            DropdownUseNumbers = false,
-                            InlineField = false,
-                            InlineBlock = false
-                        }
-                    ],
-                    Data = [
-                        new BlockMetadata {
-                            Id = "extraIsland.data.getFlag",
-                            Name = "读标志",
-                            Icon = ("读标志","\uE844"),
-                            Args = new Dictionary<string,MetaArgsBase> {
-                                ["TargetFlag"] = new CommonMetaArgs {
-                                    Name = "ID",
-                                    Type = MetaType.text
-                                }
-                            },
-                            DropdownUseNumbers = false,
-                            InlineField = false,
-                            InlineBlock = false
-                        },                        
-                        new BlockMetadata {
-                            Id = "extraIsland.data.getOnDuty",
-                            Name = "获取当前值日生",
-                            Icon = ("获取当前值日生","\uECDB"),
-                            Args = [],
-                            DropdownUseNumbers = false,
-                            InlineField = false,
-                            InlineBlock = false
-                        },
-                        new BlockMetadata {
-                            Id = "extraIsland.data.getRhesis",
-                            Name = "获取名句",
-                            Icon = ("获取名句","\uE3F4"),
-                            Args = new Dictionary<string,MetaArgsBase> {
-                                ["Dummy"] = new CommonMetaArgs {
-                                    Name = "",
-                                    Type = MetaType.dummy
-                                },
-                                ["HitokotoDummy"] = new CommonMetaArgs {
-                                    Name = "一言",
-                                    Type = MetaType.dummy
-                                },
-                                ["HitokotoWeight"] = new CommonMetaArgs {
-                                    Name = "├ 权重",
-                                    Type = MetaType.number
-                                },
-                                ["HitokotoQuery"] = new CommonMetaArgs {
-                                    Name = "╰ 附加查询参数",
-                                    Type = MetaType.text
-                                },
-                                ["JinrishiciDummy"] = new CommonMetaArgs {
-                                    Name = "今日诗词",
-                                    Type = MetaType.dummy
-                                },
-                                ["JinrishiciWeight"] = new CommonMetaArgs {
-                                    Name = "╰ 权重",
-                                    Type = MetaType.number
-                                },
-                                ["SainticDummy"] = new CommonMetaArgs {
-                                    Name = "诏预",
-                                    Type = MetaType.dummy
-                                },
-                                ["SainticWeight"] = new CommonMetaArgs {
-                                    Name = "├ 权重",
-                                    Type = MetaType.number
-                                },
-                                ["SainticPath"] = new CommonMetaArgs {
-                                    Name = "╰ 接口路径",
-                                    Type = MetaType.text
-                                },
-                                ["LengthLimitation"] = new CommonMetaArgs {
-                                    Name = "字数限制",
-                                    Type = MetaType.number
-                                },
-                                ["IgnoreListString"] = new CommonMetaArgs {
-                                    Name = "排除列表(回车分隔)",
-                                    Type = MetaType.text
-                                }
-                            },
-                            DropdownUseNumbers = false,
-                            InlineField = false,
-                            InlineBlock = false
-                        }
-                    ]
-                };
-                if (EiUtils.IsPluginInstalled("IslandCaller.Plugin2")) {
-                    regData.Actions.Add(new BlockMetadata {
-                        Id = "extraIsland.action.islandCaller",
-                        Name = "拉起IslandCaller",
-                        Icon = ("拉起IslandCaller", "\uECB5"),
-                        Args = [],
-                        DropdownUseNumbers = false,
-                        InlineField = false,
-                        InlineBlock = false
-                    });
-                    if (GlobalConstants.Handlers.MainConfig!.Data.IsExperimentalModeActivated) {
-                        regData.Actions.Add(new BlockMetadata {
-                            Id = "extraIsland.action.islandCallerAdvanced",
-                            Name = "(实验性)拉起IslandCaller-高级",
-                            Icon = ("拉起IslandCaller", "\uECB5"),
-                            Args = [],
-                            DropdownUseNumbers = false,
-                            InlineField = false,
-                            InlineBlock = false
+                            Fields = new Dictionary<string,Field> {
+                                ["TargetFlag"] = BasicFields.Text("ID"),
+                                ["FlagContent"] = BasicFields.Text("期望标志")
+                            }
                         });
-                    }
-                }
-                saiServerService.RegisterBlocks("ExtraIsland", regData);
-                
-                saiServerService.RegisterDataGetter<GetFlag>("extraIsland.data.getFlag",GetFlag.Getter);
-                saiServerService.RegisterDataGetter<GetFlag>("extraIsland.data.getOnDuty",GetOnDuty.Getter);
-                saiServerService.RegisterDataGetter<GetRhesis>("extraIsland.data.getRhesis",GetRhesis.Getter);
+                    it.AddLabel("数据")
+                        .AddBlock<GetFlagBlock>()
+                        .AddBlock<GetOnDutyBlock>()
+                        .AddBlock<GetRhesisBlock>();
+                });
             };
         }
     }

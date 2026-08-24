@@ -1,28 +1,46 @@
 ﻿using ExtraIsland.Shared;
+using SuperAutoIsland.Interface.Metadata;
+using SuperAutoIsland.Interface.Services;
+using SuperAutoIsland.Interface.Services.Automations;
 
 namespace ExtraIsland.Automations.Data;
 
-public class GetRhesis {
+public class GetRhesisBlock : DataBlockBase {
+    public override string Id => "extraIsland.data.getRhesis";
+    public override string Name => "获取名句";
+    public override (string,string) Icon => ("获取名句","\uE3F4");
+    public override string DataOutput => "String";
+    public override Type SettingsType => typeof(GetRhesisBlock);
     public int HitokotoWeight { get; set; }
     public string HitokotoQuery { get; set; } = string.Empty;
-    
     public int JinrishiciWeight { get; set; }
-    
     public int SainticWeight { get; set; }
     public string SainticPath { get; set; } = string.Empty;
-    
     public int LengthLimitation { get; set; }
     public string IgnoreListString { get; set; } = string.Empty;
-
     static readonly RhesisHandler.Instance Rhesis = new RhesisHandler.Instance();
 
-    public static Task<string> Getter(object? data) {
-        return data is not GetRhesis config 
-            ? Task.FromResult("???") : GetterAsync(config);
+    public override void GetFields(FieldsRegister it) => it
+        .AddField("Dummy",BasicFields.Dummy(""))
+        .AddField("HitokotoDummy",BasicFields.Dummy("一言"))
+        .AddField("HitokotoWeight",BasicFields.Number("├ 权重"))
+        .AddField("HitokotoQuery",BasicFields.Text("╰ 附加查询参数"))
+        .AddField("JinrishiciDummy",BasicFields.Dummy("今日诗词"))
+        .AddField("JinrishiciWeight",BasicFields.Number("╰ 权重"))
+        .AddField("SainticDummy",BasicFields.Dummy("诏预"))
+        .AddField("SainticWeight",BasicFields.Number("├ 权重"))
+        .AddField("SainticPath",BasicFields.Text("╰ 接口路径"))
+        .AddField("LengthLimitation",BasicFields.Number("字数限制"))
+        .AddField("IgnoreListString",BasicFields.Text("排除列表(回车分隔)"));
+
+    public override async Task<object> Handler(object? data) {
+        if (data is not GetRhesisBlock config)
+            return "???";
+        return await GetterAsync(config);
     }
 
-    static async Task<string> GetterAsync(GetRhesis config) {
-        Dictionary<string,RhesisProviderConfig> providerSettings = 
+    static async Task<object> GetterAsync(GetRhesisBlock config) {
+        Dictionary<string,RhesisProviderConfig> providerSettings =
             new Dictionary<string,RhesisProviderConfig>(StringComparer.OrdinalIgnoreCase);
         foreach (IRhesisProvider provider in RhesisHandler.Providers) {
             providerSettings[provider.Id] = new RhesisProviderConfig {
@@ -31,18 +49,18 @@ public class GetRhesis {
             };
         }
         Configure(providerSettings,
-            HitokotoRhesisProvider.ProviderId,
-            config.HitokotoWeight,
-            HitokotoRhesisProvider.QueryOption,
-            config.HitokotoQuery);
+                  HitokotoRhesisProvider.ProviderId,
+                  config.HitokotoWeight,
+                  HitokotoRhesisProvider.QueryOption,
+                  config.HitokotoQuery);
         Configure(providerSettings,
-            JinrishiciRhesisProvider.ProviderId,
-            config.JinrishiciWeight);
+                  JinrishiciRhesisProvider.ProviderId,
+                  config.JinrishiciWeight);
         Configure(providerSettings,
-            SainticRhesisProvider.ProviderId,
-            config.SainticWeight,
-            SainticRhesisProvider.PathOption,
-            config.SainticPath);
+                  SainticRhesisProvider.ProviderId,
+                  config.SainticWeight,
+                  SainticRhesisProvider.PathOption,
+                  config.SainticPath);
 
         RhesisData last = new RhesisData();
         for (int i = 0; i < 3; i++) {
@@ -53,8 +71,10 @@ public class GetRhesis {
     }
 
     static void Configure(Dictionary<string,RhesisProviderConfig> settings,
-        string providerId, int weight,
-        string? optionKey = null, string? optionValue = null) {
+        string providerId,
+        int weight,
+        string? optionKey = null,
+        string? optionValue = null) {
         if (!settings.TryGetValue(providerId,out RhesisProviderConfig? providerConfig)) return;
         providerConfig.IsEnabled = weight != 0;
         providerConfig.Weight = weight;
