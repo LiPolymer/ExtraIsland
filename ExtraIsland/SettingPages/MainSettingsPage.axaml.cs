@@ -11,6 +11,7 @@ using FluentAvalonia.UI.Controls;
 namespace ExtraIsland.SettingPages;
 
 [HidePageTitle]
+[Group("extraisland")]
 [SettingsPageInfo("extraisland.master","主设置","\uE51A","\uE519")]
 public partial class MainSettingsPage : SettingsPageBase {
     public MainSettingsPage() {
@@ -49,7 +50,7 @@ public partial class MainSettingsPage : SettingsPageBase {
                 ? Brushes.LightGreen
                 : Brushes.IndianRed;
             indicatorLabel.Content = GlobalConstants.Handlers.LyricsIsland.Status
-                ? "正常"
+                ? "内置"
                 : "错误";
             indicatorLabel.Foreground = GlobalConstants.Handlers.LyricsIsland.Status
                 ? Brushes.DarkOliveGreen

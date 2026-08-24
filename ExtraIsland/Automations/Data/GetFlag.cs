@@ -7,11 +7,11 @@ using SuperAutoIsland.Interface.Services.Automations;
 namespace ExtraIsland.Automations.Data;
 
 public class GetFlagBlock : DataBlockBase {
-    public override string Id => "extraIsland.data.getFlag";
-    public override string Name => "读标志";
-    public override (string,string) Icon => ("读标志","\uE844");
-    public override string DataOutput => "String";
-    public override Type SettingsType => typeof(GetFlagBlock);
+    public override string Id { get => "extraIsland.data.getFlag"; }
+    public override string Name { get => "读标志"; }
+    public override (string,string) Icon { get => ("读标志","\uE844"); }
+    public override string DataOutput { get => "String"; }
+    public override Type SettingsType { get => typeof(GetFlagBlock); }
     public string TargetFlag { get; set; } = string.Empty;
 
     public override void GetFields(FieldsRegister it) => it

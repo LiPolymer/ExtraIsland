@@ -8,6 +8,7 @@ using ExtraIsland.Shared;
 namespace ExtraIsland.SettingPages;
 
 [HidePageTitle]
+[Group("extraisland")]
 [SettingsPageInfo("extraisland.tiny","微功能","\uEDC5","\uEDC4")]
 public partial class TinyFeaturesSettingsPage : SettingsPageBase {
     public TinyFeaturesSettingsPage() {

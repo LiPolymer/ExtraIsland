@@ -1,11 +1,9 @@
-using System.Reflection;
 using System.Runtime.InteropServices;
 using ClassIsland.Core;
 using ClassIsland.Core.Abstractions;
 using ClassIsland.Core.Attributes;
-using ClassIsland.Core.Enums.SettingsWindow;
 using ClassIsland.Core.Extensions.Registry;
-using ClassIsland.Core.Services.Registry;
+using ClassIsland.Core.Models.SettingsWindow;
 using ClassIsland.Shared;
 using ExtraIsland.Automations;
 using ExtraIsland.AuthorizeProvider;
@@ -82,8 +80,8 @@ public class Plugin : PluginBase {
         
         ct.WriteLine("正在注册ClassIsland要素...");
         //Services
-        services.AddHostedService<ServicesFetcherService>();
-        services.AddHostedService<Register>();
+        services.AddHostedService<ServicesFetcherService>()
+            .AddHostedService<Register>();
         
         // Rhesis providers
         RhesisHandler.RegisterProvider(new HitokotoRhesisProvider());
@@ -91,43 +89,20 @@ public class Plugin : PluginBase {
         RhesisHandler.RegisterProvider(new SainticRhesisProvider());
 
         //Components
-        services.AddComponent<BetterCountdown,BetterCountdownSettings>();
-        services.AddComponent<FluentClock,FluentClockSettings>();
-        services.AddComponent<Rhesis,RhesisSettings>();
-        services.AddComponent<OnDuty,OnDutySettings>();
-        services.AddComponent<LiveActivity,LiveActivitySettings>();
-        services.AddComponent<DynamicLyrics,DynamicLyricsSettings>();
-        services.AddComponent<ProfileInformation,ProfileInformationSettings>();
-        services.AddComponent<FlagDisplay,FlagDisplaySettings>();
+        services.AddComponent<BetterCountdown,BetterCountdownSettings>()
+            .AddComponent<FluentClock,FluentClockSettings>()
+            .AddComponent<Rhesis,RhesisSettings>()
+            .AddComponent<OnDuty,OnDutySettings>()
+            .AddComponent<LiveActivity,LiveActivitySettings>()
+            .AddComponent<DynamicLyrics,DynamicLyricsSettings>()
+            .AddComponent<ProfileInformation,ProfileInformationSettings>()
+            .AddComponent<FlagDisplay,FlagDisplaySettings>();
         
         //SettingsPages
-        services.AddSettingsPage<MainSettingsPage>();
-        services.AddSettingsPage<DutySettingsPage>();
+        services.AddSettingsPageGroup("extraisland", "\uEA33", "ExtraIsland")
+            .AddSettingsPage<MainSettingsPage>()
+            .AddSettingsPage<DutySettingsPage>();
         //services.AddSettingsPage<TinyFeaturesSettingsPage>();
-        
-        // 动态反射，实现在低 PluginSdk 上使用高版本功能
-        List<SettingsPageInfo> registeredSettingsPageInfos = SettingsWindowRegistryService.Registered
-            .Where(info => info.Id.StartsWith("extraisland") && info.Category == SettingsPageCategory.External)
-            .ToList();
-        
-        if (InjectService.TryGetAddSettingsPageGroupMethod(out MethodInfo? addSettingsPageGroupMethod))
-        {
-            addSettingsPageGroupMethod.Invoke(typeof(SettingsWindowRegistryExtensions), [services, "extraisland.settings", "\uEA33", "ExtraIsland"]);
-            
-            PropertyInfo groupIdProperty = InjectService.GetSettingsPageInfoGroupIdProperty();
-            foreach (SettingsPageInfo info in registeredSettingsPageInfos)
-            {
-                groupIdProperty.SetValue(info, "extraisland.settings");
-            }
-        }
-        else
-        {
-            FieldInfo nameField = InjectService.GetSettingsPageInfoNameField();
-            foreach (SettingsPageInfo info in registeredSettingsPageInfos)
-            {
-                nameField.SetValue(info, "ExtraIsland·" + (string)nameField.GetValue(info)!);
-            }
-        }
         
         //NotificationProvider
         services.AddNotificationProvider<TimeUpNotification>();

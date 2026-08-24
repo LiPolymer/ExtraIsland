@@ -6,11 +6,11 @@ using SuperAutoIsland.Interface.Services.Automations;
 namespace ExtraIsland.Automations.Data;
 
 public class GetRhesisBlock : DataBlockBase {
-    public override string Id => "extraIsland.data.getRhesis";
-    public override string Name => "获取名句";
-    public override (string,string) Icon => ("获取名句","\uE3F4");
-    public override string DataOutput => "String";
-    public override Type SettingsType => typeof(GetRhesisBlock);
+    public override string Id { get => "extraIsland.data.getRhesis"; }
+    public override string Name { get => "获取名句"; }
+    public override (string,string) Icon { get => ("获取名句","\uE3F4"); }
+    public override string DataOutput { get => "String"; }
+    public override Type SettingsType { get => typeof(GetRhesisBlock); }
     public int HitokotoWeight { get; set; }
     public string HitokotoQuery { get; set; } = string.Empty;
     public int JinrishiciWeight { get; set; }

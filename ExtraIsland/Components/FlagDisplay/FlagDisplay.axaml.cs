@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using Avalonia;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Abstractions.Services;
@@ -10,7 +9,7 @@ namespace ExtraIsland.Components;
 
 [ComponentInfo(
                   "0ce2fe37-5f79-41c1-a2fe-375f7901c182",
-                  "标志展示",
+                  "展示标志",
                   "\uE843",
                   "展示由设标志行动设定的特定标志内容"
               )]

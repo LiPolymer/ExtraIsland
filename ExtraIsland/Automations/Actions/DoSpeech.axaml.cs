@@ -3,12 +3,7 @@ using ClassIsland.Core.Abstractions.Automation;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Core.Abstractions.Services.SpeechService;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Threading.Tasks;
-using System;
-using ClassIsland.Core;
-using ClassIsland.Core.Controls;
 using ClassIsland.Shared;
-using ExtraIsland.Shared;
 
 namespace ExtraIsland.Automations.Actions;
 
