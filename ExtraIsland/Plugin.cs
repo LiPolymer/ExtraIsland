@@ -105,7 +105,7 @@ public class Plugin : PluginBase {
         //services.AddSettingsPage<TinyFeaturesSettingsPage>();
         
         //NotificationProvider
-        services.AddNotificationProvider<TimeUpNotification>();
+        services.AddNotificationProvider<EiNotificationProvider>();
         
         //Actions
         Register.Claim(services);

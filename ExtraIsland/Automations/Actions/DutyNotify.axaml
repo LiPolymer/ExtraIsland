@@ -1,0 +1,27 @@
+<ci:ActionSettingsControlBase x:Class="ExtraIsland.Automations.Actions.DutyNotifySettingsControl"
+                              x:TypeArguments="actions1:DutyNotifySettings"
+                              xmlns="https://github.com/avaloniaui"
+                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                              xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                              xmlns:actions1="clr-namespace:ExtraIsland.Automations.Actions"
+                              mc:Ignorable="d"
+                              x:CompileBindings="False">
+    <StackPanel DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=actions1:DutyNotifySettingsControl}}"
+                Spacing="8" Margin="10" Orientation="Horizontal">
+        <StackPanel Orientation="Vertical" Spacing="2" VerticalAlignment="Center">
+            <TextBox MinWidth="340"
+                     PlaceholderText="提示内容格式: {0}=当前值日, {1}=下次轮换"
+                     Text="{Binding Settings.Format, Mode=TwoWay}" />
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Content="通知置顶"
+                          IsChecked="{Binding Settings.IsTopmostEnabled, Mode=TwoWay}"
+                          VerticalAlignment="Center"/>
+                <CheckBox Content="等待提醒完成"
+                          IsChecked="{Binding Settings.WaitForCompletion, Mode=TwoWay}"
+                          VerticalAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</ci:ActionSettingsControlBase>

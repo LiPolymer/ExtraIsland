@@ -394,6 +394,41 @@ public class OnDutyPersistedConfigData : ObservableObject {
         }
         return pit;
     }
+
+    /// <summary>
+    /// 只读预测下一次轮换后的值日人员, 不修改轮换状态, 不考虑节假日跳过
+    /// </summary>
+    public List<PeopleItem> GetNextGroupOnDuty() {
+        if (Peoples.Count == 0) return [];
+        int nextIndex = DutyState switch {
+            DutyStateData.Grouped => CurrentPeopleIndex + NumberOfPeoples,
+            _ => CurrentPeopleIndex + 1
+        };
+        if (nextIndex >= Peoples.Count) {
+            if (!IsCycled) return [];
+            nextIndex = 0;
+        }
+        return DutyState switch {
+            DutyStateData.Grouped => Enumerable.Range(0,NumberOfPeoples).Select(k => GetPeopleOnDuty(nextIndex + k)).ToList(),
+            _ => EiUtils.IsOdd(nextIndex) switch {
+                true => [GetPeopleOnDuty(nextIndex),GetPeopleOnDuty(nextIndex - 1)],
+                false => [GetPeopleOnDuty(nextIndex),GetPeopleOnDuty(nextIndex + 1)]
+            }
+        };
+    }
+
+    /// <summary>
+    /// 下一次轮换后的值日人员文本; 无下一次轮换时返回空字符串
+    /// </summary>
+    public string GetNextGroupOnDutyString() {
+        List<PeopleItem> next = GetNextGroupOnDuty();
+        if (next.Count == 0) return string.Empty;
+        return DutyState switch {
+            DutyStateData.Grouped => string.Join(" ",next.Select(p => p.Name)),
+            DutyStateData.InOut => $"内:{next[0].Name} 外:{next[1].Name}",
+            _ => string.Empty
+        };
+    }
     
     public List<PeopleItem> GetWhoOnDuty(bool reset = false) {
         if (reset) DutyState = 0;

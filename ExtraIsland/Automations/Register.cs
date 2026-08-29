@@ -35,6 +35,7 @@ public class Register : IHostedService {
             }
         }
         services.AddAction<DoSpeechAction,DoSpeechSettingsControl>();
+        services.AddAction<DutyNotifyAction,DutyNotifySettingsControl>();
 
         // 规则
         services.AddRule<TodayIsConfig,TodayIs>
