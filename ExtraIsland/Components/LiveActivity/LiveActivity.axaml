@@ -11,12 +11,8 @@
                   AttachedToVisualTree="OnAttachedToVisualTree"
                   DetachedFromVisualTree="OnDetachedFromVisualTree"
                   d:DesignHeight="300" d:DesignWidth="300">
-    <ci:ComponentBase.Resources>
-        <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter"/>
-    </ci:ComponentBase.Resources>
     <Border x:Name="CardChip"
             ClipToBounds="True"
-            CornerRadius="{Binding Bounds.Height, RelativeSource={RelativeSource Self}, Converter={StaticResource SizeDoubleToCornerRadiusConverter}}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Padding="12,4,12,2"

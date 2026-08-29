@@ -7,8 +7,12 @@
                   xmlns:local="clr-namespace:ExtraIsland.Components"
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
                   xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                  xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
                   mc:Ignorable="d"
                   d:DesignHeight="300" d:DesignWidth="300">
+    <ci:ComponentBase.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </ci:ComponentBase.Resources>
     <ScrollViewer
         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:LiveActivitySettings}}">
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
@@ -31,6 +35,27 @@
                                Foreground="Gray" />
                     </StackPanel>
                 </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xF031;}"
+                                       Header="圆角"
+                                       Description="同步ClassIsland主界面圆角, 或使用自定义圆角">
+                <fa:FASettingsExpander.Footer>
+                    <ToggleSwitch IsChecked="{Binding Settings.IsCornerRadiusSyncEnabled, Mode=TwoWay}"/>
+                </fa:FASettingsExpander.Footer>
+                <fa:FASettingsExpanderItem Content="自定义圆角">
+                    <fa:FASettingsExpanderItem.Footer>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Slider Minimum="0" Maximum="30"
+                                    TickFrequency="1" IsSnapToTickEnabled="True"
+                                    SmallChange="1" LargeChange="2"
+                                    IsEnabled="{Binding Settings.IsCornerRadiusSyncEnabled, Converter={StaticResource InverseBooleanConverter}}"
+                                    Value="{Binding Settings.CustomCornerRadius, Mode=TwoWay}"
+                                    Width="200" />
+                            <TextBlock VerticalAlignment="Center"
+                                       Text="{Binding Settings.CustomCornerRadius, StringFormat='{}{0:F0}'}"/>
+                        </StackPanel>
+                    </fa:FASettingsExpanderItem.Footer>
+                </fa:FASettingsExpanderItem>
             </fa:FASettingsExpander>
             <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE051;}"
                                        Header="启用动画"

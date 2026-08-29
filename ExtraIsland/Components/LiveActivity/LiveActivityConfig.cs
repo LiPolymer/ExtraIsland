@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace ExtraIsland.Components;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class LiveActivityConfig {
+public class LiveActivityConfig : ObservableObject {
     public event Action? OnMarginChanged;
     bool _isLeftNegativeMargin;
     public bool IsLeftNegativeMargin {
@@ -22,6 +22,28 @@ public class LiveActivityConfig {
             if (_isRightNegativeMargin == value) return;
             _isRightNegativeMargin = value;
             OnMarginChanged?.Invoke();
+        }
+    }
+
+    public event Action? OnCornerRadiusChanged;
+    bool _isCornerRadiusSyncEnabled = true;
+    public bool IsCornerRadiusSyncEnabled {
+        get => _isCornerRadiusSyncEnabled;
+        set {
+            if (_isCornerRadiusSyncEnabled == value) return;
+            _isCornerRadiusSyncEnabled = value;
+            OnPropertyChanged();
+            OnCornerRadiusChanged?.Invoke();
+        }
+    }
+    double _customCornerRadius = 8.0;
+    public double CustomCornerRadius {
+        get => _customCornerRadius;
+        set {
+            if (Math.Abs(_customCornerRadius - value) < 0.01f) return;
+            _customCornerRadius = value;
+            OnPropertyChanged();
+            OnCornerRadiusChanged?.Invoke();
         }
     }
 

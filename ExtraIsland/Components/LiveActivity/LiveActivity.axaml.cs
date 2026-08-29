@@ -5,6 +5,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Abstractions.Services;
+using ClassIsland.Core.Assists;
 using ClassIsland.Core.Attributes;
 using ClassIsland.Platforms.Abstraction;
 using ExtraIsland.Shared;
@@ -105,6 +106,22 @@ public partial class LiveActivity : ComponentBase<LiveActivityConfig> {
         });
     }
 
+    IDisposable? _cornerRadiusSubscription;
+
+    void ApplyCornerRadius() {
+        Dispatcher.UIThread.InvokeAsync(() => {
+            _cornerRadiusSubscription?.Dispose();
+            _cornerRadiusSubscription = null;
+            if (Settings.IsCornerRadiusSyncEnabled) {
+                _cornerRadiusSubscription = this.GetObservable(MainWindowStylesAssist.CornerRadiusProperty)
+                    .Subscribe(value => CardChip.CornerRadius = new CornerRadius(value));
+                CardChip.CornerRadius = new CornerRadius(MainWindowStylesAssist.GetCornerRadius(this));
+            } else {
+                CardChip.CornerRadius = new CornerRadius(Settings.CustomCornerRadius);
+            }
+        });
+    }
+
     void InitializeLyrics() {
         if (IsLyricsIslandLoaded) {
             Settings.IsLyricsEnabled = false;
@@ -188,15 +205,20 @@ public partial class LiveActivity : ComponentBase<LiveActivityConfig> {
             Settings.IsSleepyUploaderEnabled = false;
         }
         UpdateMargin();
+        ApplyCornerRadius();
         InitializeLyrics();
         LessonsService.PostMainTimerTicked += Check;
         Settings.OnMarginChanged += UpdateMargin;
+        Settings.OnCornerRadiusChanged += ApplyCornerRadius;
         Settings.OnLyricsChanged += InitializeLyrics;
     }
     void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs visualTreeAttachmentEventArgs) {
         LessonsService.PostMainTimerTicked -= Check;
         Settings.OnMarginChanged -= UpdateMargin;
+        Settings.OnCornerRadiusChanged -= ApplyCornerRadius;
         Settings.OnLyricsChanged -= InitializeLyrics;
+        _cornerRadiusSubscription?.Dispose();
+        _cornerRadiusSubscription = null;
         if (_lyricsHandler != null) {
             _lyricsHandler.OnLyricsChanged -= UpdateLyrics;
         }
