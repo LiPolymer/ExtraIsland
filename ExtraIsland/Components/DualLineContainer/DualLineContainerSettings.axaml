@@ -1,0 +1,66 @@
+<ci:ComponentBase x:TypeArguments="local:DualLineContainerConfig"
+                  x:Class="ExtraIsland.Components.DualLineContainerSettings"
+                  xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:ExtraIsland.Components"
+                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
+                  xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                  mc:Ignorable="d"
+                  d:DesignHeight="300" d:DesignWidth="300">
+    <ScrollViewer
+        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:DualLineContainerSettings}}">
+        <StackPanel Classes="settings-container animated-intro">
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE446;}"
+                                   Header="上行缩放"
+                                   Description="调整双行容器上半部分组件的显示比例">
+                <fa:FASettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Slider Minimum="0.3" Maximum="1.0"
+                                TickFrequency="0.05" IsSnapToTickEnabled="True"
+                                SmallChange="0.05" LargeChange="0.1"
+                                Value="{Binding Settings.UpScale, Mode=TwoWay}"
+                                Width="200" />
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="{Binding Settings.UpScale, StringFormat='{}{0:P0}'}"/>
+                    </StackPanel>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE440;}"
+                                   Header="下行缩放"
+                                   Description="调整双行容器下半部分组件的显示比例">
+                <fa:FASettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Slider Minimum="0.3" Maximum="1.0"
+                                TickFrequency="0.05" IsSnapToTickEnabled="True"
+                                SmallChange="0.05" LargeChange="0.1"
+                                Value="{Binding Settings.DownScale, Mode=TwoWay}"
+                                Width="200" />
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="{Binding Settings.DownScale, StringFormat='{}{0:P0}'}"/>
+                    </StackPanel>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE44A;}"
+                                   Header="行间距"
+                                   Description="调整上下两行之间的空隙">
+                <fa:FASettingsExpander.Footer>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Slider Minimum="0" Maximum="24"
+                                TickFrequency="1" IsSnapToTickEnabled="True"
+                                SmallChange="1" LargeChange="2"
+                                Value="{Binding Settings.RowSpacing, Mode=TwoWay}"
+                                Width="200" />
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="{Binding Settings.RowSpacing, StringFormat='{}{0:F0}'}"/>
+                    </StackPanel>
+                </fa:FASettingsExpander.Footer>
+            </fa:FASettingsExpander>
+            <Label HorizontalAlignment="Center"
+                   Foreground="{DynamicResource MaterialDesignBodyLight}">
+                Added by ExtraIsland
+            </Label>
+        </StackPanel>
+    </ScrollViewer>
+</ci:ComponentBase>

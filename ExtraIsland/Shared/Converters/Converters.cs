@@ -117,21 +117,6 @@ public class DayOfWeekEnumStringConverter : IValueConverter {
     }
 }
 
-public class DoubleMultipleConverter : IValueConverter
-{
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-        if (value is not double v) return null;
-        double m = System.Convert.ToDouble(parameter);
-        return v * m;
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
-        if (value is not double v) return null;
-        double m = System.Convert.ToDouble(parameter);
-        return v / m;
-    }
-}
-
 public class SeparateAttributesDisplayVisibilityConverter : IValueConverter {
     public object Convert(object? value,Type targetType,object? parameter,
         CultureInfo culture) {
@@ -143,16 +128,6 @@ public class SeparateAttributesDisplayVisibilityConverter : IValueConverter {
     
     public object ConvertBack(object? value,Type targetType,object? parameter,
         CultureInfo culture) {
-        throw new NotSupportedException();
-    }
-}
-
-public class HalfLengthToMarginThicknessConverter : IValueConverter {
-    public object? Convert(object? value,Type targetType,object? parameter,CultureInfo culture) {
-        double width = (double)value!;
-        return new Thickness(-width/8,0);
-    }
-    public object? ConvertBack(object? value,Type targetType,object? parameter,CultureInfo culture) {
         throw new NotSupportedException();
     }
 }

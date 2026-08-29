@@ -8,7 +8,7 @@ using ClassIsland.Core.Models.Components;
 namespace ExtraIsland.Components;
 
 [ContainerComponent]
-[ComponentInfo("1FA88C26-6E17-4CF5-9BB4-771C7527FD1B", "(WIP)双行容器", "\uF021", "将多个组件组合到两小行中显示")]
+[ComponentInfo("1FA88C26-6E17-4CF5-9BB4-771C7527FD1B", "双行容器", "\uF021", "将多个组件组合到两小行中显示")]
 public partial class DualLineContainer: ComponentBase<DualLineContainerConfig> {
     public DualLineContainer() {
         InitializeComponent();

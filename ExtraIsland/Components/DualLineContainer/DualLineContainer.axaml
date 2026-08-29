@@ -6,65 +6,64 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:local="clr-namespace:ExtraIsland.Components"
                   xmlns:ci="http://classisland.tech/schemas/xaml/core"
-                  xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
                   AttachedToVisualTree="OnAttachedToVisualTree"
                   DetachedFromVisualTree="OnDetachedFromVisualTree"
                   mc:Ignorable="d">
-    <ci:ComponentBase.Resources>
-        <converters:DoubleMultipleConverter x:Key="DoubleMultipleConverter" />
-        <converters:HalfLengthToMarginThicknessConverter x:Key="HalfLengthToMarginThicknessConverter" />
-        <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter" />
-    </ci:ComponentBase.Resources>
-    <Grid VerticalAlignment="Stretch"
-          DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:DualLineContainer}}"
-          Margin="{Binding #ContentRoot.Bounds.Width, Converter={StaticResource HalfLengthToMarginThicknessConverter}}">
-        <Grid x:Name="ContentRoot">
-            <ItemsControl Margin="-6 0"
-                          VerticalAlignment="Top"
-                          ClipToBounds="False"
-                          ItemsSource="{Binding Settings.UpChildren}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Classes="components-panel" Orientation="Horizontal">
-                            <StackPanel.RenderTransform>
-                                <ScaleTransform ScaleX="0.6" ScaleY="0.6" />
-                            </StackPanel.RenderTransform>
-                        </StackPanel>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <ci:ComponentPresenter IsOnMainWindow="True"
-                                               ClipToBounds="False"
-                                               Settings="{Binding}"
-                                               HidingRules="{Binding HidingRules, Mode=OneWay}"
-                                               HideOnRule="{Binding HideOnRule, Mode=OneWay}"
-                                               Margin="6 0" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <ItemsControl Margin="-6 0"
-                          VerticalAlignment="Bottom"
-                          ItemsSource="{Binding Settings.DownChildren}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Classes="components-panel" Orientation="Horizontal">
-                            <StackPanel.RenderTransform>
-                                <ScaleTransform ScaleX="0.7" ScaleY="0.7" />
-                            </StackPanel.RenderTransform>
-                        </StackPanel>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <ci:ComponentPresenter IsOnMainWindow="True"
-                                               Settings="{Binding}"
-                                               HidingRules="{Binding HidingRules, Mode=OneWay}"
-                                               HideOnRule="{Binding HideOnRule, Mode=OneWay}"
-                                               Margin="6 0" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Grid>
+    <Grid VerticalAlignment="Center"
+          HorizontalAlignment="Left"
+          DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:DualLineContainer}}">
+        <StackPanel Orientation="Vertical"
+                    Spacing="{Binding Settings.RowSpacing}">
+            <LayoutTransformControl>
+                <LayoutTransformControl.LayoutTransform>
+                    <ScaleTransform ScaleX="{Binding Settings.UpScale}"
+                                    ScaleY="{Binding Settings.UpScale}" />
+                </LayoutTransformControl.LayoutTransform>
+                <ItemsControl VerticalAlignment="Center"
+                              ClipToBounds="False"
+                              ItemsSource="{Binding Settings.UpChildren}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Classes="components-panel" Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ci:ComponentPresenter IsOnMainWindow="True"
+                                                   ClipToBounds="False"
+                                                   Settings="{Binding}"
+                                                   HidingRules="{Binding HidingRules, Mode=OneWay}"
+                                                   HideOnRule="{Binding HideOnRule, Mode=OneWay}"
+                                                   Margin="6 0" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </LayoutTransformControl>
+            <LayoutTransformControl>
+                <LayoutTransformControl.LayoutTransform>
+                    <ScaleTransform ScaleX="{Binding Settings.DownScale}"
+                                    ScaleY="{Binding Settings.DownScale}" />
+                </LayoutTransformControl.LayoutTransform>
+                <ItemsControl VerticalAlignment="Center"
+                              ClipToBounds="False"
+                              ItemsSource="{Binding Settings.DownChildren}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Classes="components-panel" Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ci:ComponentPresenter IsOnMainWindow="True"
+                                                   ClipToBounds="False"
+                                                   Settings="{Binding}"
+                                                   HidingRules="{Binding HidingRules, Mode=OneWay}"
+                                                   HideOnRule="{Binding HideOnRule, Mode=OneWay}"
+                                                   Margin="6 0" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </LayoutTransformControl>
+        </StackPanel>
     </Grid>
 </ci:ComponentBase>

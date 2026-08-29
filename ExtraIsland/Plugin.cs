@@ -127,7 +127,7 @@ public class Plugin : PluginBase {
         
         if (GlobalConstants.Handlers.MainConfig.Data.IsExperimentalModeActivated) {
             ct.WriteLine("&9实验模式已启用! &7若出现Bug,&c请勿报告&7!",Terminal.MessageType.Warn);
-            services.AddComponent<DualLineContainer>();
+            services.AddComponent<DualLineContainer,DualLineContainerSettings>();
             //services.AddComponent<DebugLyricsHandler>();
             //services.AddComponent<DebugSubLyricsHandler>();
         }

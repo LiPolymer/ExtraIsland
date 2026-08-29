@@ -100,11 +100,16 @@
 	    <XamlRuntime>Wpf</XamlRuntime>
 	    <SubType>Designer</SubType>
 	  </Page>
-	  <Page Update="Components\DualLineContainer\DualLineContainer.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	    <XamlRuntime>Wpf</XamlRuntime>
-	    <SubType>Designer</SubType>
-	  </Page>
+ 	  <Page Update="Components\DualLineContainer\DualLineContainer.xaml">
+ 	    <Generator>MSBuild:Compile</Generator>
+ 	    <XamlRuntime>Wpf</XamlRuntime>
+ 	    <SubType>Designer</SubType>
+ 	  </Page>
+ 	  <Page Update="Components\DualLineContainer\DualLineContainerSettings.axaml">
+ 	    <Generator>MSBuild:Compile</Generator>
+ 	    <XamlRuntime>Wpf</XamlRuntime>
+ 	    <SubType>Designer</SubType>
+ 	  </Page>
 	  <Page Update="Components\FlagDisplay\FlagDisplay.axaml">
 	    <Generator>MSBuild:Compile</Generator>
 	    <XamlRuntime>Wpf</XamlRuntime>

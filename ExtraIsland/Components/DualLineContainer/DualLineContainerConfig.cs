@@ -13,21 +13,28 @@ public partial class DualLineContainerConfig : ObservableObject, IComponentConta
     
     public event Action? ContainerContentChanged;
 
-    ObservableCollection<ComponentSettings> _children = [];
-    public ObservableCollection<ComponentSettings> Children {
-        get => _children;
+    public ObservableCollection<ComponentSettings> Children { get;
         set {
-            if (Equals(value,_children)) return;
-            _children = value;
+            if (Equals(value,field)) return;
+            field = value;
             OnPropertyChanged();
             ContainerContentChanged?.Invoke();
             value.CollectionChanged += (_,_) => ContainerContentChanged?.Invoke();
         }
-    }
+    } = [];
 
     [ObservableProperty]
     ObservableCollection<ComponentSettings> _upChildren = [];
 
     [ObservableProperty]
     ObservableCollection<ComponentSettings> _downChildren = [];
+
+    [ObservableProperty]
+    double _upScale = 0.6;
+
+    [ObservableProperty]
+    double _downScale = 0.7;
+
+    [ObservableProperty]
+    double _rowSpacing = 4;
 }
