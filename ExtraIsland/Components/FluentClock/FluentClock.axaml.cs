@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Abstractions.Services;
@@ -177,6 +178,29 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         Now = !Settings.IsSystemTime ?
             ExactTimeService.GetCurrentLocalDateTime()
             : DateTime.Now;
+        Reconcile();
+    }
+    
+    void Reconcile() {
+        Dispatcher.UIThread.InvokeAsync(() => {
+            if (_cts?.IsCancellationRequested ?? false) return;
+            string hours = Now.Hour.ToString("D2");
+            string minutes = Now.Minute.ToString("D2");
+            string seconds = Now.Second.ToString("D2");
+            SyncDigit(LHourTens,hours[0],_hourTensAnimator);
+            SyncDigit(LHourUnits,hours[1],_hourUnitsAnimator);
+            SyncDigit(LMinTens,minutes[0],_minTensAnimator);
+            SyncDigit(LMinUnits,minutes[1],_minUnitsAnimator);
+            SyncDigit(LSecTens,seconds[0],_secTensAnimator);
+            SyncDigit(LSecUnits,seconds[1],_secUnitsAnimator);
+        });
+    }
+
+    void SyncDigit(ContentControl label,char expected,Animators.GenericContentSwapAnimator animator) {
+        if (animator.IsRendering) return;
+        string expectedStr = expected.ToString();
+        if (label.Content as string == expectedStr) return;
+        animator.SilentUpdate(expectedStr);
     }
 
     void OnAttachedToVisualTree(object? sender,VisualTreeAttachmentEventArgs e) {

@@ -107,25 +107,46 @@ public static class Animators {
         }
 
         bool _renderLock;
+        int _generation;
+        long _lockStartTimestamp;
+        object? _pendingContent;
+        bool _pendingAnimated;
+        bool _pendingSwap;
+        
+        const long LockTimeoutMs = 3000;
+
+        public bool IsRendering => _renderLock;
+
         public void Update(string content, bool isAnimated = true, bool isSwapAnimEnabled = true, bool isForced = false) {
-            if (_renderLock) return;
             if (!(content != _targetContent | isForced)) return;
             _targetContent = content;
             Update((object)content, isAnimated, isSwapAnimEnabled);
         }
 
         public void Update(object content, bool isAnimated = true, bool isSwapAnimEnabled = true) {
-            if (_renderLock) return;
+            if (_renderLock) {
+                if (Environment.TickCount64 - _lockStartTimestamp <= LockTimeoutMs) {
+                    _pendingContent = content;
+                    _pendingAnimated = isAnimated;
+                    _pendingSwap = isSwapAnimEnabled;
+                    return;
+                }
+                // 认为动画挂起,放弃旧动画并接管锁
+                _pendingContent = null;
+                _renderLock = false;
+            }
             _renderLock = true;
+            _lockStartTimestamp = Environment.TickCount64;
+            int generation = ++_generation;
             // Use InvokeAsync only if needed to avoid overhead if already on UI thread
             if (Dispatcher.UIThread.CheckAccess()) {
-                RunUpdate(content, isAnimated, isSwapAnimEnabled);
+                RunUpdate(content, isAnimated, isSwapAnimEnabled, generation);
             } else {
-                Dispatcher.UIThread.InvokeAsync(() => RunUpdate(content, isAnimated, isSwapAnimEnabled));
+                Dispatcher.UIThread.InvokeAsync(() => RunUpdate(content, isAnimated, isSwapAnimEnabled, generation));
             }
         }
 
-        private async void RunUpdate(object content, bool isAnimated, bool isSwapAnimEnabled) {
+        private async void RunUpdate(object content, bool isAnimated, bool isSwapAnimEnabled, int generation) {
             try {
                 if (!isAnimated) {
                     _targetLabel.Content = content;
@@ -140,9 +161,19 @@ public static class Animators {
                 }
             } catch {
                 // Ignore animation errors
-                _targetLabel.Content = content;
+                if (generation == _generation) {
+                    _targetLabel.Content = content;
+                }
             } finally {
-                _renderLock = false;
+                // 代际不匹配说明本次动画已被放弃,不再参与锁管理,避免干扰新的更新或写回旧内容
+                if (generation == _generation) {
+                    _renderLock = false;
+                    object? pending = _pendingContent;
+                    if (pending != null) {
+                        _pendingContent = null;
+                        Update(pending,_pendingAnimated,_pendingSwap);
+                    }
+                }
             }
         }
 
