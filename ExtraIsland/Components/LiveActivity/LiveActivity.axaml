@@ -25,7 +25,7 @@
                                Glyph="&#xE453;" 
                                Foreground="Gray"
                                VerticalAlignment="Center"
-                               Margin="-4,0,0,0"
+                               Margin="-4,0,0,3"
                                FontSize="20"/>
                 <Label x:Name="CurrentLabel" 
                        ClipToBounds="True"
@@ -45,7 +45,7 @@
                 <ci:FluentIcon Glyph="&#xEBC7;" 
                                Foreground="DarkTurquoise"
                                VerticalAlignment="Center"
-                               Margin="-4,0,0,0"
+                               Margin="-4,0,0,3"
                                FontSize="20"/>
                 <Label x:Name="LyricsLabel" 
                        Content="---" 
