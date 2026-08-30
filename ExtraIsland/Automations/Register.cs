@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SuperAutoIsland.Interface.Metadata;
 using SuperAutoIsland.Interface.Services;
+using System.Runtime.InteropServices;
 
 namespace ExtraIsland.Automations;
 
@@ -50,6 +51,10 @@ public class Register : IHostedService {
             ("extraIsland.rule.flagIs","读标志","\uE844");
         services.AddRule<RulesDummyConfig,Rules.EmptySettings>
             ("extraIsland.rule.isDoubleLesson","下节课连堂","\uE2AC");
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+            services.AddRule<WindowStatusConfig,WindowStatus>
+                ("extraIsland.rule.windowStatus","存在最大化/全屏窗口","\uEFD5");
+        }
         // 触发器
         services.AddTrigger<TimePassed,TimePassedSettings>();
 
@@ -150,12 +155,19 @@ public class Register : IHostedService {
         rulesetService.RegisterRuleHandler("extraIsland.rule.currentTeacherIs",TeacherIs.CurrentRule);
         rulesetService.RegisterRuleHandler("extraIsland.rule.nextTeacherIs",TeacherIs.NextRule);
         rulesetService.RegisterRuleHandler("extraIsland.rule.isDoubleLesson",IsDoubleLesson.Rule);
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+            rulesetService.RegisterRuleHandler("extraIsland.rule.windowStatus",WindowStatus.Rule);
+            WindowStatusWatcher.Start();
+        }
     }
 
     public Task StartAsync(CancellationToken _) {
         return Task.CompletedTask;
     }
     public Task StopAsync(CancellationToken _) {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+            WindowStatusWatcher.Stop();
+        }
         return Task.CompletedTask;
     }
 }
