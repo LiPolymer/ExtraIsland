@@ -24,6 +24,6 @@ public partial class LiveActivitySettings : ComponentBase<LiveActivityConfig> {
     }
     
     public bool IsLifeModeEnabled { get; }
-    bool IsLyricsIslandLoaded { get; }
+    public bool IsLyricsIslandLoaded { get; }
     public bool IsLyricsIslandNotLoaded { get => !IsLyricsIslandLoaded; }
 }
