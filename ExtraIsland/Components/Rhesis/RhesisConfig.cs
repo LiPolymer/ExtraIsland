@@ -19,7 +19,10 @@ public class RhesisConfig : ObservableObject {
                 : new Dictionary<string,RhesisProviderConfig>(value,StringComparer.OrdinalIgnoreCase));
     }
 
-    public string IgnoreListString { get; set; } = string.Empty;
+    public string IgnoreListString {
+        get;
+        set => SetProperty(ref field,value);
+    } = string.Empty;
 
     public DateTime LastUpdate { get; set; } = DateTime.Today;
 

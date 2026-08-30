@@ -170,9 +170,14 @@
             </fa:FASettingsExpander>
             <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE3DA;}"
                                        Header="排除列表"
-                                       Description="包含位于此列表中的字符串的内容更新将被忽略,一行一个">
+                                       Description="包含位于此列表中的字符串的内容更新将被忽略,一行一个;可从文本文件导入(文件不超过1MB,总计不超过5000条)">
                 <fa:FASettingsExpander.Footer>
-                    <ci:FluentIcon Glyph="&#xEBD8;"/>
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Button Click="ImportIgnoreListButton_OnClick">
+                            <ci:FluentIcon Glyph="&#xE105;" Foreground="Gray" />
+                        </Button>
+                        <ci:FluentIcon Glyph="&#xEBD8;"/>
+                    </StackPanel>
                 </fa:FASettingsExpander.Footer>
                     <TextBox Text="{Binding Settings.IgnoreListString}"
                              Background="Transparent"
