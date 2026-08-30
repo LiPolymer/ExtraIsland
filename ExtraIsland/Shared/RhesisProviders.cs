@@ -19,7 +19,7 @@ public sealed class HitokotoRhesisProvider : IRhesisProvider, IRhesisProviderSet
 
     public string DisplayName { get => "一言"; }
 
-    public string Description { get => "来自一言 API；请留意来源中可能存在的不良内容。"; }
+    public string Description { get => "来自一言 API；请留意本来源中可能存在的不良内容。"; }
 
     public bool IsEnabledByDefault { get => false; }
 

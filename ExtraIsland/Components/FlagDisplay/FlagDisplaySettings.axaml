@@ -17,7 +17,7 @@
                              HorizontalContentAlignment="Right"/>
                 </fa:FASettingsExpander.Footer>
             </fa:FASettingsExpander>
-            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE71B;}"
+            <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xEFEB;}"
                                    Header="占位文本"
                                    Description="标志未设置时显示的内容">
                 <fa:FASettingsExpander.Footer>

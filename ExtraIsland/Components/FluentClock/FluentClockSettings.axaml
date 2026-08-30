@@ -11,7 +11,7 @@
         <ScrollViewer DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=components:FluentClockSettings}}">
         <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
         <!-- ReSharper disable once Xaml.StyleClassNotFound -->
-        <StackPanel Classes="settings-container animated-intro" Margin="0">
+        <StackPanel Classes="settings-container animated-intro">
             <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xF361;}"
                                        Header="精确到秒"
                                        Description="启用后,将显示秒数,并关闭分隔符闪动">

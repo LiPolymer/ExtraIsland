@@ -37,12 +37,13 @@
             <TextBlock Text="内容来源"
                        FontWeight="SemiBold"
                        Margin="4 8 4 4"/>
-            <ItemsControl ItemsSource="{Binding ProviderItems}">
+            <ItemsControl ItemsSource="{Binding ProviderItems}" Margin="0,0,0,-2">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <fa:FASettingsExpander IconSource="{ci:FluentIconSource &#xE21D;}"
                                                Header="{Binding DisplayName}"
-                                               Description="{Binding Description}">
+                                               Description="{Binding Description}"
+                                               Margin="0,2">
                             <fa:FASettingsExpander.Footer>
                                 <ToggleSwitch IsChecked="{Binding Configuration.IsEnabled, Mode=TwoWay}"/>
                             </fa:FASettingsExpander.Footer>
