@@ -1,5 +1,5 @@
 # ExtraIsland
-⌈R1.21⌋ [更新日志](https://gitlab.com/LiPolymer/ExtraIsland/-/releases/1.2.1.0)
+⌈A1.30⌋
 
 > 现已正式上架 ClassIsland v2!
 
@@ -94,4 +94,4 @@ U盘验证
 
 感谢所有贡献者对本项目的 文档/代码 贡献!
 
-感谢 `Aris` 提供 `当前活动` 组件的UI设计原稿!
+感谢 [Aris](https://github.com/Aris-Offline) 提供 `当前活动` 组件的UI设计原稿!
