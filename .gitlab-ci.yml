@@ -31,6 +31,7 @@
 # place project specific paths in variables to make the rest of the script more generic
 stages:
   - build
+  - release
 
 build_job:
   stage: build
@@ -48,3 +49,19 @@ build_job:
     paths:
       #- '/builds/LiPolymer/ExtraIsland/ink.lipoly.ext.extraisland.cipx'  # saving exe to copy to deploy folder
       - '/builds/LiPolymer/ExtraIsland/ExtraIsland/bin/Release/'
+
+release:
+  stage: release
+  image: mcr.microsoft.com/dotnet/sdk:10.0
+  variables:
+    GIT_DEPTH: "0"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH && $CI_COMMIT_REF_PROTECTED == "true" && $CI_COMMIT_TITLE =~ /^release: [ABR][0-9]+\.[0-9a-z]{2}(fix[0-9a-z])?$/'
+  script:
+    - 'pwsh -NoLogo -NoProfile -File .gitlab/release.ps1'
+  artifacts:
+    name: 'extraisland-${CI_COMMIT_SHORT_SHA}'
+    when: always
+    expire_in: 1 week
+    paths:
+      - 'ExtraIsland/cipx/ink.lipoly.ext.extraisland.cipx'
