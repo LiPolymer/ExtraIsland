@@ -14,6 +14,7 @@ public class GetRhesisBlock : DataBlockBase {
     public int HitokotoWeight { get; set; }
     public string HitokotoQuery { get; set; } = string.Empty;
     public int JinrishiciWeight { get; set; }
+    public int DlystcWeight { get; set; }
     public int SainticWeight { get; set; }
     public string SainticPath { get; set; } = string.Empty;
     public int LengthLimitation { get; set; }
@@ -27,6 +28,8 @@ public class GetRhesisBlock : DataBlockBase {
         .AddField("HitokotoQuery",BasicFields.Text("╰ 附加查询参数"))
         .AddField("JinrishiciDummy",BasicFields.Dummy("今日诗词"))
         .AddField("JinrishiciWeight",BasicFields.Number("╰ 权重"))
+        .AddField("DlystcDummy",BasicFields.Dummy("每日一句"))
+        .AddField("DlystcWeight",BasicFields.Number("╰ 权重"))
         .AddField("SainticDummy",BasicFields.Dummy("诏预"))
         .AddField("SainticWeight",BasicFields.Number("├ 权重"))
         .AddField("SainticPath",BasicFields.Text("╰ 接口路径"))
@@ -56,6 +59,9 @@ public class GetRhesisBlock : DataBlockBase {
         Configure(providerSettings,
                   JinrishiciRhesisProvider.ProviderId,
                   config.JinrishiciWeight);
+        Configure(providerSettings,
+                  DlystcRhesisProvider.ProviderId,
+                  config.DlystcWeight);
         Configure(providerSettings,
                   SainticRhesisProvider.ProviderId,
                   config.SainticWeight,

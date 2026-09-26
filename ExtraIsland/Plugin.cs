@@ -86,6 +86,7 @@ public class Plugin : PluginBase {
         // Rhesis providers
         RhesisHandler.RegisterProvider(new HitokotoRhesisProvider());
         RhesisHandler.RegisterProvider(new JinrishiciRhesisProvider());
+        RhesisHandler.RegisterProvider(new DlystcRhesisProvider());
         RhesisHandler.RegisterProvider(new SainticRhesisProvider());
 
         //Components

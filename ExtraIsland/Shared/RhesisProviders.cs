@@ -102,6 +102,28 @@ public sealed class JinrishiciRhesisProvider : IRhesisProvider {
     }
 }
 
+public sealed class DlystcRhesisProvider : IRhesisProvider {
+    public const string ProviderId = "dlystc";
+
+    static readonly HttpClient HttpClient = new HttpClient();
+
+    public string Id { get => ProviderId; }
+    public string DisplayName { get => "每日一句"; }
+    public string Description { get => "来自每日一句 API, 有 30s 的 CDN 缓存, 期间刷新可能不会更新句子"; }
+    public bool IsEnabledByDefault { get => false; }
+    public int DefaultWeight { get => 1; }
+
+    public async Task<RhesisData> FetchAsync(
+        RhesisProviderConfig config,
+        int lengthLimitation,
+        CancellationToken cancellationToken = default) {
+        const string requestUrl = "https://dlystc.unknownmp.top/api/v2/sentence";
+        DlystcData data = await HttpClient.GetFromJsonAsync<DlystcData>(requestUrl,cancellationToken)
+            ?? throw new InvalidOperationException("每日一句 API 返回了空响应。");
+        return data.ToRhesisData();
+    }
+}
+
 public sealed class SainticRhesisProvider : IRhesisProvider, IRhesisProviderSettingsFactory {
     public const string ProviderId = "saintic";
     public const string PathOption = "path";
@@ -158,6 +180,26 @@ public sealed class SainticRhesisProvider : IRhesisProvider, IRhesisProviderSett
         HttpClient client = new HttpClient();
         client.DefaultRequestHeaders.UserAgent.Add(ProductInfoHeaderValue.Parse("ExtraIsland/1.0"));
         return client;
+    }
+}
+
+internal sealed class DlystcData {
+    [JsonPropertyName("content")]
+    public string Content { get; set; } = string.Empty;
+
+    [JsonPropertyName("source")]
+    public string? Source { get; set; }
+
+    [JsonPropertyName("author")]
+    public string? Author { get; set; }
+
+    public RhesisData ToRhesisData() {
+        return new RhesisData {
+            Author = Author ?? string.Empty,
+            Title = Source ?? string.Empty,
+            Content = Content,
+            Source = "每日一句API"
+        };
     }
 }
 
