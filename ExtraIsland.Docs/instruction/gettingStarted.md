@@ -34,7 +34,7 @@ __推荐通过插件市场进行安装!__
 - 选取最新的 Pipeline
 - 点击右侧对应下载按钮,选择 `buildjob:archive`
 - 将下载到的 `artifacts.zip` 解压
-- 进入文件夹,导航到`ExtraIsland > bin > Release > net8.0-windows`
+- 进入文件夹,导航到`ExtraIsland > bin > Release > net10.0-windows`
 - 选中其中所有文件,压缩为zip
 - 将得到的压缩包扩展名修改为 `.cipx`
 ### 安装
