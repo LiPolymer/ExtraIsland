@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
@@ -16,20 +17,23 @@ namespace ExtraIsland.Components;
                   "拥有动画支持"
               )]
 public partial class FluentClock : ComponentBase<FluentClockConfig> {
-    DispatcherTimer? _separatorBlinkTimer;
-    bool _separatorBlinkInvisible;
-    bool _pendingWidthSync;
-    CancellationTokenSource? _cts;
+    /// <summary>
+    /// 整点强调完整时长 (淡入 + 停留 + 淡出), 期间忽略重复触发
+    /// </summary>
+    const long EmphasizeDurationMs = 3400;
+
     public FluentClock(ILessonsService lessonsService,IExactTimeService exactTimeService) {
         ExactTimeService = exactTimeService;
         LessonsService = lessonsService;
         InitializeComponent();
-        _hourTensAnimator = new Animators.GenericContentSwapAnimator(LHourTens);
-        _hourUnitsAnimator = new Animators.GenericContentSwapAnimator(LHourUnits);
-        _minTensAnimator = new Animators.GenericContentSwapAnimator(LMinTens);
-        _minUnitsAnimator = new Animators.GenericContentSwapAnimator(LMinUnits);
-        _secTensAnimator = new Animators.GenericContentSwapAnimator(LSecTens);
-        _secUnitsAnimator = new Animators.GenericContentSwapAnimator(LSecUnits);
+        _digits = [
+            new DigitSlot(LHourTens),
+            new DigitSlot(LHourUnits),
+            new DigitSlot(LMinTens),
+            new DigitSlot(LMinUnits),
+            new DigitSlot(LSecTens),
+            new DigitSlot(LSecUnits)
+        ];
         _separatorAnimator = new Animators.SeparatorVisualAnimator(SMins);
         _emphasizeAnimator = new Animators.EmphasizerVisualAnimator(EmpBack);
     }
@@ -37,246 +41,199 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
     IExactTimeService ExactTimeService { get; }
     ILessonsService LessonsService { get; }
 
-    DateTime _nowTime;
-    DateTime Now {
-        get => _nowTime;
-        set {
-            if (_nowTime == value) return;
-            _nowTime = value;
-            OnTimeChanged?.Invoke();
-        }
-    }
-    event Action? OnTimeChanged;
-
-    readonly Animators.GenericContentSwapAnimator _hourTensAnimator;
-    readonly Animators.GenericContentSwapAnimator _hourUnitsAnimator;
-    readonly Animators.GenericContentSwapAnimator _minTensAnimator;
-    readonly Animators.GenericContentSwapAnimator _minUnitsAnimator;
-    readonly Animators.GenericContentSwapAnimator _secTensAnimator;
-    readonly Animators.GenericContentSwapAnimator _secUnitsAnimator;
+    readonly DigitSlot[] _digits;
     readonly Animators.SeparatorVisualAnimator _separatorAnimator;
     readonly Animators.EmphasizerVisualAnimator _emphasizeAnimator;
 
-    void LoadedAction() {
-        //Prepare local variable
+    /// <summary>
+    /// 上一次渲染的帧, 唯一的显示状态来源; 为 null 时下一帧将静默渲染
+    /// </summary>
+    ClockFrame? _lastFrame;
+    bool _separatorVisible = true;
+    long _emphasizeUntil;
 
-        string hours = "--";
-        string minutes = "--";
-        string seconds = "--";
+    int _attachGeneration;
+    FluentClockConfig? _subscribedSettings;
 
-        bool updLock = false;
-        //Initialization
-        UpdateSecondsAppearance();
-        UpdateTime();
-        SilentUpdater();
-        UpdateGaps();
-        //Register Events
-        Settings.OnSecondsSmallChanged += UpdateSecondsAppearance;
-        Settings.OnAccurateChanged += UpdateSecondsAppearance;
-        Settings.OnOClockEmpEnabled += ShowEmphasise;
-        Settings.OnLayoutGapChanged += UpdateGaps;
-        LessonsService.PostMainTimerTicked += UpdateTime;
-        OnTimeChanged += () => {
-            if (updLock) return;
-            updLock = true;
-            MainUpdater();
-            RequestSyncBackgroundWidth();
-        };
-        return;
+    #region Lifecycle
 
-        void MainUpdater() {
-            DateTime handlingTime = Now;
-            while (true) {
-                int h = handlingTime.Hour;
-                int m = handlingTime.Minute;
-                int s = handlingTime.Second;
-                string hoursStr = h.ToString("D2");
-                string minsStr = m.ToString("D2");
-                string secsStr = s.ToString("D2");
+    void OnAttachedToVisualTree(object? sender,VisualTreeAttachmentEventArgs e) {
+        int generation = ++_attachGeneration;
+        Dispatcher.UIThread.Post(() => {
+            if (generation != _attachGeneration) return;
+            Start();
+        });
+    }
 
-                bool swapEnabled = Settings.IsSwapAnimationEnabled;
+    void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs e) {
+        ++_attachGeneration;
+        Stop();
+    }
 
-                if (hours != hoursStr) {
-                    if (Settings.IsOClockEmp && s == 0) {
-                        _emphasizeAnimator.Update();
-                    }
-                    hours = hoursStr;
-                    _hourTensAnimator.Update(hours[0].ToString(), true, swapEnabled);
-                    _hourUnitsAnimator.Update(hours[1].ToString(), true, swapEnabled);
-                }
-                
-                bool minutesChanged = minutes != minsStr;
-                if (minutesChanged) {
-                    minutes = minsStr;
-                    _minTensAnimator.Update(minutes[0].ToString(), true, swapEnabled);
-                    _minUnitsAnimator.Update(minutes[1].ToString(), true, swapEnabled);
-                }
-                
-                if (seconds != secsStr) {
-                    seconds = secsStr;
-                    if (Settings.IsAccurate) {
-                        SMins.Opacity = 1;
-                        // Focus Mode Sync: Force animation if minutes just flipped
-                        bool forceSync = Settings.IsFocusedMode && minutesChanged;
-                        bool shouldSwap = swapEnabled && (!Settings.IsFocusedMode || forceSync);
-                        
-                        _secTensAnimator.Update(seconds[0].ToString(), true, shouldSwap);
-                        _secUnitsAnimator.Update(seconds[1].ToString(), true, shouldSwap);
-                    }
-                }
-                if (handlingTime == Now) break;
-                handlingTime = Now;
+    void Start() {
+        Stop();
+        _subscribedSettings = Settings;
+        _subscribedSettings.PropertyChanged += OnSettingsChanged;
+        LessonsService.PostMainTimerTicked += OnMainTimerTicked;
+        RootPanel.SizeChanged += OnRootPanelSizeChanged;
+        _lastFrame = null;
+        ApplyLayout();
+        Tick();
+        SyncBackgroundWidth();
+    }
+
+    void Stop() {
+        if (_subscribedSettings == null) return;
+        _subscribedSettings.PropertyChanged -= OnSettingsChanged;
+        LessonsService.PostMainTimerTicked -= OnMainTimerTicked;
+        RootPanel.SizeChanged -= OnRootPanelSizeChanged;
+        _subscribedSettings = null;
+    }
+
+    #endregion
+
+    #region Event entries (统一切换到 UI 线程)
+
+    void OnMainTimerTicked(object? sender,EventArgs e) {
+        RunOnUiThread(Tick);
+    }
+
+    void OnSettingsChanged(object? sender,PropertyChangedEventArgs e) {
+        RunOnUiThread(() => {
+            if (_subscribedSettings == null) return;
+            switch (e.PropertyName) {
+                case nameof(FluentClockConfig.IsAccurate):
+                    ApplyLayout();
+                    Tick();
+                    break;
+                case nameof(FluentClockConfig.HorizontalGap):
+                    ApplyLayout();
+                    break;
+                case nameof(FluentClockConfig.IsSystemTime):
+                    Tick();
+                    break;
+                case nameof(FluentClockConfig.IsOClockEmp):
+                    // 开启时预览一次强调特效
+                    if (Settings.IsOClockEmp) TryEmphasize();
+                    break;
             }
-            updLock = false;
-        }
+        });
+    }
 
-        void SilentUpdater() {
-            hours = Now.Hour.ToString("D2");
-            minutes = Now.Minute.ToString("D2");
-            seconds = Now.Second.ToString("D2");
-            _hourTensAnimator.SilentUpdate(hours[0].ToString());
-            _hourUnitsAnimator.SilentUpdate(hours[1].ToString());
-            _minTensAnimator.SilentUpdate(minutes[0].ToString());
-            _minUnitsAnimator.SilentUpdate(minutes[1].ToString());
-            _secTensAnimator.SilentUpdate(seconds[0].ToString());
-            _secUnitsAnimator.SilentUpdate(seconds[1].ToString());
+    void OnRootPanelSizeChanged(object? sender,SizeChangedEventArgs e) {
+        SyncBackgroundWidth();
+    }
+
+    static void RunOnUiThread(Action action) {
+        if (Dispatcher.UIThread.CheckAccess()) {
+            action();
+        } else {
+            Dispatcher.UIThread.Post(action);
         }
     }
 
+    #endregion
+
+    #region Rendering
+
+    void Tick() {
+        if (_subscribedSettings == null) return;
+        DateTime now = Settings.IsSystemTime
+            ? DateTime.Now
+            : ExactTimeService.GetCurrentLocalDateTime();
+        Render(ClockFrame.From(now,Settings.IsAccurate));
+    }
+
     /// <summary>
-    /// 同步强调背景的宽度为当前RootPanel宽度
+    /// 单一渲染路径: 与上一帧比较, 变化的位播放动画, 未变化的位自愈 (修正卡顿/丢帧导致的不同步)
+    /// </summary>
+    void Render(ClockFrame frame) {
+        ClockFrame? prev = _lastFrame;
+        _lastFrame = frame;
+
+        bool swapEnabled = Settings.IsSwapAnimationEnabled;
+        bool secondsSwap = prev is { } p
+                           && ClockFrame.ShouldSwapSeconds(p,frame,swapEnabled,Settings.IsFocusedMode);
+
+        for (int i = 0; i < ClockFrame.DigitCount; i++) {
+            char digit = frame.DigitAt(i);
+            bool isSecond = ClockFrame.IsSecondDigit(i);
+            bool changed = prev is { } pf && pf.DigitAt(i) != digit;
+            if (changed && (!isSecond || frame.ShowSeconds)) {
+                _digits[i].Set(digit,isSecond ? secondsSwap : swapEnabled);
+            } else {
+                _digits[i].Heal(digit);
+            }
+        }
+
+        ApplySeparator(frame.SeparatorVisible);
+
+        if (prev is { } pe && Settings.IsOClockEmp && ClockFrame.IsOClockMoment(pe,frame)) {
+            TryEmphasize();
+        }
+    }
+
+    void ApplySeparator(bool visible) {
+        if (visible == _separatorVisible) return;
+        _separatorVisible = visible;
+        _separatorAnimator.Update(!visible);
+    }
+
+    void TryEmphasize() {
+        long now = Environment.TickCount64;
+        if (now < _emphasizeUntil) return;
+        _emphasizeUntil = now + EmphasizeDurationMs;
+        _emphasizeAnimator.Update();
+    }
+
+    void ApplyLayout() {
+        bool isAccurate = Settings.IsAccurate;
+        SecsPanel.IsVisible = isAccurate;
+        SSecs.IsVisible = isAccurate;
+
+        double gap = Math.Round(Settings.HorizontalGap);
+        HoursPanel.Margin = new Thickness(0,0,gap,0);
+        MinsPanel.Margin = new Thickness(gap,0,gap,0);
+        SecsPanel.Margin = new Thickness(gap,0,0,0);
+    }
+
+    /// <summary>
+    /// 同步强调背景的宽度为当前RootPanel宽度 (取整以避免亚像素模糊)
     /// </summary>
     void SyncBackgroundWidth() {
-        double width = RootPanel?.Bounds.Width ?? 0;
+        double width = RootPanel.Bounds.Width;
         if (width > 0) {
             EmpBack.Width = Math.Round(width);
         }
     }
 
-    void RequestSyncBackgroundWidth() {
-        if (_pendingWidthSync) return;
-        _pendingWidthSync = true;
-        Dispatcher.UIThread.Post(() => {
-            if (_cts?.IsCancellationRequested ?? false) {
-                _pendingWidthSync = false;
-                return;
-            }
-            _pendingWidthSync = false;
-            SyncBackgroundWidth();
-        },DispatcherPriority.Background);
-    }
+    #endregion
 
-    void ShowEmphasise() {
-        _emphasizeAnimator.Update();
-    }
+    /// <summary>
+    /// 单个数字位: 封装 Label 与其翻页动画
+    /// </summary>
+    sealed class DigitSlot(ContentControl label) {
+        static readonly string[] Glyphs = ["0","1","2","3","4","5","6","7","8","9"];
 
-    void UpdateTime(object? sender,EventArgs e) {
-        UpdateTime();
-    }
+        readonly Animators.GenericContentSwapAnimator _animator = new Animators.GenericContentSwapAnimator(label);
 
-    void UpdateTime() {
-        Now = !Settings.IsSystemTime ?
-            ExactTimeService.GetCurrentLocalDateTime()
-            : DateTime.Now;
-        Reconcile();
-    }
-    
-    void Reconcile() {
-        Dispatcher.UIThread.InvokeAsync(() => {
-            if (_cts?.IsCancellationRequested ?? false) return;
-            string hours = Now.Hour.ToString("D2");
-            string minutes = Now.Minute.ToString("D2");
-            string seconds = Now.Second.ToString("D2");
-            SyncDigit(LHourTens,hours[0],_hourTensAnimator);
-            SyncDigit(LHourUnits,hours[1],_hourUnitsAnimator);
-            SyncDigit(LMinTens,minutes[0],_minTensAnimator);
-            SyncDigit(LMinUnits,minutes[1],_minUnitsAnimator);
-            SyncDigit(LSecTens,seconds[0],_secTensAnimator);
-            SyncDigit(LSecUnits,seconds[1],_secUnitsAnimator);
-        });
-    }
+        static string Glyph(char digit) => Glyphs[digit - '0'];
 
-    void SyncDigit(ContentControl label,char expected,Animators.GenericContentSwapAnimator animator) {
-        if (animator.IsRendering) return;
-        string expectedStr = expected.ToString();
-        if (label.Content as string == expectedStr) return;
-        animator.SilentUpdate(expectedStr);
-    }
-
-    void OnAttachedToVisualTree(object? sender,VisualTreeAttachmentEventArgs e) {
-        _cts?.Cancel();
-        _cts?.Dispose();
-        _cts = new CancellationTokenSource();
-        Dispatcher.UIThread.InvokeAsync(() => {
-            if (_cts?.IsCancellationRequested ?? false) return;
-            LoadedAction();
-        });
-    }
-    void OnDetachedFromVisualTree(object? sender,VisualTreeAttachmentEventArgs e) {
-        Settings.OnAccurateChanged -= UpdateSecondsAppearance;
-        Settings.OnSecondsSmallChanged -= UpdateSecondsAppearance;
-        Settings.OnOClockEmpEnabled -= ShowEmphasise;
-        Settings.OnLayoutGapChanged -= UpdateGaps;
-        LessonsService.PostMainTimerTicked -= UpdateTime;
-        _cts?.Cancel();
-        _cts?.Dispose();
-        _cts = null;
-        _pendingWidthSync = false;
-        StopSeparatorBlinking();
-    }
-
-    void EnsureSeparatorBlinkingState() {
-        if (!Settings.IsAccurate) {
-            if (_separatorBlinkTimer == null) {
-                _separatorBlinkInvisible = false; // 初始为可见
-                _separatorBlinkTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-                _separatorBlinkTimer.Tick += SeparatorBlinkTick;
-                _separatorBlinkTimer.Start();
-            }
-        } else {
-            _separatorAnimator.Update(false);
-            StopSeparatorBlinking();
+        /// <summary>
+        /// 以动画切换到新数字
+        /// </summary>
+        public void Set(char digit,bool swap) {
+            _animator.Update(Glyph(digit),true,swap);
         }
-    }
 
-    void StopSeparatorBlinking() {
-        if (_separatorBlinkTimer != null) {
-            _separatorBlinkTimer.Stop();
-            _separatorBlinkTimer.Tick -= SeparatorBlinkTick;
-            _separatorBlinkTimer = null;
+        /// <summary>
+        /// 若当前未在动画中且显示内容与期望不符, 则静默修正
+        /// </summary>
+        public void Heal(char digit) {
+            if (_animator.IsRendering) return;
+            string glyph = Glyph(digit);
+            if (label.Content as string == glyph) return;
+            _animator.SilentUpdate(glyph);
         }
-    }
-
-    void SeparatorBlinkTick(object? sender,EventArgs e) {
-        _separatorBlinkInvisible = !_separatorBlinkInvisible;
-        _separatorAnimator.Update(_separatorBlinkInvisible);
-    }
-
-    void UpdateGaps() {
-        Dispatcher.UIThread.InvokeAsync(() => {
-            if (_cts?.IsCancellationRequested ?? false) return;
-            double gap = Math.Round(Settings.HorizontalGap);
-            HoursPanel.Margin = new Thickness(0,0,gap,0);
-            MinsPanel.Margin = new Thickness(gap,0,gap,0);
-            SecsPanel.Margin = new Thickness(gap,0,0,0);
-            RequestSyncBackgroundWidth();
-        });
-    }
-
-    void UpdateSecondsAppearance() {
-        Dispatcher.UIThread.InvokeAsync(() => {
-            if (_cts?.IsCancellationRequested ?? false) return;
-            bool isAccurate = Settings.IsAccurate;
-            bool isSmall = Settings.IsSecondsSmall;
-            SecsPanel.IsVisible = isAccurate;
-            SSecs.IsVisible = isAccurate;
-            Placeholder1.Content = isAccurate ? "00:00:00" : "00:00";
-            Placeholder2.Content = isAccurate ? "00:00:00" : "00:00";
-            if (isAccurate) {
-                SMins.Opacity = 1;
-            }
-            RequestSyncBackgroundWidth();
-            EnsureSeparatorBlinkingState();
-        });
     }
 }
