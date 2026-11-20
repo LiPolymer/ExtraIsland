@@ -6,90 +6,138 @@
                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                  xmlns:local="clr-namespace:ExtraIsland.AuthorizeProvider"
                                  xmlns:ci="http://classisland.tech/schemas/xaml/core"
-                                 xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                                 xmlns:converters="clr-namespace:ExtraIsland.Shared.Converters"
                                  xmlns:fa="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
-                                 mc:Ignorable="d"
-                                 Loaded="UsbDriveAuthorizer_OnLoaded"
-                                 Unloaded="UsbDriveAuthorizer_OnUnloaded">
-    <ci:AuthorizeProviderControlBase.Resources>
-        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
-    </ci:AuthorizeProviderControlBase.Resources>
-    <StackPanel Orientation="Horizontal"
-                DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=local:UsbDriveAuthorizer}}">
+                                 mc:Ignorable="d">
+    <StackPanel Orientation="Vertical"
+                Spacing="8"
+                DataContext="{Binding ViewModel, RelativeSource={RelativeSource FindAncestor, AncestorType=local:UsbDriveAuthorizer}}">
         <StackPanel IsVisible="{Binding IsEditingMode}"
-                    Orientation="Vertical">
-            <Border Background="#3f00eff1"
-                    CornerRadius="4"
-                    Margin="3,4,0,0">
-                <StackPanel Orientation="Horizontal" Margin="4">
-                    <ci:LucideIcon Glyph="&#xE07B;" Margin="0,0,5,0"/>
-                    <TextBlock>
-                        请尽量使用正规U盘进行验证
-                        <LineBreak/>
-                        推荐同时设置密码,防止认证设备损坏
-                        <LineBreak/>
-                        暂不支持多分区, 请谨慎使用相关设备!
-                    </TextBlock>
-                </StackPanel>
-            </Border>
-            <fa:FASettingsExpander x:Name="ModeSettingsControl"
-                                       Margin="4"
-                                       IconSource="{ci:LucideIconSource Glyph=&#xE31F;}"
-                                       Header="使用文件模式"
-                                       Description="以自动放置的密钥文件而不是S/N作为验证依据">
+                    Orientation="Vertical"
+                    Spacing="8">
+            <fa:FAInfoBar IsOpen="True"
+                          IsClosable="False"
+                          Severity="Informational"
+                          Message="请尽量使用正规U盘进行验证，支持多分区设备；推荐同时配置备用密码，以防认证设备损坏或丢失。" />
+
+            <fa:FASettingsExpander IconSource="{ci:LucideIconSource Glyph=&#xE31F;}"
+                                   Header="使用文件模式"
+                                   Description="在U盘根目录写入隐藏密钥文件 (.verify.extraisland.nfo) 作为验证依据，适用于无硬件序列号的设备">
                 <fa:FASettingsExpander.Footer>
-                    <!-- ReSharper disable once Xaml.StaticResourceNotResolved -->
-                    <ToggleSwitch IsChecked="{Binding Settings.IsFileModeEnabled, Mode=OneTime}"
-                                  Click="SetCredential"/>
+                    <ToggleSwitch IsChecked="{Binding SelectedFileMode, Mode=TwoWay}"
+                                  IsEnabled="{Binding !IsBusy}" />
                 </fa:FASettingsExpander.Footer>
             </fa:FASettingsExpander>
-            <StackPanel Orientation="Horizontal">
-                <Label IsVisible="{Binding Settings.Operating, Converter={StaticResource InverseBooleanConverter}}">
-                    <Button Click="SetCredential"
-                            IsVisible="{Binding Settings.OperationFinished, Converter={StaticResource InverseBooleanConverter}}">
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <ci:LucideIcon Glyph="&#xE655;" Margin="0,0,5,0"/>
-                                <TextBlock>
-                                    设置验证存储器
-                                </TextBlock>
-                            </StackPanel>
-                        </Button.Content>
-                    </Button>
-                </Label>
-                <Label Foreground="SkyBlue"
-                       IsVisible="{Binding Settings.Operating}"
-                       Content="现在插入U盘" />
-                <Label Foreground="LightGreen"
-                       IsVisible="{Binding Settings.OperationFinished}"
-                       Content="完成!" />
+
+            <TextBlock Text="{Binding BoundStatusText}"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       Margin="2,0" />
+
+            <fa:FAInfoBar IsOpen="{Binding IsModeMismatch}"
+                          IsVisible="{Binding IsModeMismatch}"
+                          IsClosable="False"
+                          Severity="Warning"
+                          Title="验证模式已更改"
+                          Message="请重新绑定U盘以应用新的验证模式。" />
+
+            <WrapPanel Orientation="Horizontal">
+                <Button Click="WaitInsertButton_OnClick"
+                        IsEnabled="{Binding !IsBusy}"
+                        Margin="0,0,8,4">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <ci:LucideIcon Glyph="&#xE655;" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding WaitInsertButtonText}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+                <Button Click="ScanExistingDrivesButton_OnClick"
+                        IsEnabled="{Binding !IsBusy}"
+                        Margin="0,0,0,4">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <ci:LucideIcon Glyph="&#xE35A;" VerticalAlignment="Center" />
+                        <TextBlock Text="扫描已插入U盘" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </WrapPanel>
+
+            <StackPanel IsVisible="{Binding ShowWaitingBanner}"
+                        Orientation="Vertical"
+                        Spacing="4">
+                <TextBlock Text="请插入要绑定的U盘…"
+                           Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+                <ProgressBar IsIndeterminate="True" Height="3" />
             </StackPanel>
-            <Label Foreground="{DynamicResource MaterialDesignBodyLight}">
-                Added by ExtraIsland
-            </Label>
+
+            <StackPanel IsVisible="{Binding ShowDrivePicker}"
+                        Orientation="Horizontal"
+                        Spacing="8">
+                <ComboBox ItemsSource="{Binding AvailableDrives}"
+                          SelectedItem="{Binding SelectedDrive, Mode=TwoWay}"
+                          DisplayMemberBinding="{Binding DisplayName}"
+                          IsEnabled="{Binding !IsBusy}"
+                          MinWidth="220"
+                          VerticalAlignment="Center" />
+                <Button Click="BindSelectedDriveButton_OnClick"
+                        IsEnabled="{Binding CanBindSelectedDrive}"
+                        Content="绑定所选U盘"
+                        VerticalAlignment="Center" />
+            </StackPanel>
+
+            <StackPanel IsVisible="{Binding IsBusy}"
+                        Orientation="Vertical"
+                        Spacing="4">
+                <ProgressBar IsIndeterminate="True" Height="3" />
+                <TextBlock Text="{Binding BusyMessage}"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+
+            <fa:FAInfoBar IsOpen="{Binding StatusIsOpen}"
+                          IsVisible="{Binding StatusIsOpen}"
+                          IsClosable="False"
+                          Severity="{Binding StatusSeverity}"
+                          Title="{Binding StatusTitle}"
+                          Message="{Binding StatusMessage}" />
+
+            <TextBlock Text="Added by ExtraIsland"
+                       Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                       FontSize="12"
+                       Margin="2,2,0,0" />
         </StackPanel>
-        <StackPanel
-            IsVisible="{Binding IsEditingMode, Converter={StaticResource InverseBooleanConverter}}"
-            Orientation="Vertical">
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <ci:LucideIcon Glyph="&#xE35A;" Margin="0,0,5,0"/>
-                    <TextBlock VerticalAlignment="Center" FontSize="20">
-                        请插入U盘开始验证
-                    </TextBlock>
-                </StackPanel>
-                <Button Click="VerifyButton_OnClick"
-                        Content="已经插入?点此扫描"
-                        HorizontalContentAlignment="Left"
-                        BorderBrush="Transparent"
-                        Background="Transparent"
-                        Foreground="{DynamicResource PrimaryHueMidBrush}" />
-                <Label
-                    IsVisible="{Binding Settings.OperationFinished}"
-                    Foreground="OrangeRed"
-                    Content="验证失败，请使用正确的设备重试!" />
+
+        <StackPanel IsVisible="{Binding !IsEditingMode}"
+                    Orientation="Vertical"
+                    Spacing="8">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <ci:LucideIcon Glyph="&#xE35A;" FontSize="20" VerticalAlignment="Center" />
+                <TextBlock Text="请插入U盘开始验证"
+                           FontSize="20"
+                           VerticalAlignment="Center" />
             </StackPanel>
+
+            <TextBlock Text="{Binding VerifyModeHint}"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+            <Button Click="VerifyButton_OnClick"
+                    IsEnabled="{Binding !IsBusy}"
+                    Content="已经插入？点此扫描"
+                    HorizontalContentAlignment="Left"
+                    Padding="4,4"
+                    BorderBrush="Transparent"
+                    Background="Transparent"
+                    Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+
+            <StackPanel IsVisible="{Binding IsBusy}"
+                        Orientation="Vertical"
+                        Spacing="4">
+                <ProgressBar IsIndeterminate="True" Height="3" />
+                <TextBlock Text="{Binding BusyMessage}"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+
+            <fa:FAInfoBar IsOpen="{Binding StatusIsOpen}"
+                          IsVisible="{Binding StatusIsOpen}"
+                          IsClosable="False"
+                          Severity="{Binding StatusSeverity}"
+                          Title="{Binding StatusTitle}"
+                          Message="{Binding StatusMessage}" />
         </StackPanel>
     </StackPanel>
 </ci:AuthorizeProviderControlBase>
