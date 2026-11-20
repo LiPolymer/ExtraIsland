@@ -14,7 +14,8 @@
         <ci:SizeDoubleToCornerRadiusConverter x:Key="SizeDoubleToCornerRadiusConverter"/>
     </ci:ComponentBase.Resources>
     <Grid Margin="0" ClipToBounds="True">
-        <Grid x:Name="EmpBack" Opacity="0" HorizontalAlignment="Center" Width="{Binding #RootPanel.Bounds.Width}">
+        <!-- 宽度由 code-behind 跟随 RootPanel 尺寸同步 (取整), 见 SyncBackgroundWidth -->
+        <Grid x:Name="EmpBack" Opacity="0" HorizontalAlignment="Center">
             <Border Background="{DynamicResource Rainy}"
                     ClipToBounds="True"
                     BorderThickness="1"
