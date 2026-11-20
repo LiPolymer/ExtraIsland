@@ -21,19 +21,9 @@ public static class EiUtils {
         return Convert.ToDouble($"{major}.{versionParts[3]}");
     }
     
-    public static string Sha256EncryptString(string data)
-    {
-        byte[] bytes = Encoding.UTF8.GetBytes(data);
-        #pragma warning disable SYSLIB0021
-        // ReSharper disable once AccessToStaticMemberViaDerivedType
-        byte[] hash = SHA256Managed.Create().ComputeHash(bytes);
-        #pragma warning restore SYSLIB0021
- 
-        StringBuilder builder = new StringBuilder();
-        foreach (byte t in hash) {
-            builder.Append(t.ToString("x2"));
-        }
-        return builder.ToString();
+    public static string Sha256EncryptString(string data) {
+        ArgumentNullException.ThrowIfNull(data);
+        return Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(data)));
     }
 
     public static bool IsPluginInstalled(string pkgName) {
