@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 using Avalonia.Controls;
 using Avalonia.Threading;
 
-namespace ExtraIsland.AuthorizeProvider;
+namespace ExtraIsland.Shared;
 
 public sealed class UsbVolumeWatcher {
     const uint WmDeviceChange = 0x0219u;

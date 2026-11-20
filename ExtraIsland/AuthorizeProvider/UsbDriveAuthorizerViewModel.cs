@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using ExtraIsland.Shared;
 using FluentAvalonia.UI.Controls;
 
 namespace ExtraIsland.AuthorizeProvider;

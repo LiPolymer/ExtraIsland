@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
 
-namespace ExtraIsland.AuthorizeProvider;
+namespace ExtraIsland.Shared;
 
 public sealed record UsbVolumeInfo(
     string DriveLetter,

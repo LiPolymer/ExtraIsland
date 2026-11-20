@@ -2,8 +2,9 @@ using System.IO;
 using System.Security;
 using System.Security.Cryptography;
 using System.Text;
+using ExtraIsland.AuthorizeProvider;
 
-namespace ExtraIsland.AuthorizeProvider;
+namespace ExtraIsland.Shared;
 
 public static class UsbCredentialHelper {
     public const string CredentialFileName = ".verify.extraisland.nfo";
