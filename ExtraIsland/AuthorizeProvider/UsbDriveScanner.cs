@@ -6,23 +6,54 @@ using Microsoft.Win32.SafeHandles;
 
 namespace ExtraIsland.AuthorizeProvider;
 
+public sealed record UsbVolumeInfo(
+    string DriveLetter,
+    bool IsEfiOrSystemPartition,
+    bool IsLikelyBootPartition);
+
 public sealed record UsbDriveInfo(
     string? SerialNumber,
     IReadOnlyList<string> DriveLetters,
     string DisplayName,
-    int? DeviceNumber);
+    int? DeviceNumber,
+    IReadOnlyList<UsbVolumeInfo>? Volumes = null);
 
 [SuppressMessage("Interoperability", "SYSLIB1054:使用 “LibraryImportAttribute” 而不是 “DllImportAttribute” 在编译时生成 P/Invoke 封送代码")]
 public static class UsbDriveScanner {
     const uint FileShareReadWrite = 0x00000003u;
     const uint OpenExisting = 3u;
+    const uint IoctlDiskGetPartitionInfoEx = 0x00070048u;
     const uint IoctlStorageGetDeviceNumber = 0x002D1080u;
     const uint IoctlStorageQueryProperty = 0x002D1400u;
     const int FileDeviceDisk = 7;
     const int BusTypeUsb = 7;
     const int MaxDescriptorBufferSize = 65536;
+    const int PartitionStyleMbr = 0;
+    const int PartitionStyleGpt = 1;
+    const byte MbrPartitionTypeEfi = 0xEF;
+    const byte MbrPartitionTypeRecovery = 0x27;
+    const ulong GptAttrPlatformRequired = 0x0000000000000001UL;
+    const ulong GptAttrBasicDataHidden = 0x4000000000000000UL;
+    const ulong GptAttrBasicDataNoDriveLetter = 0x8000000000000000UL;
 
     static readonly int[] ArrivalRetryDelaysMs = [0, 150, 250, 400, 600, 800];
+
+    static readonly HashSet<Guid> GptSystemPartitionTypes = [
+        new Guid("C12A7328-F81F-11D2-BA4B-00A0C93EC93B"), // EFI System Partition
+        new Guid("E3C9E316-0B5C-4DB8-817D-F92DF00215AE"), // Microsoft Reserved (MSR)
+        new Guid("DE94BBA4-06D1-4D40-A16A-BFD50179D6AC"), // Windows Recovery
+        new Guid("21686148-6449-6E6F-744E-656564454649")  // BIOS Boot Partition
+    ];
+
+    static readonly HashSet<string> BootPartitionLabels = new(StringComparer.OrdinalIgnoreCase) {
+        "VTOYEFI",
+        "UEFI_NTFS",
+        "UEFI:NTFS",
+        "EFI",
+        "ESP",
+        "EFISYS",
+        "EFI_SYS"
+    };
 
     static readonly HashSet<string> InvalidSerialPlaceholders = new(StringComparer.OrdinalIgnoreCase) {
         "none",
@@ -220,12 +251,72 @@ public static class UsbDriveScanner {
             return null;
         }
 
+        bool isEfiOrSystem = TryIsEfiOrSystemPartition(volumeHandle);
+        bool isLikelyBoot = isEfiOrSystem || IsLikelyBootPartitionLabel(TryGetVolumeLabel(normalizedLetter));
+
         return new VolumeProbeResult(
             normalizedLetter,
             deviceNumber,
             NormalizeAndValidateSerialNumber(descriptor.SerialNumber),
             descriptor.VendorId,
-            descriptor.ProductId);
+            descriptor.ProductId,
+            isEfiOrSystem,
+            isLikelyBoot);
+    }
+
+    internal static bool IsEfiOrSystemPartitionInfo(byte[] buffer, int bytesReturned) {
+        if (buffer is null || bytesReturned < 32 || buffer.Length < 32) {
+            return false;
+        }
+
+        ReadOnlySpan<byte> span = buffer;
+        if (span[29] != 0) {
+            return true;
+        }
+
+        int style = BitConverter.ToInt32(span[..4]);
+        if (style == PartitionStyleMbr && bytesReturned >= 33 && span.Length >= 33) {
+            return span[32] is MbrPartitionTypeEfi or MbrPartitionTypeRecovery;
+        }
+
+        if (style == PartitionStyleGpt && bytesReturned >= 72 && span.Length >= 72) {
+            Guid partitionType = new Guid(span.Slice(32, 16));
+            ulong attrs = BitConverter.ToUInt64(span.Slice(64, 8));
+            return GptSystemPartitionTypes.Contains(partitionType) ||
+                   (attrs & (GptAttrPlatformRequired | GptAttrBasicDataHidden | GptAttrBasicDataNoDriveLetter)) != 0;
+        }
+
+        return false;
+    }
+
+    internal static bool IsLikelyBootPartitionLabel(string? volumeLabel) {
+        return !string.IsNullOrWhiteSpace(volumeLabel) &&
+               BootPartitionLabels.Contains(volumeLabel.Trim());
+    }
+
+    static bool TryIsEfiOrSystemPartition(SafeFileHandle volumeHandle) {
+        byte[] buffer = new byte[144];
+        if (!DeviceIoControl(
+                volumeHandle,
+                IoctlDiskGetPartitionInfoEx,
+                IntPtr.Zero,
+                0,
+                buffer,
+                buffer.Length,
+                out int bytesReturned,
+                IntPtr.Zero)) {
+            return false;
+        }
+
+        return IsEfiOrSystemPartitionInfo(buffer, bytesReturned);
+    }
+
+    static string? TryGetVolumeLabel(string normalizedLetter) {
+        try {
+            return new DriveInfo(normalizedLetter).VolumeLabel;
+        } catch {
+            return null;
+        }
     }
 
     static IReadOnlyList<UsbDriveInfo> GroupVolumes(List<VolumeProbeResult> usbVolumes) {
@@ -257,11 +348,16 @@ public static class UsbDriveScanner {
     }
 
     static UsbDriveInfo BuildDriveInfo(int? deviceNumber, List<VolumeProbeResult> volumes) {
-        List<string> letters = volumes
-            .Select(v => v.DriveLetter)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderBy(l => l, StringComparer.OrdinalIgnoreCase)
+        List<UsbVolumeInfo> volumeInfos = volumes
+            .GroupBy(v => v.DriveLetter, StringComparer.OrdinalIgnoreCase)
+            .Select(g => new UsbVolumeInfo(
+                g.First().DriveLetter,
+                g.Any(v => v.IsEfiOrSystemPartition),
+                g.Any(v => v.IsLikelyBootPartition)))
+            .OrderBy(v => v.DriveLetter, StringComparer.OrdinalIgnoreCase)
             .ToList();
+
+        List<string> letters = volumeInfos.Select(v => v.DriveLetter).ToList();
 
         string? serial = volumes.Select(v => v.SerialNumber).FirstOrDefault(s => !string.IsNullOrEmpty(s));
         string? vendor = volumes.Select(v => v.VendorId).FirstOrDefault(s => !string.IsNullOrWhiteSpace(s));
@@ -269,7 +365,7 @@ public static class UsbDriveScanner {
 
         string deviceName = BuildDeviceName(vendor, product);
         string displayName = $"{deviceName} ({string.Join(", ", letters)})";
-        return new UsbDriveInfo(serial, letters, displayName, deviceNumber);
+        return new UsbDriveInfo(serial, letters, displayName, deviceNumber, volumeInfos);
     }
 
     static string BuildDeviceName(string? vendor, string? product) {
@@ -406,7 +502,9 @@ public static class UsbDriveScanner {
         int? DeviceNumber,
         string? SerialNumber,
         string? VendorId,
-        string? ProductId);
+        string? ProductId,
+        bool IsEfiOrSystemPartition,
+        bool IsLikelyBootPartition);
 
     [StructLayout(LayoutKind.Sequential)]
     struct StoragePropertyQuery {
@@ -424,6 +522,18 @@ public static class UsbDriveScanner {
         uint dwCreationDisposition,
         uint dwFlagsAndAttributes,
         IntPtr hTemplateFile);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    static extern bool DeviceIoControl(
+        SafeFileHandle hDevice,
+        uint dwIoControlCode,
+        IntPtr lpInBuffer,
+        int nInBufferSize,
+        [Out] byte[] lpOutBuffer,
+        int nOutBufferSize,
+        out int lpBytesReturned,
+        IntPtr lpOverlapped);
 
     [DllImport("kernel32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]

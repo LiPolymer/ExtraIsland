@@ -93,14 +93,41 @@ public static class UsbCredentialHelper {
         }
     }
 
+    internal static IReadOnlyList<UsbVolumeInfo> GetOrderedVolumesForRead(UsbDriveInfo drive) {
+        IReadOnlyList<UsbVolumeInfo> source = drive.Volumes is { Count: > 0 }
+            ? drive.Volumes
+            : drive.DriveLetters.Select(l => new UsbVolumeInfo(l, false, false)).ToList();
+
+        return source
+            .OrderBy(v => v.IsEfiOrSystemPartition)
+            .ThenBy(v => v.IsLikelyBootPartition)
+            .ThenBy(v => v.DriveLetter, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    internal static IReadOnlyList<UsbVolumeInfo> GetWritableDataVolumes(UsbDriveInfo drive) {
+        return GetOrderedVolumesForRead(drive)
+            .Where(v => !v.IsEfiOrSystemPartition)
+            .ToList();
+    }
+
     public static FileEnsureResult EnsureCredentialFile(UsbDriveInfo drive) {
         if (drive.DriveLetters.Count == 0) {
-            return new FileEnsureResult(false, null, null, "该U盘没有可用盘符，无法写入密钥文件");
+            return new FileEnsureResult(false, null, null, "该U盘没有可用盘符，无法写入密钥文件。");
         }
 
-        // Pass 1: Reuse an existing valid credential file on any partition.
-        foreach (string letter in drive.DriveLetters) {
-            string? path = TryGetCredentialFilePath(letter);
+        IReadOnlyList<UsbVolumeInfo> writableVolumes = GetWritableDataVolumes(drive);
+        if (writableVolumes.Count == 0) {
+            return new FileEnsureResult(
+                false,
+                null,
+                null,
+                "未找到可用的数据分区（已自动跳过 EFI/系统分区），无法写入密钥文件。请改用“硬件序列号模式”或为该U盘分配数据分区盘符。");
+        }
+
+        // Pass 1: Reuse an existing valid credential file on non-EFI data partitions (regular partitions first).
+        foreach (UsbVolumeInfo volume in writableVolumes) {
+            string? path = TryGetCredentialFilePath(volume.DriveLetter);
             if (path is null) {
                 continue;
             }
@@ -112,12 +139,12 @@ public static class UsbCredentialHelper {
             }
         }
 
-        // Pass 2: Create a fresh credential file on the first writable partition.
+        // Pass 2: Create a fresh credential file on the first writable non-EFI partition.
         string token = GenerateFileToken();
         string? lastError = null;
 
-        foreach (string letter in drive.DriveLetters) {
-            string? path = TryGetCredentialFilePath(letter);
+        foreach (UsbVolumeInfo volume in writableVolumes) {
+            string? path = TryGetCredentialFilePath(volume.DriveLetter);
             if (path is null) {
                 continue;
             }
@@ -157,8 +184,8 @@ public static class UsbCredentialHelper {
         }
 
         if (settings.IsFileModeEnabled) {
-            foreach (string letter in drive.DriveLetters) {
-                FileReadResult read = TryReadCredentialFile(letter);
+            foreach (UsbVolumeInfo volume in GetOrderedVolumesForRead(drive)) {
+                FileReadResult read = TryReadCredentialFile(volume.DriveLetter);
                 if (read.Status == FileReadStatus.Success &&
                     VerifyHash(read.Content, settings.PassHash, settings.Salt)) {
                     return true;
