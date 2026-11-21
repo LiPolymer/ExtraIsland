@@ -149,7 +149,7 @@ ExtraIsland 无需额外依赖即可独立使用；若安装了以下插件，�
 
 **感谢同学们对本项目的支持与贡献！**
 
-[![Contributors](https://contrib.nn.ci/api?repo=LiPolymer/ExtraIsland&repo=LiPolymer/SentenceSplicer)](https://github.com/LiPolymer/ExtraIsland/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=LiPolymer/ExtraIsland)](https://github.com/LiPolymer/ExtraIsland/graphs/contributors)
 
 </div>
 
