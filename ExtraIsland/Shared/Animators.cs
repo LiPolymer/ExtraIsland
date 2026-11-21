@@ -298,24 +298,63 @@ public static class Animators {
         readonly Visual _target;
         readonly Animation _fadeOutAnimation;
         readonly Animation _fadeInAnimation;
-        string _targetContent = string.Empty;
+        CancellationTokenSource? _animCts;
 
         public void Update(bool? stat = null) {
             Dispatcher.UIThread.InvokeAsync(async () => {
-                switch (stat) {
-                    case null:
-                        await _fadeInAnimation.RunAsync(_target);
-                        await Task.Delay(TimeSpan.FromSeconds(3));
-                        await _fadeOutAnimation.RunAsync(_target);
-                        break;
-                    case true:
-                        await _fadeOutAnimation.RunAsync(_target);
-                        break;
-                    case false:
-                        await _fadeInAnimation.RunAsync(_target);
-                        break;
+                _animCts?.Cancel();
+                CancellationTokenSource cts = new CancellationTokenSource();
+                _animCts = cts;
+                CancellationToken token = cts.Token;
+
+                try {
+                    switch (stat) {
+                        case null:
+                            await _fadeInAnimation.RunAsync(_target, token);
+                            if (token.IsCancellationRequested) return;
+                            _target.Opacity = 1.0;
+                            await Task.Delay(TimeSpan.FromSeconds(3), token);
+                            await _fadeOutAnimation.RunAsync(_target, token);
+                            if (token.IsCancellationRequested) return;
+                            _target.Opacity = 0.0;
+                            break;
+                        case true:
+                            await _fadeOutAnimation.RunAsync(_target, token);
+                            if (token.IsCancellationRequested) return;
+                            _target.Opacity = 0.0;
+                            break;
+                        case false:
+                            await _fadeInAnimation.RunAsync(_target, token);
+                            if (token.IsCancellationRequested) return;
+                            _target.Opacity = 1.0;
+                            break;
+                    }
+                } catch (OperationCanceledException) {
+                    // Interrupted by a newer animation trigger or explicit cancel
+                } catch {
+                    if (!token.IsCancellationRequested) {
+                        _target.Opacity = stat == false ? 1.0 : 0.0;
+                    }
+                } finally {
+                    if (ReferenceEquals(_animCts, cts)) {
+                        _animCts = null;
+                    }
+                    cts.Dispose();
                 }
             });
+        }
+
+        public void Cancel() {
+            void DoCancel() {
+                _animCts?.Cancel();
+                _animCts = null;
+            }
+
+            if (Dispatcher.UIThread.CheckAccess()) {
+                DoCancel();
+            } else {
+                Dispatcher.UIThread.InvokeAsync(DoCancel);
+            }
         }
     }
 }

@@ -1,6 +1,9 @@
 using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
+using Avalonia.Media;
+using Avalonia.Media.TextFormatting;
 using Avalonia.Threading;
 using ClassIsland.Core.Abstractions.Controls;
 using ClassIsland.Core.Abstractions.Services;
@@ -76,18 +79,26 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         _subscribedSettings.PropertyChanged += OnSettingsChanged;
         LessonsService.PostMainTimerTicked += OnMainTimerTicked;
         RootPanel.SizeChanged += OnRootPanelSizeChanged;
+        LHourTens.PropertyChanged += OnFontMetricPropertyChanged;
+        LSecTens.PropertyChanged += OnFontMetricPropertyChanged;
         _lastFrame = null;
         ApplyLayout();
         Tick();
-        SyncBackgroundWidth();
+        UpdateVisualAlignment();
     }
 
     void Stop() {
-        if (_subscribedSettings == null) return;
-        _subscribedSettings.PropertyChanged -= OnSettingsChanged;
-        LessonsService.PostMainTimerTicked -= OnMainTimerTicked;
-        RootPanel.SizeChanged -= OnRootPanelSizeChanged;
-        _subscribedSettings = null;
+        if (_subscribedSettings != null) {
+            _subscribedSettings.PropertyChanged -= OnSettingsChanged;
+            LessonsService.PostMainTimerTicked -= OnMainTimerTicked;
+            RootPanel.SizeChanged -= OnRootPanelSizeChanged;
+            LHourTens.PropertyChanged -= OnFontMetricPropertyChanged;
+            LSecTens.PropertyChanged -= OnFontMetricPropertyChanged;
+            _subscribedSettings = null;
+        }
+        _emphasizeAnimator.Cancel();
+        EmpBack.Opacity = 0;
+        _emphasizeUntil = 0;
     }
 
     #endregion
@@ -112,16 +123,27 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
                 case nameof(FluentClockConfig.IsSystemTime):
                     Tick();
                     break;
+                case nameof(FluentClockConfig.IsSecondsSmall):
+                    Dispatcher.UIThread.Post(UpdateVisualAlignment, DispatcherPriority.Loaded);
+                    break;
                 case nameof(FluentClockConfig.IsOClockEmp):
-                    // 开启时预览一次强调特效
-                    if (Settings.IsOClockEmp) TryEmphasize();
+                    // 开启时立即预览一次强调特效
+                    if (Settings.IsOClockEmp) TryEmphasize(force: true);
                     break;
             }
         });
     }
 
-    void OnRootPanelSizeChanged(object? sender,SizeChangedEventArgs e) {
-        SyncBackgroundWidth();
+    void OnRootPanelSizeChanged(object? sender, SizeChangedEventArgs e) {
+        UpdateVisualAlignment();
+    }
+
+    void OnFontMetricPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e) {
+        if (e.Property == TextElement.FontSizeProperty
+            || e.Property == TextElement.FontFamilyProperty
+            || e.Property == TextElement.FontWeightProperty) {
+            Dispatcher.UIThread.Post(UpdateVisualAlignment, DispatcherPriority.Loaded);
+        }
     }
 
     static void RunOnUiThread(Action action) {
@@ -179,31 +201,91 @@ public partial class FluentClock : ComponentBase<FluentClockConfig> {
         _separatorAnimator.Update(!visible);
     }
 
-    void TryEmphasize() {
+    void TryEmphasize(bool force = false) {
         long now = Environment.TickCount64;
-        if (now < _emphasizeUntil) return;
+        if (!force && now < _emphasizeUntil) return;
         _emphasizeUntil = now + EmphasizeDurationMs;
         _emphasizeAnimator.Update();
     }
 
     void ApplyLayout() {
         bool isAccurate = Settings.IsAccurate;
-        SecsPanel.IsVisible = isAccurate;
-        SSecs.IsVisible = isAccurate;
+        SecondsGroup.IsVisible = isAccurate;
 
         double gap = Math.Round(Settings.HorizontalGap);
-        HoursPanel.Margin = new Thickness(0,0,gap,0);
-        MinsPanel.Margin = new Thickness(gap,0,isAccurate ? gap : 0,0);
-        SecsPanel.Margin = new Thickness(gap,0,0,0);
+        RootPanel.Spacing = gap;
+        SecondsGroup.Spacing = gap;
+        UpdateVisualAlignment();
     }
 
     /// <summary>
-    /// 同步强调背景的宽度为当前RootPanel宽度 (取整以避免亚像素模糊)
+    /// 基于实际字体度量 (Baseline / CapHeight) 精确对齐小字号秒数基线与强调胶囊背景
     /// </summary>
-    void SyncBackgroundWidth() {
-        double width = RootPanel.Bounds.Width;
-        if (width > 0) {
-            EmpBack.Width = Math.Round(width);
+    void UpdateVisualAlignment() {
+        if (_subscribedSettings == null) return;
+
+        (double mainH, double mainBaseline, double mainCapH) = MeasureDigitMetrics(LHourTens);
+        if (mainH <= 0) return;
+
+        double rootH = RootPanel.Bounds.Height > 0 ? RootPanel.Bounds.Height : mainH;
+        double mainTop = (rootH - mainH) / 2.0;
+        double mainBaselineY = mainTop + mainBaseline;
+        double mainGlyphCenterY = mainBaselineY - mainCapH / 2.0;
+
+        // 1. 小字号秒数: 补偿字号下行区 (descender) 与行高差异，使数字基线与左侧严格平齐
+        if (Settings.IsSecondsSmall) {
+            (double smallH, double smallBaseline, _) = MeasureDigitMetrics(LSecTens);
+            double bottomMargin = Math.Max(0, (rootH - mainBaselineY) - (smallH - smallBaseline));
+            SecondsGroup.Margin = new Thickness(0, 0, 0, bottomMargin);
+        } else {
+            SecondsGroup.Margin = new Thickness(0);
+        }
+
+        // 2. 冒号光学居中: 补偿冒号字形相对数字视觉中心偏低的问题 (使用显式 TranslateTransform 避免影响行高)
+        SetTranslateY(SMins, -TextElement.GetFontSize(SMins) * 0.11);
+        SetTranslateY(SSecs, -TextElement.GetFontSize(SSecs) * 0.11);
+
+        // 3. 整点强调胶囊: 围绕数字字形视觉中心对称包裹，消除上下偏置
+        double padV = Math.Max(3.0, mainCapH * 0.35);
+        double empHeight = Math.Min(rootH, Math.Round(mainCapH + padV * 2));
+        double empTop = Math.Clamp(mainGlyphCenterY - empHeight / 2.0, 0, Math.Max(0, rootH - empHeight));
+        EmpBack.Height = empHeight;
+        EmpBack.Margin = new Thickness(0, empTop, 0, 0);
+    }
+
+    static (double Height, double Baseline, double CapHeight) MeasureDigitMetrics(Control control) {
+        double fontSize = TextElement.GetFontSize(control);
+        if (fontSize <= 0) return (0, 0, 0);
+
+        Typeface typeface = new Typeface(
+            TextElement.GetFontFamily(control),
+            TextElement.GetFontStyle(control),
+            TextElement.GetFontWeight(control),
+            TextElement.GetFontStretch(control));
+
+        using TextLayout layout = new TextLayout("0", typeface, fontSize, null);
+        double height = layout.Height;
+        double baseline = layout.TextLines.Count > 0 ? layout.TextLines[0].Baseline : height * 0.8;
+
+        double capHeight = fontSize * 0.72;
+        if (FontManager.Current.TryGetGlyphTypeface(typeface, out GlyphTypeface? glyphTypeface)) {
+            int emHeight = glyphTypeface.Metrics.DesignEmHeight;
+            if (emHeight > 0
+                && glyphTypeface.CharacterToGlyphMap.TryGetGlyph('0', out ushort glyph)
+                && glyphTypeface.TryGetGlyphMetrics(glyph, out GlyphMetrics glyphMetrics)
+                && glyphMetrics.Height > 0) {
+                capHeight = fontSize * glyphMetrics.Height / emHeight;
+            }
+        }
+
+        return (height, baseline, capHeight);
+    }
+
+    static void SetTranslateY(Visual target, double y) {
+        if (target.RenderTransform is TranslateTransform translate) {
+            translate.Y = y;
+        } else {
+            target.RenderTransform = new TranslateTransform(0, y);
         }
     }
 
