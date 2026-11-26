@@ -1,12 +1,20 @@
 import { defineConfig } from 'vitepress'
 
+const base = '/ExtraIsland/'
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   lang: 'zh-CN',
   title: 'ExtraIsland',
-  base: '/ExtraIsland/',
+  base,
   description: 'ExtraIsland（课岛进化）官方文档与使用指南',
   lastUpdated: true,
+
+  head: [
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}images/extraIsland.svg` }],
+    ['link', { rel: 'icon', type: 'image/png', href: `${base}images/extraIsland.png` }],
+    ['link', { rel: 'apple-touch-icon', href: `${base}images/extraIsland.png` }]
+  ],
 
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
